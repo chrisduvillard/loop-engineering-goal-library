@@ -2,15 +2,29 @@
 
 These seven loops form the recommended permanent toolkit for long-running coding-agent work in mature repositories.
 
-## Brownfield Continue / Finish
+## Before you start: define the target
 
-**Use when:** An existing project has plans, partial implementation, or an unfinished target and should advance autonomously.
+A `/goal` should execute an approved target, not discover product direction while already looping. `TARGET` may be a verifiable end state or a pointer to an approved Goal Contract, issue, PRD, milestone, or acceptance checklist.
+
+When you only know something like “continue this project,” run [`/shape-goal`](skills/shape-goal/SKILL.md) first:
 
 ```text
-/goal Bring this existing repository to [TARGET]. First establish the actual state: read applicable repository instructions, specifications/PRDs, architecture, approved plans, progress/handoffs, native scripts/CI/tests, and Git status/diff/history. Reconcile stale or conflicting artifacts by authority, recency, and executable evidence; protect user, uncommitted, and unrelated work. Then repeat: select the highest-priority unblocked gap; verify it; make the smallest coherent reversible production change; run the repository-native relevant checks; review the diff; add regression coverage for fixed failures; keep only changes that preserve or improve the baseline; and update existing progress/handoff state with evidence and the next action. Continue autonomously—do not stop at planning, analysis, documentation, or tests while production work remains, and do not ask what to do next when the repository answers it. Finish only when every in-scope gap is closed and [ACCEPTANCE EVIDENCE] passes with results surfaced. Stop earlier only for a genuine external/owner-approval blocker, an exhausted [BUDGET], or two consecutive no-progress cycles; leave a restartable handoff. Never perform destructive, deployment, credential, release, or external-system actions without explicit approval.
+/shape-goal Continue this project
 ```
 
-**Why it works:** It starts from evidence rather than stale assumptions and gives the agent authority to choose the next safe task. Success, regression, stagnation, and approval boundaries are all explicit.
+It reads the repository, reconciles the actual state, asks only material owner decisions, persists a concise Goal Contract, selects the right loop, and returns the exact `/goal` command.
+
+---
+
+## Brownfield Continue / Finish
+
+**Use when:** An existing project has an approved outcome, partial implementation, or unfinished milestone and should advance autonomously.
+
+```text
+/goal Bring this existing repository to [APPROVED TARGET OR GOAL-CONTRACT PATH]. First establish the actual state: read applicable repository instructions, specifications/PRDs, architecture, approved plans, progress/handoffs, native scripts/CI/tests, and Git status/diff/history. Reconcile stale or conflicting artifacts by authority, recency, and executable evidence; protect user, uncommitted, and unrelated work. Then repeat: select the highest-priority unblocked gap; verify it; make the smallest coherent reversible production change; run the repository-native relevant checks; review the diff; add regression coverage for fixed failures; keep only changes that preserve or improve the baseline; and update existing progress/handoff state with evidence and the next action. Continue autonomously—do not stop at planning, analysis, documentation, or tests while production work remains, and do not ask what to do next when the repository answers it. Finish only when every in-scope gap is closed and the approved target's acceptance evidence passes with results surfaced. Stop earlier only for a genuine external/owner-approval blocker, an exhausted contract-defined budget, or two consecutive no-progress cycles; leave a restartable handoff. Never perform destructive, deployment, credential, release, or external-system actions without explicit approval.
+```
+
+**Why it works:** It starts from an approved outcome and current evidence rather than stale assumptions, then gives the agent authority to choose the next safe task. Success, regression, stagnation, and approval boundaries are explicit.
 
 ---
 

@@ -1,17 +1,35 @@
 # Dependency / Framework Upgrade
 
-**Use when:** A dependency, framework, language runtime, or toolchain must be upgraded without breaking supported behavior.
+**Use when:** A dependency, framework, language runtime, or toolchain must move to a target version without breaking supported behavior.
 
-## Recommended: skill-backed
+**In simple terms:** Upgrade through safe version steps while checking the full compatibility surface.
 
-```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the Dependency / Framework Upgrade profile. Follow official version-path guidance, upgrade through the smallest safe boundaries, inspect transitive changes, preserve rollback, and continue until the target version runs in every supported environment and compatibility gates pass. Stop only for a contract-defined decision, blocker, approval boundary, budget, or two no-progress cycles; preserve a reusable closeout packet.
-```
+## Run unchanged — recommended
 
-## Standalone fallback
+Copy this command exactly. It uses `shape-goal` to discover and approve the missing inputs, then `goal-engine` to execute the result.
 
 ```text
-/goal Upgrade [DEPENDENCY OR FRAMEWORK] from [CURRENT VERSION] to [TARGET VERSION] across [SCOPE] while preserving [SUPPORTED CONTRACTS]. Establish the actual dependency graph, lockfiles, runtime/toolchain constraints, consumers, generated artifacts, native build/test/release gates, prior goal archives, and Git state; reconcile documentation with code and protect unrelated work. Capture the baseline, consult official migration, release, and security guidance for the exact version path, identify breaking and transitive changes, and choose the smallest safe staged route; avoid unrelated modernization. Upgrade one coherent version boundary at a time, adapt required production code and configuration, regenerate only necessary artifacts, run repository-native targeted and full compatibility checks, inspect lockfile and transitive changes, add regression coverage, and retain a rollback path. Do not disable checks, hide deprecations, or accept unexplained dependency churn merely to make the upgrade pass. Finish only when the target version runs in every supported environment, [COMPATIBILITY GATES] pass with surfaced evidence, and rollback remains viable. Stop for a required product decision, unsupported platform, approval/external blocker, [BUDGET], or two no-progress cycles. At any terminal outcome, preserve a reusable closeout packet under the repository's goal-history convention (default `docs/goals/<goal-id>/`) containing `CONTRACT.md`, final `PROGRESS.md`, and `RESULT.md`; update the history index, promote verified reusable tests/docs/ADRs/runbooks/fixtures/tooling, and exclude secrets, private data, raw production dumps, and unnecessarily large logs. Do not publish or deploy without explicit approval.
+/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Dependency / Framework Upgrade objective. During shaping, load shape-goal's required-input specification for Dependency / Framework Upgrade; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Then hand off within this same goal to goal-engine to map the dependency graph, follow official version-path guidance, stage changes, inspect transitive effects, and prove compatibility; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
 ```
 
-**Why it works:** It treats the whole compatibility surface as the unit of success and saves the version path, lockfile evidence, and migration lessons for later upgrades.
+## Inputs the skills resolve
+
+- Current and target versions
+- Supported environments and consumers
+- Official migration/security guidance
+- Compatibility gates and rollback
+- Common contract inputs: outcome, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, goal relationships, state paths, and closeout paths.
+
+**Suggested assurance overlays:** Compatibility & Portability, Security & Privacy
+
+`shape-goal` must search the repository and connected authoritative sources before asking. It asks only material unresolved decisions, one at a time with a recommendation. The active `/goal` is not complete when the contract is shaped; execution and passing evidence are still required.
+
+## Run unchanged — self-contained fallback
+
+Use this command when the skills are unavailable. It reproduces the same shape-then-execute gate without requiring placeholders.
+
+```text
+/goal Determine, obtain approval for, and complete this repository's next Dependency / Framework Upgrade objective without requiring the user to prefill placeholders. Phase 1 — shape: establish the actual repository state from instructions, Git state/history, requirements, architecture, plans, prior goals, tests/CI, runtime behavior, and available authoritative tools or connected sources. Build an input ledger for the target, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, and the profile-specific inputs described in this goal. Search before asking; when a material decision cannot be derived, ask the user one question at a time, include the evidence and a recommended answer, record the decision, and continue until a concise Goal Contract is approved. Do not edit production before approval, and do not treat contract creation as completion. Phase 2 — execute: map the dependency graph, follow official version-path guidance, stage changes, inspect transitive effects, and prove compatibility. In particular, upgrade coherent boundaries; inspect lockfiles and generated changes; avoid unrelated modernization. Make small coherent reversible changes; use repository-native checks; verify findings before fixing; add regression protection; review important diffs independently when practical; keep only changes that preserve or improve the verified baseline; and persist progress, failed approaches, evidence, reusable outputs, and the next action. Finish only when every approved acceptance and assurance item passes with surfaced evidence and protected behavior remains intact. Stop for a genuine external blocker, required approval, exhausted approved budget, material goal drift, or two consecutive no-progress cycles. At every terminal outcome, preserve a reusable closeout packet containing CONTRACT.md, final PROGRESS.md, and RESULT.md under the repository's goal-history convention, update the portfolio/history, promote durable tests/docs/ADRs/runbooks/fixtures/tooling, and never archive secrets, private data, production dumps, exploit-enabling evidence, or unnecessary large logs. Never perform destructive, deployment, release, credential, billing, or external-system actions without explicit approval.
+```
+
+**Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.

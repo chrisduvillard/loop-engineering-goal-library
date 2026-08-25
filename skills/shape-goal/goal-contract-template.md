@@ -2,20 +2,21 @@
 
 **Status:** Proposed / Ready / Active / Paused / Blocked / Closed  
 **Outcome:** — / Achieved / Cancelled / Superseded / Approval required / Budget exhausted / Stalled  
-**Goal ID:** [YYYY-MM-DD-SHORT-SLUG OR ISSUE/MILESTONE ID]  
+**Goal ID:** [ID]  
 **Revision:** [INTEGER]  
 **Priority:** P0 / P1 / P2 / P3  
 **Owner:** [OWNER]  
-**Created:** [DATE]  
-**Last updated:** [DATE]  
-**Library:** chrisduvillard/loop-engineering-goal-library @ [VERSION OR SOURCE COMMIT]  
-**Current branch/worktree/SHA:** [OPTIONAL]  
-**Primary profile:** [PRESET OR CUSTOM CONTRACT-DRIVEN]  
+**Created / updated:** [DATES]  
+**Library:** chrisduvillard/loop-engineering-goal-library @ [VERSION OR COMMIT]  
+**Launcher:** [GOAL FILE / DIRECT SHAPING / AUTHORITATIVE ISSUE]  
+**Input ledger:** [THIS DOCUMENT SECTION / PATH]  
+**Branch / worktree / SHA:** [OPTIONAL]  
+**Primary profile:** [ONE OF THE CATALOG PROFILES OR CUSTOM CONTRACT-DRIVEN]  
 **Assurance overlays:** [LIST OR NONE]  
 **Project harness:** [EXISTING SOURCES OR `docs/agent/PROJECT_HARNESS.md`]  
-**Parent goal:** [GOAL ID OR NONE]  
-**Depends on:** [GOAL IDS OR NONE]  
-**Supersedes:** [GOAL ID OR NONE]  
+**Parent goal:** [ID OR NONE]  
+**Depends on:** [IDS OR NONE]  
+**Supersedes:** [ID OR NONE]  
 **Portfolio:** [EXISTING TRACKER / `docs/goals/PORTFOLIO.md` / NOT NEEDED]  
 **Progress state:** [EXISTING ARTIFACT OR `GOAL_PROGRESS.md`]  
 **Archive path:** [EXISTING CONVENTION OR `docs/goals/[GOAL ID]/`]
@@ -26,29 +27,42 @@
 
 ## Why this is next
 
-[One short paragraph grounded in repository evidence, priority, dependencies, and current user need.]
+[Short evidence-backed priority and dependency rationale.]
+
+## Input resolution record
+
+| Input | Resolution | Evidence or approved decision |
+|---|---|---|
+| Outcome | Evidence / Safe default / Owner decision | [SOURCE] |
+| Scope and exclusions | ... | ... |
+| Acceptance evidence | ... | ... |
+| Protected behavior | ... | ... |
+| Authority boundaries | ... | ... |
+| Profile-specific inputs | ... | ... |
+
+Every material row must be resolved before approval. Searchable repository facts are not user questions.
 
 ## In scope
 
-- [Required outcome or surface]
+- [REQUIRED OUTCOME OR SURFACE]
 
 ## Out of scope
 
-- [Explicit exclusion]
+- [EXPLICIT EXCLUSION]
 
 ## Acceptance evidence
 
 | ID | Criterion | Verifier or observable evidence | Status |
 |---|---|---|---|
-| A1 | [MEASURABLE END STATE] | `[EXACT COMMAND]` or [REALISTIC WORKFLOW / ARTIFACT] | Not run |
-| A2 | No new failures relative to the recorded baseline | [RELEVANT BROADER GATES] | Not run |
-| A3 | Important changes reviewed and unexplained diffs resolved | [REVIEW EVIDENCE] | Not run |
+| A1 | [MEASURABLE END STATE] | `[EXACT COMMAND]` or [WORKFLOW / ARTIFACT] | Not run |
+| A2 | No new failures relative to baseline | [BROADER GATES] | Not run |
+| A3 | Important changes reviewed | [REVIEW EVIDENCE] | Not run |
 
-An item becomes **Pass** only when its stated evidence has been produced under the required conditions.
+An item becomes **Pass** only after its stated evidence is produced under the required conditions.
 
 ## Protected behavior
 
-- [EXISTING CONTRACT, WORKFLOW, COMPATIBILITY, DATA INVARIANT, USER WORK, OR PERFORMANCE CHARACTERISTIC]
+- [EXISTING CONTRACT, WORKFLOW, COMPATIBILITY, DATA INVARIANT, USER WORK, VISUAL REFERENCE, OR PERFORMANCE FLOOR]
 
 ## Baseline and known exceptions
 
@@ -60,9 +74,15 @@ An item becomes **Pass** only when its stated evidence has been produced under t
 
 ### Primary profile
 
-[ONE OF THE THIRTEEN PRESETS OR CUSTOM CONTRACT-DRIVEN]
+[PROFILE]
 
-For a custom profile, define:
+### Profile-specific inputs
+
+- [RESOLVED INPUT AND SOURCE]
+
+### Custom Contract-Driven fields
+
+Complete only when no preset fits:
 
 - **Iteration unit:** [BOUNDED CHANGE OR EXPERIMENT]
 - **Primary verifier:** [COMMAND / WORKFLOW / MEASUREMENT]
@@ -74,20 +94,18 @@ For a custom profile, define:
 
 - [OVERLAY] — [CONTRACT-SPECIFIC OBLIGATION]
 
-Use zero or more overlays from `assurance-overlays.md`; do not select overlays merely to appear comprehensive.
-
 ## Goal relationships and change policy
 
-- **Parent / children:** [RELATIONSHIPS OR NONE]
-- **Dependencies:** [RELATIONSHIPS OR NONE]
-- **Related or superseded goals:** [RELATIONSHIPS OR NONE]
+- Parent / children: [RELATIONSHIPS OR NONE]
+- Dependencies: [RELATIONSHIPS OR NONE]
+- Related or superseded goals: [RELATIONSHIPS OR NONE]
 
 Keep this Goal ID only while the observable outcome remains the same.
 
-- Clarifications may update wording and evidence references with a revision-log entry.
-- Material changes to scope, evidence, protection, authority, profile, overlays, or exits require approval and a revision increment.
-- A different observable outcome receives a new Goal ID.
-- New unrelated requests are added to the portfolio rather than silently appended here.
+- Clarifications record a revision note.
+- Material contract changes pause execution, require approval, and increment revision.
+- A different outcome receives a new Goal ID.
+- Unrelated requests enter the portfolio rather than this contract.
 
 ## Goal-drift review triggers
 
@@ -99,32 +117,34 @@ Re-run `shape-goal` when:
 
 Explicit approval is required before:
 
-- Deployment, publishing, release, merge, push, tag, or production changes unless expressly authorized here
+- Merge, push, tag, publish, release, deployment, or production mutation unless authorized here
 - Destructive data, schema, branch, or infrastructure operations
 - Credential, billing, account, secret, or external-system changes
 - Removal of a required rollback or recovery path
+- Security testing outside approved scope
+- Legal, regulatory, privacy, compliance, or risk-acceptance conclusions
 - [REPOSITORY-SPECIFIC BOUNDARY]
 
 **Explicitly authorized actions:** [NONE OR PRECISE LIST]
 
 ## Stop and escalation
 
-- **Success:** Every acceptance item and required overlay gate passes with surfaced evidence and protected behavior has not regressed.
+- **Success:** Every acceptance and required overlay item passes with surfaced evidence and protected behavior has not regressed.
 - **Blocked:** A named external dependency, credential, hardware resource, lawful-access requirement, or owner decision prevents progress.
 - **Approval required:** The next useful action crosses an authority boundary.
-- **Budget:** [TURN, TIME, OR COST BOUND]
+- **Budget:** [TURN / TIME / COST / EXPERIMENT BOUND]
 - **Stalled:** Two serious iterations produce neither new evidence nor measurable progress.
-- **Goal drift:** Pause and return to `shape-goal` when the current contract no longer represents the desired outcome.
+- **Goal drift:** Pause and return to `shape-goal` when the contract no longer represents the desired outcome.
 
 ## Sources of truth
 
-- [APPROVED ISSUE, PRD, PLAN, MILESTONE, ARCHITECTURE DOCUMENT, TEST SUITE, OR OTHER SOURCE]
+- [APPROVED ISSUE, PRD, PLAN, MILESTONE, ARCHITECTURE, DESIGN FILE, TEST SUITE, RUNBOOK, OR OTHER SOURCE]
 
-List relevant contradictions and their disposition rather than silently choosing one source.
+Record relevant contradictions and their disposition.
 
 ## Reuse and closeout
 
-At terminal closeout, preserve:
+At terminal closeout preserve:
 
 ```text
 [ARCHIVE PATH]/
@@ -133,16 +153,18 @@ At terminal closeout, preserve:
 └── RESULT.md
 ```
 
-Update the goal history and portfolio. Promote verified knowledge to regression tests, ADRs/docs, runbooks, project harness, fixtures, scripts, or benchmarks.
+Update goal history and portfolio. Promote verified knowledge to tests, ADRs/docs, runbooks, design references, project harness, fixtures, scripts, benchmarks, or residual-risk records.
 
-Do not archive secrets, credentials, private user data, raw production dumps, exploit-enabling evidence, or unnecessary large logs.
+Never archive secrets, private user data, production dumps, exploit-enabling evidence, or unnecessary large logs.
 
-**Expected reusable outputs:** [TESTS / FIXTURES / ADRS / RUNBOOKS / HARNESS / COMMANDS / NONE]
+**Expected reusable outputs:** [LIST OR NONE]
 
 ## Native `/goal` command
 
+Strict two-step mode:
+
 ```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [THIS PATH OR ISSUE]. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
 
 ## Revision and approval record

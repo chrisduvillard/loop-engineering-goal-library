@@ -1,221 +1,240 @@
 ---
 name: shape-goal
-description: Turn vague or changing project needs into an evidence-backed Goal Contract and managed goal portfolio, select an execution profile plus assurance overlays, preserve prior goals, and produce a copy-ready native /goal command backed by goal-engine. Use before /goal when the target, priority, scope, evidence, lifecycle transition, or best execution pattern is unclear.
-compatibility: Portable Agent Skills host. Reads repository evidence and writes planning/state artifacts; production implementation is intentionally out of scope.
+description: Resolve vague, incomplete, or changing project needs into an approved Goal Contract and managed goal portfolio. Also powers zero-friction /goal launchers by discovering every profile-specific input from repository and connected evidence before asking the user, asking only material owner decisions one at a time, then handing the approved contract to goal-engine. Use before production execution or whenever the target, priority, scope, proof, lifecycle, profile, or boundaries are unclear.
+compatibility: Portable Agent Skills host. Reads repository and connected authoritative evidence and writes planning/state artifacts; production implementation remains the responsibility of goal-engine.
+user-invocable: true
+disable-model-invocation: false
+argument-hint: "[continue | new goal | profile | goal ID | changed need]"
 metadata:
   author: chrisduvillard
-  version: "0.3.0"
+  version: "0.4.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
 # Shape Goal
 
-Compile rough or changing intent into a safe execution contract. **Shape and manage the work; do not implement production changes.**
+Turn rough or changing intent into one safe, approved, executable contract.
+
+> **Search facts first. Ask only decisions. Never let shaping masquerade as implementation or completion.**
 
 ```text
-project needs → goal portfolio → approved contract → native /goal + goal-engine
+project need → evidence search → input ledger → owner decisions → approved contract → goal-engine
 ```
 
-A useful target has this form:
+## Invocation modes
 
-> **[Observable outcome]** is true for **[scope]**, proven by **[acceptance evidence]**, while **[protected behavior]** remains intact.
+### Direct shaping
 
-## Invocation patterns
+- **Claude Code:** `/shape-goal Continue this project`
+- **Codex CLI / IDE:** `$shape-goal Continue this project`
+- Other Agent Skills hosts: explicitly select or mention `shape-goal`
 
-These are natural-language modes, not a rigid parser:
+### Zero-friction bootstrap
 
-| Need | Claude Code | Codex CLI / IDE |
-|---|---|---|
-| Continue or shape the next goal | `/shape-goal Continue this project` | `$shape-goal Continue this project` |
-| Add a new goal | `/shape-goal New goal: [INTENT]` | `$shape-goal New goal: [INTENT]` |
-| Change the current goal | `/shape-goal Change current goal: [NEW NEED]` | `$shape-goal Change current goal: [NEW NEED]` |
-| Review priorities | `/shape-goal Review the goal portfolio and recommend what should run next` | `$shape-goal Review the goal portfolio and recommend what should run next` |
-| Resume prior work | `/shape-goal Resume [GOAL ID]` | `$shape-goal Resume [GOAL ID]` |
+A copied standalone `/goal` may name both `shape-goal` and `goal-engine` without supplying repository-specific placeholders. In that mode:
+
+1. The launcher fixes the primary profile.
+2. This skill resolves every required input and obtains approval.
+3. Production edits remain forbidden during shaping.
+4. After approval, hand off inside the same native goal to `goal-engine`.
+5. The native goal is **not complete** when the contract is created.
+
+Read [references/input-resolution.md](references/input-resolution.md) and [references/profile-inputs.md](references/profile-inputs.md) whenever bootstrap mode is active.
 
 ## Required outputs
 
-Produce:
+Produce and persist, as applicable:
 
-1. A lifecycle decision for every affected existing goal.
-2. One stable Goal ID for each new goal.
-3. One approved Goal Contract revision for the next executable goal.
-4. A portfolio disposition and path when multiple non-closed goals exist.
-5. One primary execution profile or an explicit custom profile.
-6. Zero or more assurance overlays.
-7. One reusable project-harness path or a justified decision that existing repository instructions are sufficient.
-8. Durable progress and archive paths.
-9. One short skill-backed native `/goal` command.
-10. One standalone fallback when `goal-engine` may not be installed.
+1. Lifecycle decision for each affected goal
+2. Stable Goal ID and revision
+3. Approved Goal Contract for the next executable outcome
+4. Portfolio disposition when several non-closed goals exist
+5. One primary profile or a Custom Contract-Driven definition
+6. Required assurance overlays
+7. Reused or newly verified project-harness path
+8. Progress, archive, and history paths
+9. Copy-ready native `/goal` handoff
+10. Standalone fallback reference
+11. Input ledger showing how every material field was resolved
 
 ## 1. Orient before asking
 
-Read the applicable repository evidence first:
+Read the applicable:
 
-- Agent and repository instructions
-- Specifications, PRDs, architecture docs, ADRs, and domain vocabulary
-- Approved plans, milestones, issues, progress files, goal portfolio, prior archives, and handoffs
-- Native scripts, tests, CI, release gates, runtime entry points, and project harness
+- Repository and agent instructions
 - Git status, diff, branch, worktrees, and relevant history
+- Current contract, progress, portfolio, handoffs, and prior goal archives
+- Approved issues, PRDs, specifications, plans, milestones, ADRs, and architecture
+- Native scripts, task runners, package configuration, CI, tests, fixtures, benchmarks, and release gates
+- Runtime entry points, actual product behavior, screenshots, logs, and generated artifacts
+- Project Harness and supported-environment documentation
+- Connected authoritative systems available to the host
 
-Reconcile contradictions by explicit authority, recency, and executable evidence. Protect uncommitted and unrelated work.
+Reconcile contradictions by authority, approved recency, and executable evidence. Protect uncommitted and unrelated work.
 
-**Facts are the agent's job; decisions are the user's.** Never ask for something the repository, tools, history, or runtime evidence can answer.
+**Facts are the agent's job; decisions are the user's.**
 
-## 2. Treat the project as a portfolio of goals
+## 2. Resolve inputs exhaustively
 
-A project may have many candidate, ready, active, paused, blocked, and closed goals over time.
+Use [references/input-resolution.md](references/input-resolution.md).
 
-Use the repository's existing tracker when it can represent priority, dependencies, state, contract, and progress. Otherwise use [templates/goal-portfolio-template.md](templates/goal-portfolio-template.md) at `docs/goals/PORTFOLIO.md` once more than one non-closed goal exists.
+Build an input ledger. Resolve common contract fields plus the selected profile's fields from [references/profile-inputs.md](references/profile-inputs.md).
 
-Rules:
+Search all lawful, authoritative sources before asking. Use safe defaults only when reversible, low-risk, and consistent with repository conventions. Never default product direction, acceptance thresholds, risk acceptance, compatibility removal, destructive authority, or legal/compliance judgments.
 
-- One native `/goal` session or worktree executes one dependency-safe leaf Goal Contract.
-- Multiple project goals may run in parallel only in isolated branches/worktrees with non-overlapping ownership and explicit dependency handling.
-- The portfolio orders and relates goals; it does not replace their contracts.
-- A parent goal may coordinate child goals, but should not become an unbounded mega-goal.
-- Priority changes update the portfolio, not the meaning of an approved contract.
+When evidence cannot resolve a material choice:
 
-## 3. Classify the lifecycle transition
+- Ask one decision at a time
+- Show the relevant evidence
+- Offer at most three materially different options
+- Recommend one answer and explain the trade-off
+- Record the answer
+- Continue until every material input is resolved or a genuine blocker exists
 
-Do not silently absorb a new request into the active goal. Classify it:
+Do not ask users to find repository facts, commands, paths, or implementation details that tools can discover.
 
-- **Clarify** — wording or evidence reference changes without changing semantics. Keep Goal ID; record revision.
-- **Amend** — same observable outcome, but material scope, verifier, protection, authority, or stop condition changes. Pause execution, obtain approval, increment revision.
-- **Reprioritize** — portfolio order changes; contracts remain unchanged.
-- **Pause / Resume** — preserve progress, next action, branch/SHA, and resume condition.
-- **Supersede** — a different outcome replaces the prior goal. Archive the prior goal as Superseded and create a new Goal ID.
-- **Split** — one goal is too broad. Create child goals and select one dependency-safe leaf to execute.
-- **Merge** — combine only when outcomes, evidence, and authority genuinely align; otherwise keep goals separate.
-- **Cancel** — archive the goal as Cancelled with the reason and reusable evidence.
-- **Close** — archive a terminal outcome and update history.
+## 3. Manage the goal portfolio
 
-Keep the same Goal ID only when the observable outcome remains the same.
+A project may contain candidate, ready, active, paused, blocked, and closed goals.
 
-## 4. Classify ambiguity
+Use the existing tracker when it can represent priority, dependencies, state, contract, and progress. Otherwise use [templates/goal-portfolio-template.md](templates/goal-portfolio-template.md) at `docs/goals/PORTFOLIO.md` when more than one non-closed goal needs coordination.
+
+One native `/goal` session or worktree executes one dependency-safe leaf contract. Parallel goals require isolated sessions/worktrees, non-overlapping ownership, and explicit shared-resource coordination.
+
+## 4. Classify lifecycle changes
+
+Do not silently append a new request to the current goal.
+
+- **Clarify** — wording or evidence references change without semantic change; keep Goal ID and record revision.
+- **Amend** — same outcome, but scope, evidence, protection, authority, profile, overlays, or exits materially change; pause, approve, and increment revision.
+- **Reprioritize** — reorder the portfolio without rewriting contracts.
+- **Pause / Resume** — preserve progress, branch/SHA, next action, and resume condition.
+- **Supersede** — a different outcome replaces the current one; archive it and create a new Goal ID.
+- **Split** — create dependency-safe child goals and choose one leaf.
+- **Merge** — combine only when outcome, evidence, and authority truly align.
+- **Cancel** — close with reason and reusable evidence.
+- **Close** — archive the terminal outcome and update history.
+
+Keep the same Goal ID only while the observable outcome remains the same.
+
+## 5. Classify ambiguity
 
 ### One target is strongly supported
 
-Draft the contract and recommend its priority directly.
+Draft the contract and recommend priority directly.
 
-### Several materially different targets are plausible
+### Several targets are plausible
 
-Present at most three candidates with supporting evidence, expected value, dependencies, scope, trade-off, likely verifier, and recommendation. Ask one owner decision at a time only when alternatives create materially different outcomes.
+Present no more than three candidates with repository evidence, expected value, dependencies, scope, trade-off, likely verifier, and recommendation. Ask one owner decision at a time.
 
 ### The destination is still foggy
 
-Do not manufacture a target. Recommend wayfinding or product discovery when no stable outcome exists. Use the Technical Spike / Feasibility preset when the product need is stable but a bounded technical unknown must be answered before implementation.
+Do not manufacture a target. Recommend product discovery, wayfinding, an ADR, or a bounded Technical Spike / Feasibility goal when no stable outcome or verifier exists.
 
-## 5. Assign durable identity and relationships
+## 6. Select the execution pattern
 
-Create a stable Goal ID:
+Choose one primary profile from [../goal-engine/references/loop-profiles.md](../goal-engine/references/loop-profiles.md).
 
-```text
-YYYY-MM-DD-short-kebab-slug
-```
+Profiles are control-loop presets, not project types. When none fits, use **Custom Contract-Driven** and define:
 
-An issue or milestone ID may be used when already authoritative.
+- Bounded iteration unit
+- Primary verifier
+- Keep-or-revert rule
+- Review and regression strategy
+- Objective success, blocker, approval, budget, and stall exits
 
-Record:
+Select only relevant overlays from [../goal-engine/references/assurance-overlays.md](../goal-engine/references/assurance-overlays.md). When two profiles imply different outcomes, split the goal.
 
-- Contract revision and lifecycle state
-- Priority
-- Parent and dependency Goal IDs
-- Supersedes / superseded-by relationships
-- Library version or source commit
-- Contract, progress, portfolio, archive, and history paths
-- Branch/worktree when active
+## 7. Reuse the project harness
 
-## 6. Build the Goal Contract
+Prefer verified repository instructions and scripts. When setup, run, reset, supported environments, or verification knowledge is fragmented, contradictory, or repeatedly rediscovered, update an authoritative source or create `docs/agent/PROJECT_HARNESS.md` from [../goal-engine/templates/project-harness-template.md](../goal-engine/templates/project-harness-template.md).
 
-Use [goal-contract-template.md](goal-contract-template.md). Include:
+The harness links canonical mechanics; it does not duplicate the entire README or CI configuration.
 
+## 8. Build and approve the Goal Contract
+
+Use [goal-contract-template.md](goal-contract-template.md). The contract must include:
+
+- Goal identity, revision, state, priority, relationships, and durable paths
 - One observable outcome and why it is next
 - Scope and exclusions
 - Acceptance evidence
 - Protected behavior
 - Baseline and known exceptions
-- Primary profile or custom loop definition
+- Primary profile or custom loop
 - Assurance overlays
-- Project-harness path
+- Project harness
 - Authority and stop boundaries
-- Review triggers for goal drift
-- Portfolio relationships and durable state paths
+- Goal-drift review triggers
+- Reuse and closeout expectations
 
-A target is not ready when it is a task list, implementation mechanism, vague aspiration, entire backlog, or proxy metric that can pass while the user outcome fails.
+Before production edits, surface a concise review of outcome, evidence, protection, authority, and exits. Obtain explicit approval unless an already-approved authoritative artifact has identical semantics.
 
-## 7. Select the execution pattern
+## 9. Readiness gate
 
-Choose one primary preset from [../goal-engine/references/loop-profiles.md](../goal-engine/references/loop-profiles.md) when it matches the dominant control loop.
+Proceed to execution only when:
 
-The thirteen presets are **not project types and not a ceiling**. They cover common execution shapes, including measured champion-versus-challenger optimization and bounded technical feasibility work. When none fits, select **Custom Contract-Driven** and define in the contract:
+- One outcome is clear
+- Every material input ledger row is resolved
+- Scope and exclusions are understandable to a fresh agent
+- Completion has observable proof
+- Protected behavior and user work are named
+- Dependencies and priority are handled
+- Profile, overlays, harness, state, and archive paths are clear
+- Authority and stop conditions are explicit
+- No different active goal will be overwritten
+- The contract is approved
 
-- Unit of iteration
-- Primary verifier
-- Keep-or-revert rule
-- Review strategy
-- Stop condition
+A draft contract is not an execution-ready goal.
 
-Select relevant assurance overlays from [../goal-engine/references/assurance-overlays.md](../goal-engine/references/assurance-overlays.md). If two profiles imply different outcomes, split the goal rather than building a composite mega-goal.
+## 10. Persist without competing state
 
-## 8. Reuse or establish the project harness
-
-Prefer existing verified commands and documentation. When setup, run, reset, or verification knowledge is repeatedly rediscovered or contradictory, use [../goal-engine/templates/project-harness-template.md](../goal-engine/templates/project-harness-template.md) to create or refresh `docs/agent/PROJECT_HARNESS.md`.
-
-The harness stores project-specific mechanics once so later goals do not rediscover them. It must link to canonical scripts and remain vendor-neutral.
-
-## 9. Apply the readiness gate
-
-The next executable goal is ready only when:
-
-- It has one stable Goal ID, revision, state, priority, and outcome.
-- A fresh agent can tell what is in and out of scope.
-- Completion has observable proof.
-- Protected behavior and user work are named.
-- Material owner decisions are resolved.
-- Profile, overlays, harness, state, and archive paths are clear.
-- Dependencies are satisfied or explicitly handled.
-- Review and stopping conditions are explicit.
-- No other active goal will be overwritten or accidentally entangled.
-
-## 10. Persist without creating competing state
-
-After approval:
-
-1. Update an existing authoritative issue, milestone, PRD, plan, or goal artifact when possible.
-2. Otherwise create or update `GOAL.md`.
-3. Use `GOAL_PROGRESS.md` only when no suitable progress artifact exists.
-4. Create or update a portfolio only when multiple non-closed goals need coordination.
-5. Link rather than duplicate detailed requirements.
-6. Preserve prior contract revisions and terminal closeout packets.
-7. Record approvals and lifecycle transitions.
-
-If the user requested read-only shaping, return the contract and launch packet without writing.
-
-## 11. Render the native `/goal`
+Update existing authoritative artifacts when possible. Otherwise use:
 
 ```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
+GOAL.md
+GOAL_PROGRESS.md
+docs/goals/PORTFOLIO.md
+docs/goals/INDEX.md
+docs/goals/<goal-id>/
 ```
 
-Also provide the matching standalone preset. When **Custom Contract-Driven** is selected, use [templates/custom-contract-driven-goal.md](templates/custom-contract-driven-goal.md). Do not duplicate the entire standalone prompt into the contract.
+Link detailed requirements instead of duplicating them. Preserve prior revisions and immutable closeout packets. Record approvals and lifecycle transitions.
 
-## 12. End with a launch packet
+## 11. Handoff to goal-engine
+
+For a normal shaping session, return the copy-ready command:
 
 ```text
-Lifecycle decision: [NEW / RESUME / AMEND / REPRIORITIZE / PAUSE / SUPERSEDE / SPLIT / MERGE / CANCEL / CLOSE]
-Approved target: [ONE SENTENCE]
-Goal ID / revision: [ID] / [REVISION]
-Priority and dependencies: [PRIORITY] / [IDS OR NONE]
-Contract: [PATH OR ISSUE]
-Portfolio: [PATH / EXISTING TRACKER / NOT NEEDED]
-Execution profile: [PRESET OR CUSTOM]
-Assurance overlays: [LIST OR NONE]
-Project harness: [PATH / EXISTING SOURCES]
-Progress state: [PATH OR ISSUE]
-Archive: [PATH]
-Run with goal-engine: [COPY-READY /goal]
-Standalone fallback: [LINK OR COPY-READY /goal]
-Open owner decisions: None / [SHORT LIST]
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
 
-Native `/goal` activation remains the boundary between shaping and autonomous implementation.
+For a zero-friction launcher already running inside native `/goal`:
+
+1. Surface the approved outcome and acceptance evidence in the conversation.
+2. State explicitly: **shaping is complete; the enclosing goal is not complete**.
+3. Load or invoke `goal-engine`.
+4. Continue execution in the same session.
+5. Do not emit terminal success until the approved contract passes.
+
+## 12. Launch packet
+
+```text
+Lifecycle decision:
+Approved target:
+Goal ID / revision:
+Priority and dependencies:
+Contract:
+Input ledger:
+Portfolio:
+Execution profile:
+Assurance overlays:
+Project harness:
+Progress state:
+Archive:
+Run with goal-engine:
+Standalone fallback:
+Open owner decisions: None
+```
+
+If open material decisions remain, the contract is not approved and production execution must not start.

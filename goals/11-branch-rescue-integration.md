@@ -1,17 +1,35 @@
 # Branch Rescue / Integration
 
-**Use when:** Valuable work is stranded in a stale, divergent, oversized, or partially conflicting branch and must be recovered safely.
+**Use when:** Valuable work is stranded in a stale, divergent, oversized, or conflicting branch and must be recovered safely.
 
-## Recommended: skill-backed
+**In simple terms:** Recover useful behavioral slices without overwriting newer target work.
 
-```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the Branch Rescue / Integration profile. Account for every source slice, port only dependency-complete behavior that remains valid, protect newer target work, and continue until selected behavior passes broader gates and the target contains no unexplained changes. Stop for irreconcilable intent or a contract-defined blocker, approval boundary, budget, or two no-progress cycles; preserve a reusable closeout packet.
-```
+## Run unchanged — recommended
 
-## Standalone fallback
+Copy this command exactly. It uses `shape-goal` to discover and approve the missing inputs, then `goal-engine` to execute the result.
 
 ```text
-/goal Safely recover and integrate valuable work from [SOURCE BRANCH OR COMMITS] into [TARGET BRANCH] while preserving newer target behavior and unrelated work. Establish actual refs/SHAs, clean or dirty state, divergence, target baseline, relevant requirements/issues/PRs/tests, prior goal archives, and source intent from Git history; create a recovery point before changes. Inventory source changes by coherent behavior and classify each slice as already present, obsolete, conflicting, unsafe, or worth porting; verify every classification against current code and executable evidence. Port the smallest dependency-complete slices using the least risky method, resolving conflicts by current contracts and tests rather than taking either side wholesale. After each slice, run repository-native targeted checks, add regression coverage where needed, review the diff, and keep only changes that preserve or improve the target baseline. Never overwrite newer target work or import unrelated source history. Finish only when every source slice is accounted for, all selected behavior passes affected broader gates with surfaced evidence, and the target contains no unexplained changes. Stop for an owner decision on irreconcilable intent, approval/external blocker, [BUDGET], or two no-progress cycles. At any terminal outcome, preserve a reusable closeout packet under the repository's goal-history convention (default `docs/goals/<goal-id>/`) containing `CONTRACT.md`, final `PROGRESS.md`, and `RESULT.md`; update the history index, promote verified reusable tests/docs/ADRs/runbooks/fixtures/tooling, and exclude secrets, private data, raw production dumps, and unnecessarily large logs. Do not merge, push, delete, or rewrite branches without explicit approval.
+/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Branch Rescue / Integration objective. During shaping, load shape-goal's required-input specification for Branch Rescue / Integration; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Then hand off within this same goal to goal-engine to pin source and target state, classify source slices, port only dependency-complete valid behavior, and account for every decision; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
 ```
 
-**Why it works:** It treats a branch as behavioral slices, preserves a path matrix, and records reusable integration decisions rather than hiding them in a one-off merge.
+## Inputs the skills resolve
+
+- Source branch/commits and target branch
+- Source intent and relevant requirements
+- Slice classification criteria
+- Integration, review, and branch-operation authority
+- Common contract inputs: outcome, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, goal relationships, state paths, and closeout paths.
+
+**Suggested assurance overlays:** Compatibility & Portability
+
+`shape-goal` must search the repository and connected authoritative sources before asking. It asks only material unresolved decisions, one at a time with a recommendation. The active `/goal` is not complete when the contract is shaped; execution and passing evidence are still required.
+
+## Run unchanged — self-contained fallback
+
+Use this command when the skills are unavailable. It reproduces the same shape-then-execute gate without requiring placeholders.
+
+```text
+/goal Determine, obtain approval for, and complete this repository's next Branch Rescue / Integration objective without requiring the user to prefill placeholders. Phase 1 — shape: establish the actual repository state from instructions, Git state/history, requirements, architecture, plans, prior goals, tests/CI, runtime behavior, and available authoritative tools or connected sources. Build an input ledger for the target, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, and the profile-specific inputs described in this goal. Search before asking; when a material decision cannot be derived, ask the user one question at a time, include the evidence and a recommended answer, record the decision, and continue until a concise Goal Contract is approved. Do not edit production before approval, and do not treat contract creation as completion. Phase 2 — execute: pin source and target state, classify source slices, port only dependency-complete valid behavior, and account for every decision. In particular, protect recovery refs; classify slices as present/obsolete/conflicting/worth porting; never merge wholesale without evidence. Make small coherent reversible changes; use repository-native checks; verify findings before fixing; add regression protection; review important diffs independently when practical; keep only changes that preserve or improve the verified baseline; and persist progress, failed approaches, evidence, reusable outputs, and the next action. Finish only when every approved acceptance and assurance item passes with surfaced evidence and protected behavior remains intact. Stop for a genuine external blocker, required approval, exhausted approved budget, material goal drift, or two consecutive no-progress cycles. At every terminal outcome, preserve a reusable closeout packet containing CONTRACT.md, final PROGRESS.md, and RESULT.md under the repository's goal-history convention, update the portfolio/history, promote durable tests/docs/ADRs/runbooks/fixtures/tooling, and never archive secrets, private data, production dumps, exploit-enabling evidence, or unnecessary large logs. Never perform destructive, deployment, release, credential, billing, or external-system actions without explicit approval.
+```
+
+**Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.

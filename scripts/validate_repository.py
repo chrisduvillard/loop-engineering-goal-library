@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Validate the goal library's structure, lifecycle, adaptive coverage, docs, and links."""
+"""Validate the zero-friction goal library, skills, generated docs, and lifecycle."""
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -14,70 +15,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import sync_goal_docs  # noqa: E402
 
 ERRORS: list[str] = []
-
-CORE_GOALS = list(sync_goal_docs.CORE_GOALS)
-SPECIALIST_GOALS = list(sync_goal_docs.SPECIALIST_GOALS)
-ALL_GOALS = CORE_GOALS + SPECIALIST_GOALS
-
-PRESET_NAMES = (
-    "Brownfield Continue / Finish",
-    "PRD / Spec Compliance",
-    "Next Milestone",
-    "Deep Audit + Remediation",
-    "QA / Regression / UAT",
-    "Safe Refactor / Modernization",
-    "Release Readiness",
-    "Incident Recovery / Stabilization",
-    "Dependency / Framework Upgrade",
-    "Data Migration / Integrity",
-    "Branch Rescue / Integration",
-    "Measured Optimization / Benchmark",
-    "Technical Spike / Feasibility",
-)
-
-ASSURANCE_OVERLAYS = (
-    "Security & Privacy",
-    "Reliability & Recovery",
-    "Performance & Cost",
-    "UX & Accessibility",
-    "Data Integrity & Governance",
-    "Compatibility & Portability",
-    "Operability & Observability",
-    "Documentation & Knowledge Transfer",
-    "Compliance & Auditability",
-)
-
-REQUIRED_PATHS = (
-    "README.md",
-    "INSTALL.md",
-    "CHANGELOG.md",
-    "ROADMAP.md",
-    "VERSION",
-    "GOAL_LIBRARY.md",
-    "SPECIALIST_LOOPS.md",
-    "QUICK_REFERENCE.md",
-    "SKILLS_AND_GOALS.md",
-    "skills/shape-goal/SKILL.md",
-    "skills/shape-goal/goal-contract-template.md",
-    "skills/shape-goal/templates/goal-portfolio-template.md",
-    "skills/shape-goal/templates/custom-contract-driven-goal.md",
-    "skills/goal-engine/SKILL.md",
-    "skills/goal-engine/references/loop-profiles.md",
-    "skills/goal-engine/references/assurance-overlays.md",
-    "skills/goal-engine/references/state-and-evidence.md",
-    "skills/goal-engine/templates/project-harness-template.md",
-    "skills/goal-engine/templates/goal-progress-template.md",
-    "skills/goal-engine/templates/goal-result-template.md",
-    "skills/goal-engine/templates/goal-history-index-template.md",
-    "scripts/package_skills.py",
-    "scripts/sync_goal_docs.py",
-    "examples/complete-brownfield-cycle/README.md",
-    "examples/complete-brownfield-cycle/PORTFOLIO.md",
-    "examples/complete-brownfield-cycle/CONTRACT.md",
-    "examples/complete-brownfield-cycle/PROGRESS.md",
-    "examples/complete-brownfield-cycle/RESULT.md",
-    ".github/workflows/validate.yml",
-)
+PLACEHOLDER = re.compile(r"\[[A-Z][A-Z0-9 _/.,:+-]{2,}\]")
+ACTION_PIN = re.compile(r"uses:\s+[^@\s]+@([0-9a-f]{40})(?:\s+#.*)?$")
 
 
 def fail(message: str) -> None:
@@ -89,6 +28,17 @@ def require(path: str) -> Path:
     if not candidate.exists():
         fail(f"Missing required path: {path}")
     return candidate
+
+
+def load_catalog() -> dict:
+    path = require("goals/catalog.json")
+    if not path.exists():
+        return {"categories": [], "goals": []}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        fail(f"goals/catalog.json is invalid JSON: {error}")
+        return {"categories": [], "goals": []}
 
 
 def unquote_yaml(value: str) -> str:
@@ -126,22 +76,141 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, str], dict[str, str]]:
         key = key.strip()
         if key == "metadata":
             in_metadata = True
-            continue
-        top[key] = unquote_yaml(value)
+        else:
+            top[key] = unquote_yaml(value)
     return top, metadata
 
 
 def validate_version() -> str:
-    path = require("VERSION")
-    if not path.exists():
-        return ""
-    version = path.read_text(encoding="utf-8").strip()
+    version_path = require("VERSION")
+    version = version_path.read_text(encoding="utf-8").strip() if version_path.exists() else ""
     if not re.fullmatch(r"\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?", version):
         fail(f"VERSION is not semantic: {version!r}")
     changelog = require("CHANGELOG.md")
     if changelog.exists() and f"## [{version}]" not in changelog.read_text(encoding="utf-8"):
-        fail(f"CHANGELOG.md has no release section for VERSION {version}")
+        fail(f"CHANGELOG.md has no section for VERSION {version}")
     return version
+
+
+def validate_catalog(catalog: dict) -> list[dict]:
+    if catalog.get("schema_version") != 1:
+        fail("goals/catalog.json: schema_version must be 1")
+    categories = catalog.get("categories", [])
+    goals = catalog.get("goals", [])
+    keys = [item.get("key") for item in categories]
+    if keys != ["core", "specialist", "quality"]:
+        fail(f"Unexpected category order: {keys}")
+    expected_counts = {"core": 7, "specialist": 6, "quality": 9}
+    counts = {key: 0 for key in expected_counts}
+    seen_ids: set[str] = set()
+    seen_files: set[str] = set()
+    for index, item in enumerate(goals, start=1):
+        goal_id = item.get("id", "")
+        filename = item.get("file", "")
+        category = item.get("category", "")
+        if goal_id != f"{index:02d}":
+            fail(f"Catalog goal {filename}: expected id {index:02d}, found {goal_id}")
+        if goal_id in seen_ids or filename in seen_files:
+            fail(f"Duplicate catalog goal: {goal_id} / {filename}")
+        seen_ids.add(goal_id)
+        seen_files.add(filename)
+        if category not in counts:
+            fail(f"Catalog goal {filename}: unknown category {category}")
+        else:
+            counts[category] += 1
+        for field in ("title", "simple", "use_when"):
+            if not item.get(field):
+                fail(f"Catalog goal {filename}: missing {field}")
+    if len(goals) != 22:
+        fail(f"Expected 22 goals, found {len(goals)}")
+    if counts != expected_counts:
+        fail(f"Unexpected category counts: {counts}")
+    return goals
+
+
+def extract_commands(text: str) -> list[str]:
+    return [item.strip() for item in re.findall(r"```text\n(/goal .*?)\n```", text, flags=re.DOTALL)]
+
+
+def validate_goal_files(catalog_goals: list[dict]) -> None:
+    expected = {item["file"] for item in catalog_goals}
+    actual = {
+        path.name
+        for path in (ROOT / "goals").glob("*.md")
+        if path.name != "README.md"
+    }
+    if actual != expected:
+        fail(f"Goal catalog/file mismatch. Missing={sorted(expected-actual)}; extra={sorted(actual-expected)}")
+
+    profile_inputs = require("skills/shape-goal/references/profile-inputs.md")
+    profile_text = profile_inputs.read_text(encoding="utf-8") if profile_inputs.exists() else ""
+    loop_profiles = require("skills/goal-engine/references/loop-profiles.md")
+    loop_text = loop_profiles.read_text(encoding="utf-8") if loop_profiles.exists() else ""
+
+    for item in catalog_goals:
+        path = ROOT / "goals" / item["file"]
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        lower = text.lower()
+        if not text.startswith(f"# {item['title']}\n"):
+            fail(f"goals/{item['file']}: title differs from catalog")
+        for field, marker in (
+            ("use_when", "**Use when:**"),
+            ("simple", "**In simple terms:**"),
+        ):
+            expected_line = f"{marker} {item[field]}"
+            if expected_line not in text:
+                fail(f"goals/{item['file']}: {field} differs from catalog")
+        for heading in (
+            "## Run unchanged — recommended",
+            "## Inputs the skills resolve",
+            "## Run unchanged — self-contained fallback",
+        ):
+            if heading not in text:
+                fail(f"goals/{item['file']}: missing {heading!r}")
+
+        commands = extract_commands(text)
+        if len(commands) != 2:
+            fail(f"goals/{item['file']}: expected exactly 2 /goal commands, found {len(commands)}")
+            continue
+        recommended, fallback = commands
+
+        if PLACEHOLDER.search(recommended):
+            fail(f"goals/{item['file']}: recommended launcher contains placeholder {PLACEHOLDER.search(recommended).group(0)!r}")
+        for fragment in (
+            "shape-goal",
+            "goal-engine",
+            item["title"],
+            "do not make production changes until the user approves a Goal Contract",
+            "Do not declare success when shaping is complete",
+        ):
+            if fragment not in recommended:
+                fail(f"goals/{item['file']}: recommended launcher missing {fragment!r}")
+
+        if PLACEHOLDER.search(fallback):
+            fail(f"goals/{item['file']}: self-contained fallback contains placeholder {PLACEHOLDER.search(fallback).group(0)!r}")
+        for fragment in (
+            "without requiring the user to prefill placeholders",
+            "Search before asking",
+            "Goal Contract is approved",
+            "reusable closeout packet",
+            "Never perform",
+        ):
+            if fragment not in fallback:
+                fail(f"goals/{item['file']}: fallback missing {fragment!r}")
+
+        if "secrets" not in lower or "private data" not in lower:
+            fail(f"goals/{item['file']}: sensitive-data guard is incomplete")
+        if item["title"] not in profile_text:
+            fail(f"profile-inputs.md: missing {item['title']}")
+        if item["title"] not in loop_text:
+            fail(f"loop-profiles.md: missing {item['title']}")
+
+    if "## Custom Contract-Driven" not in profile_text:
+        fail("profile-inputs.md: missing Custom Contract-Driven")
+    if "## Custom Contract-Driven" not in loop_text:
+        fail("loop-profiles.md: missing Custom Contract-Driven")
 
 
 def validate_skills(version: str) -> None:
@@ -149,112 +218,67 @@ def validate_skills(version: str) -> None:
     skill_files = sorted(skills_root.glob("*/SKILL.md")) if skills_root.exists() else []
     if len(skill_files) != 2:
         fail(f"Expected exactly 2 skills, found {len(skill_files)}")
-
     names: set[str] = set()
     for path in skill_files:
         top, metadata = parse_frontmatter(path)
         rel = path.relative_to(ROOT)
         for key in ("name", "description", "compatibility"):
             if not top.get(key):
-                fail(f"{rel}: missing non-empty {key}")
+                fail(f"{rel}: missing {key}")
+        for key in ("user-invocable", "disable-model-invocation"):
+            if key not in top:
+                fail(f"{rel}: missing {key}")
         name = top.get("name", "")
-        if name:
-            if name in names:
-                fail(f"Duplicate skill name: {name}")
-            names.add(name)
-            if name != path.parent.name:
-                fail(f"{rel}: name {name!r} does not match directory {path.parent.name!r}")
-            if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
-                fail(f"{rel}: invalid portable skill name {name!r}")
-        if len(top.get("description", "")) > 1024:
-            fail(f"{rel}: description exceeds 1024 characters")
-        if len(top.get("compatibility", "")) > 500:
-            fail(f"{rel}: compatibility exceeds 500 characters")
+        names.add(name)
+        if name != path.parent.name:
+            fail(f"{rel}: name {name!r} does not match directory")
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
+            fail(f"{rel}: invalid skill name {name!r}")
         for key in ("author", "version", "source"):
             if not metadata.get(key):
                 fail(f"{rel}: metadata.{key} is missing")
-        if version and metadata.get("version") != version:
-            fail(f"{rel}: metadata.version does not match VERSION {version!r}")
+        if metadata.get("version") != version:
+            fail(f"{rel}: metadata.version does not match VERSION {version}")
         if metadata.get("source") != "github.com/chrisduvillard/loop-engineering-goal-library":
             fail(f"{rel}: unexpected metadata.source")
+
+        host_metadata = require(str(path.parent.relative_to(ROOT) / "agents/openai.yaml"))
+        if host_metadata.exists():
+            host_text = host_metadata.read_text(encoding="utf-8")
+            for fragment in ("display_name:", "short_description:", "default_prompt:", "allow_implicit_invocation: true"):
+                if fragment not in host_text:
+                    fail(f"{host_metadata.relative_to(ROOT)}: missing {fragment!r}")
 
     if names != {"shape-goal", "goal-engine"}:
         fail(f"Unexpected skill set: {sorted(names)}")
 
-
-def extract_goal_command(text: str) -> str:
-    matches = re.findall(r"```text\n(/goal .*?)\n```", text, flags=re.DOTALL)
-    return matches[-1].strip() if matches else ""
-
-
-def goal_title(path: Path) -> str:
-    first = path.read_text(encoding="utf-8").splitlines()[0]
-    return first.removeprefix("# ").strip()
-
-
-def validate_goals_and_generated_docs() -> None:
-    goal_dir = require("goals")
-    actual = sorted(path.name for path in goal_dir.glob("*.md")) if goal_dir.exists() else []
-    if actual != ALL_GOALS:
-        fail(f"Goal files differ from expected set. Expected {ALL_GOALS}; found {actual}")
-
-    for filename in ALL_GOALS:
-        path = goal_dir / filename
-        if not path.exists():
-            continue
-        text = path.read_text(encoding="utf-8")
-        lower = text.lower()
-        if not text.startswith("# "):
-            fail(f"goals/{filename}: must begin with one H1 title")
-        if "**Use when:**" not in text:
-            fail(f"goals/{filename}: missing Use when guidance")
-        if not extract_goal_command(text):
-            fail(f"goals/{filename}: no copy-ready /goal command found")
-        if "reusable closeout packet" not in lower:
-            fail(f"goals/{filename}: no reusable closeout requirement")
-        if "secrets" not in lower and "private data" not in lower:
-            fail(f"goals/{filename}: no sensitive-data archive guard")
-
-    for path, expected in sync_goal_docs.render_documents().items():
-        if path.exists() and path.read_text(encoding="utf-8") != expected:
-            fail(f"{path.relative_to(ROOT)} is out of date; run python3 scripts/sync_goal_docs.py --write")
-
-
-def validate_profiles_and_overlays() -> None:
-    profiles_path = require("skills/goal-engine/references/loop-profiles.md")
-    if profiles_path.exists():
-        text = profiles_path.read_text(encoding="utf-8")
-        for name in PRESET_NAMES:
-            if name not in text:
-                fail(f"Execution preset missing from loop-profiles.md: {name}")
-        if "Custom Contract-Driven" not in text:
-            fail("loop-profiles.md: missing Custom Contract-Driven fallback")
-        if "not an exhaustive taxonomy" not in text:
-            fail("loop-profiles.md: presets are not described as non-exhaustive")
-
-    overlays_path = require("skills/goal-engine/references/assurance-overlays.md")
-    if overlays_path.exists():
-        text = overlays_path.read_text(encoding="utf-8")
-        for name in ASSURANCE_OVERLAYS:
-            if name not in text:
-                fail(f"Assurance overlay missing: {name}")
-        if "Project-specific overlay" not in text:
-            fail("assurance-overlays.md: missing project-specific extension rule")
-
-    custom_path = require("skills/shape-goal/templates/custom-contract-driven-goal.md")
-    if custom_path.exists():
-        text = custom_path.read_text(encoding="utf-8")
+    shape = require("skills/shape-goal/SKILL.md")
+    if shape.exists():
+        text = shape.read_text(encoding="utf-8")
         for fragment in (
-            "Custom Contract-Driven",
-            "## Standalone fallback",
-            "keep-or-revert",
-            "reusable closeout packet",
-            "thirteen execution presets",
+            "Zero-friction bootstrap",
+            "input ledger",
+            "search all lawful, authoritative sources before asking",
+            "ask one decision at a time",
+            "shaping is complete; the enclosing goal is not complete",
+            "references/profile-inputs.md",
+            "references/input-resolution.md",
         ):
-            if fragment not in text:
-                fail(f"{custom_path.relative_to(ROOT)}: missing {fragment!r}")
-        if not extract_goal_command(text):
-            fail(f"{custom_path.relative_to(ROOT)}: no standalone /goal found")
+            if fragment.lower() not in text.lower():
+                fail(f"{shape.relative_to(ROOT)}: missing {fragment!r}")
+
+    engine = require("skills/goal-engine/SKILL.md")
+    if engine.exists():
+        text = engine.read_text(encoding="utf-8")
+        for fragment in (
+            "Zero-friction handoff",
+            "do not treat shaping as completion",
+            "Goal-fit gate",
+            "Evidence for the evaluator",
+            "Preserve lifecycle state and closeout",
+        ):
+            if fragment.lower() not in text.lower():
+                fail(f"{engine.relative_to(ROOT)}: missing {fragment!r}")
 
 
 def require_fragments(path: Path, fragments: tuple[str, ...]) -> None:
@@ -263,131 +287,79 @@ def require_fragments(path: Path, fragments: tuple[str, ...]) -> None:
     text = path.read_text(encoding="utf-8")
     for fragment in fragments:
         if fragment not in text:
-            fail(f"{path.relative_to(ROOT)}: missing required text {fragment!r}")
+            fail(f"{path.relative_to(ROOT)}: missing {fragment!r}")
 
 
-def validate_state_and_examples() -> None:
-    require_fragments(require("skills/shape-goal/goal-contract-template.md"), (
-        "**Goal ID:**",
-        "**Revision:**",
-        "**Priority:**",
-        "**Primary profile:**",
-        "**Assurance overlays:**",
-        "**Project harness:**",
-        "**Portfolio:**",
-        "ONE OF THE THIRTEEN PRESETS",
-        "## Target",
-        "## Acceptance evidence",
-        "## Goal relationships and change policy",
-        "## Goal-drift review triggers",
-        "## Reuse and closeout",
-        "## Native `/goal` command",
-    ))
-    require_fragments(require("skills/shape-goal/templates/goal-portfolio-template.md"), (
-        "## Active",
-        "## Ready",
-        "## Paused or blocked",
-        "## Candidates",
-        "## Transition log",
-        "One active goal per native `/goal` session or worktree",
-    ))
-    require_fragments(require("skills/goal-engine/templates/project-harness-template.md"), (
-        "## Setup",
-        "## Run",
-        "## Repository-native verification",
-        "## Realistic workflows",
-        "## Freshness triggers",
-    ))
-    require_fragments(require("skills/goal-engine/references/state-and-evidence.md"), (
-        "GOAL.md",
-        "GOAL_PROGRESS.md",
-        "docs/goals/PORTFOLIO.md",
-        "Candidate",
-        "Active",
-        "Goal-fit",
-        "Project harness",
-        "Closeout archive",
-    ))
-    require_fragments(require("skills/goal-engine/templates/goal-progress-template.md"), (
-        "Goal ID / revision",
-        "Portfolio state / priority",
-        "Assurance overlays",
-        "Project harness",
-        "## Dependencies and goal fit",
-        "## Acceptance and overlay ledger",
-    ))
-    require_fragments(require("skills/goal-engine/templates/goal-result-template.md"), (
-        "Goal ID / revision",
-        "Cancelled",
-        "Superseded",
-        "Assurance overlays",
-        "## Goal relationships and next portfolio state",
-        "Project harness updates",
-    ))
-    require_fragments(require("examples/complete-brownfield-cycle/PORTFOLIO.md"), (
-        "2026-08-25-portfolio-import-v1-4",
-        "2026-08-26-import-performance-budget",
-        "Measured Optimization / Benchmark",
-        "## Ready",
-        "## Closed history",
-        "## Transition log",
-    ))
-    require_fragments(require("examples/complete-brownfield-cycle/CONTRACT.md"), (
-        "2026-08-25-portfolio-import-v1-4",
-        "0.2.0",
-        "PRD / Spec Compliance",
-        "Data Integrity & Governance",
-        "## Goal-drift review triggers",
-    ))
-    require_fragments(require("examples/complete-brownfield-cycle/PROGRESS.md"), (
-        "## Acceptance and overlay ledger",
-        "68 passed",
-        "12/12",
-        "42 passed",
-        "Current contract still fits user need: Yes",
-        "## Next action",
-    ))
-    require_fragments(require("examples/complete-brownfield-cycle/RESULT.md"), (
-        "**Outcome:** Achieved",
-        "## Goal relationships and next portfolio state",
-        "2026-08-26-import-performance-budget",
-        "## Reusable lessons",
-    ))
-
-
-def validate_readme_goal_guide() -> None:
-    path = require("README.md")
-    if not path.exists():
-        return
-    text = path.read_text(encoding="utf-8")
-    required = (
-        "## Step-by-step example",
-        "### 0. Install both skills once",
-        "### 1. Open the project and shape the next goal",
-        "### 2. Review the proposed Goal Contract",
-        "### 3. Start the native `/goal`",
-        "### 4. Follow progress without steering every step",
-        "### 5. Handle a new need safely",
-        "### 6. Close, archive, and reuse",
-        "## All 13 standalone goals",
-        "GOAL_PROGRESS.md",
-        "docs/goals/PORTFOLIO.md",
-        "Custom Contract-Driven fallback",
-        "Project Harness",
+def validate_state_and_docs() -> None:
+    required_paths = (
+        "README.md", "INSTALL.md", "CHANGELOG.md", "ROADMAP.md", "CONTRIBUTING.md",
+        "FULL_REPORT.md", "CURRENT_IMPLEMENTATION.md", "SOURCES.md", "VERSION", "GOAL_LIBRARY.md",
+        "SPECIALIST_LOOPS.md", "QUALITY_GOALS.md", "QUICK_REFERENCE.md",
+        "SKILLS_AND_GOALS.md", "goals/README.md", "goals/catalog.json",
+        "skills/shape-goal/SKILL.md",
+        "skills/shape-goal/goal-contract-template.md",
+        "skills/shape-goal/references/input-resolution.md",
+        "skills/shape-goal/references/profile-inputs.md",
+        "skills/shape-goal/templates/goal-portfolio-template.md",
+        "skills/shape-goal/templates/custom-contract-driven-goal.md",
+        "skills/goal-engine/SKILL.md",
+        "skills/goal-engine/references/loop-profiles.md",
+        "skills/goal-engine/references/assurance-overlays.md",
+        "skills/goal-engine/references/state-and-evidence.md",
+        "skills/goal-engine/templates/project-harness-template.md",
+        "skills/goal-engine/templates/goal-progress-template.md",
+        "skills/goal-engine/templates/goal-result-template.md",
+        "skills/goal-engine/templates/goal-history-index-template.md",
+        "scripts/package_skills.py", "scripts/sync_goal_docs.py",
+        "scripts/validate_repository.py", ".github/workflows/validate.yml",
+        "examples/complete-brownfield-cycle/README.md",
+        "examples/complete-brownfield-cycle/PORTFOLIO.md",
+        "examples/complete-brownfield-cycle/CONTRACT.md",
+        "examples/complete-brownfield-cycle/PROGRESS.md",
+        "examples/complete-brownfield-cycle/RESULT.md",
+        "docs/goals/INDEX.md",
+        "docs/goals/2026-08-25-zero-friction-profile-coverage/CONTRACT.md",
+        "docs/goals/2026-08-25-zero-friction-profile-coverage/PROGRESS.md",
+        "docs/goals/2026-08-25-zero-friction-profile-coverage/RESULT.md",
     )
-    for fragment in required:
-        if fragment not in text:
-            fail(f"README.md: missing step-by-step or reuse guidance {fragment!r}")
+    for path in required_paths:
+        require(path)
 
-    for filename in ALL_GOALS:
-        path = ROOT / "goals" / filename
-        if not path.exists():
-            continue
-        title = goal_title(path)
-        if title not in text:
-            fail(f"README.md: missing standalone goal title {title!r}")
-        if f"goals/{filename}" not in text:
-            fail(f"README.md: missing link to goals/{filename}")
+    require_fragments(require("CURRENT_IMPLEMENTATION.md"), ("Version `0.4.0`", "22 zero-friction goal profiles", "## Verification"))
+    require_fragments(require("README.md"), (
+        "## Quick start", "No placeholder replacement is required",
+        "<!-- goal-catalog:start -->", "<!-- goal-catalog:end -->",
+        "## One-command example", "## Strict two-step mode",
+        "## Deep-review guarantees",
+    ))
+    require_fragments(require("skills/shape-goal/goal-contract-template.md"), (
+        "**Launcher:**", "**Input ledger:**", "## Input resolution record",
+        "## Profile-specific inputs", "## Goal-drift review triggers",
+    ))
+    require_fragments(require("skills/shape-goal/references/input-resolution.md"), (
+        "## The input ledger", "## Search before asking", "## Ask one material decision at a time",
+        "## Approval gate", "## Handoff inside a zero-friction `/goal`",
+    ))
+    require_fragments(require("skills/goal-engine/references/assurance-overlays.md"), (
+        "## Dedicated profile or overlay?", "Frontend UI / UX / Accessibility",
+        "Documentation Synchronization / Knowledge Transfer", "Compliance / Audit Readiness",
+    ))
+    require_fragments(require("docs/goals/2026-08-25-zero-friction-profile-coverage/RESULT.md"), (
+        "**Outcome:** Achieved", "22 zero-friction launchers", "Frontend UI / UX / Accessibility",
+        "Documentation Synchronization / Knowledge Transfer", "CI validation",
+    ))
+
+
+def validate_generated_docs() -> None:
+    try:
+        documents = sync_goal_docs.render_documents()
+    except Exception as error:  # noqa: BLE001
+        fail(f"Could not render generated docs: {error}")
+        return
+    for path, expected in documents.items():
+        actual = path.read_text(encoding="utf-8") if path.exists() else ""
+        if actual != expected:
+            fail(f"{path.relative_to(ROOT)} is out of date; run python3 scripts/sync_goal_docs.py --write")
 
 
 def normalize_link(raw_target: str) -> str:
@@ -417,56 +389,6 @@ def validate_markdown_links() -> None:
                 fail(f"{path.relative_to(ROOT)}: broken local link: {raw_target}")
 
 
-def validate_entry_points() -> None:
-    checks = {
-        require("README.md"): (
-            "Step-by-step example",
-            "All 13 standalone goals",
-            "Measured Optimization / Benchmark",
-            "Technical Spike / Feasibility",
-            "shape-goal",
-            "goal-engine",
-        ),
-        require("INSTALL.md"): (
-            "install globally",
-            "Verify the installation",
-            "Update",
-            "Build reusable ZIP packages",
-        ),
-        require("QUICK_REFERENCE.md"): (
-            "Multiple goals over time",
-            "thirteen standalone goals",
-            "Measured Optimization / Benchmark",
-            "Technical Spike / Feasibility",
-            "Assurance overlays",
-            "Standalone custom fallback",
-            "Project Harness",
-            "Ultra-short default",
-        ),
-        require("SKILLS_AND_GOALS.md"): (
-            "A project can have many goals",
-            "Thirteen presets",
-            "Custom Contract-Driven",
-            "Reusable project harness",
-            "native /goal",
-        ),
-        require("ROADMAP.md"): (
-            "Implemented in `0.3.0`",
-            "Before `1.0.0`",
-            "live Codex",
-            "live Claude Code",
-            "license",
-        ),
-    }
-    for path, fragments in checks.items():
-        if not path.exists():
-            continue
-        lower = path.read_text(encoding="utf-8").lower()
-        for fragment in fragments:
-            if fragment.lower() not in lower:
-                fail(f"{path.relative_to(ROOT)}: missing entry-point text {fragment!r}")
-
-
 def validate_scripts_and_ci() -> None:
     for path in sorted((ROOT / "scripts").glob("*.py")):
         try:
@@ -476,30 +398,30 @@ def validate_scripts_and_ci() -> None:
 
     workflow = require(".github/workflows/validate.yml")
     if workflow.exists():
+        for line in workflow.read_text(encoding="utf-8").splitlines():
+            if "uses:" not in line:
+                continue
+            match = ACTION_PIN.search(line.strip())
+            if not match:
+                fail(f".github/workflows/validate.yml: action is not pinned to a full commit SHA: {line.strip()}")
         text = workflow.read_text(encoding="utf-8")
         for fragment in (
-            "actions/checkout@v7",
-            "actions/setup-python@v7",
-            "actions/upload-artifact@v7",
-            "skills@1.5.23",
-            "scripts/sync_goal_docs.py --check",
-            "scripts/package_skills.py",
+            "skills@1.5.23", "scripts/sync_goal_docs.py --check",
+            "scripts/package_skills.py", "scripts/validate_repository.py",
         ):
             if fragment not in text:
-                fail(f"{workflow.relative_to(ROOT)}: missing {fragment!r}")
+                fail(f".github/workflows/validate.yml: missing {fragment!r}")
 
 
 def main() -> int:
-    for path in REQUIRED_PATHS:
-        require(path)
     version = validate_version()
+    catalog = load_catalog()
+    catalog_goals = validate_catalog(catalog)
+    validate_goal_files(catalog_goals)
     validate_skills(version)
-    validate_goals_and_generated_docs()
-    validate_profiles_and_overlays()
-    validate_state_and_examples()
-    validate_readme_goal_guide()
+    validate_state_and_docs()
+    validate_generated_docs()
     validate_markdown_links()
-    validate_entry_points()
     validate_scripts_and_ci()
 
     if ERRORS:
@@ -510,14 +432,14 @@ def main() -> int:
 
     print("Repository validation passed.")
     print(f"- version {version}")
-    print("- 2 portable skills")
-    print(f"- {len(ALL_GOALS)} canonical execution presets plus packaged Custom Contract-Driven fallback")
-    print(f"- {len(ASSURANCE_OVERLAYS)} assurance overlays")
-    print("- complete README step-by-step workflow and standalone-goal guide")
-    print("- multi-goal portfolio and lifecycle schemas")
-    print("- reusable project harness, progress, result, history, and closeout schemas")
-    print("- generated consolidated libraries are synchronized")
-    print("- completed multi-goal example")
+    print("- 2 portable skills with host metadata")
+    print("- 22 zero-friction recommended launchers")
+    print("- 22 self-contained no-placeholder fallbacks")
+    print("- 7 core, 6 specialist, and 9 quality profiles")
+    print("- profile-specific input resolution and question protocol")
+    print("- multi-goal portfolio, project harness, and reusable closeout")
+    print("- generated catalogs synchronized")
+    print("- GitHub Actions pinned to immutable commits")
     print("- local Markdown links resolve")
     return 0
 

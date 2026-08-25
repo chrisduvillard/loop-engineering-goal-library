@@ -2,59 +2,56 @@
 
 The repository should add abstractions only when they remove more field friction than they create.
 
-## Implemented in `0.3.0`
+## Implemented in `0.4.0`
 
-- A complete step-by-step README covering installation, shaping, approval, execution, goal changes, closeout, and reuse.
-- Plain-English selection guidance for every standalone goal.
-- Measured Optimization / Benchmark for fixed-protocol champion-versus-challenger loops.
-- Technical Spike / Feasibility for bounded Go / Conditional Go / No-Go investigations.
-
-## Implemented in `0.2.0`
-
-- Multiple-goal portfolio and priority/dependency tracking.
-- Explicit goal transitions and contract revisions.
-- One-contract-per-session/worktree isolation rules.
-- Assurance overlays instead of dozens of domain-specific profiles.
-- Custom Contract-Driven fallback.
-- Reusable project harness.
-- Goal-fit checks during execution.
+- Twenty-two zero-friction profile launchers with no required placeholder replacement.
+- Two-phase bootstrap: exhaustive goal shaping and approval followed by execution inside the same native `/goal`.
+- Profile-specific input definitions and a search-before-asking decision protocol.
+- Dedicated frontend, documentation, security, reliability, API, observability, developer-experience, data-quality, and audit-readiness profiles.
+- Machine-readable goal catalog and generated README/catalog collections.
+- OpenAI skill host metadata.
+- Immutable GitHub Action pins and stronger launcher validation.
+- A real repository closeout packet documenting the deep review.
 
 ## Before `1.0.0`
 
-- Run a complete multi-goal brownfield portfolio through live Codex `/goal` sessions.
-- Run comparable goals and a priority change through live Claude Code `/goal` sessions.
-- Field-test at least one Measured Optimization / Benchmark goal and one Technical Spike / Feasibility goal.
-- Compare evaluator behavior, compaction, skill retention, evidence visibility, pause/resume, and supersession quality.
-- Test two isolated parallel goals in separate worktrees without shared-state collisions.
-- Test global install, update, reinstall, and ZIP upload paths on macOS.
+- Run the same zero-friction launcher through a complete live Codex `/goal` session.
+- Run a comparable launcher through Claude Code `/goal`, including at least one owner question during shaping.
+- Verify that neither evaluator treats Goal Contract creation as completion.
+- Compare skill retention, compaction, evidence visibility, pause/resume, and handoff quality.
+- Field-test Frontend UI / UX / Accessibility and Documentation Synchronization profiles on real mature projects.
+- Test a priority change and supersession in a multi-goal portfolio.
+- Test two isolated parallel goals in separate worktrees.
+- Test global install, update, reinstall, ZIP upload, and OpenAI host metadata on macOS.
 - Choose an explicit repository and skill license. **Recommended:** MIT for maximum reuse with attribution.
 - Create a tagged release with permanent packaged skill ZIPs and checksums.
 
 ## Evidence-gated candidates
 
-### `goalctl` automation
+### Deterministic `goalctl` helper
 
-A small CLI could initialize contracts, validate frontmatter, update portfolios, switch active pointers, and archive closeouts. Add only after live use identifies repetitive deterministic steps that are safer to automate than leave to agents.
+A small CLI could initialize contracts, validate input ledgers, update portfolios, switch active pointers, and archive closeouts. Add only after field use identifies repetitive deterministic steps that are safer to automate than leave to agents.
 
-### Goal-history search and portfolio summarization
+### Goal history search and portfolio summarization
 
 Add when several real archived goals make manual navigation inconvenient.
 
-### Project-harness generator
+### Project-specific profile packs
 
-The current skills can create or refresh the harness. A dedicated generator is justified only if setup/run discovery repeatedly consumes substantial effort across projects.
+A repository or organization may need its own profiles or overlays. Prefer project skills that reference this library rather than expanding the global catalog from one local use case.
 
-### New execution preset
+### New global profile
 
-Add only when the same Custom Contract-Driven pattern recurs across multiple real projects and has a distinct verifier, failure mode, and stopping logic. Do not add profiles merely for technologies or quality attributes already handled by overlays.
+Add only when the same Custom Contract-Driven pattern recurs across multiple real projects and has a distinct iteration unit, verifier, failure mode, keep-or-revert decision, and stopping logic.
 
-### Claude Code plugin packaging
+### Claude Code plugin and OpenAI plugin packaging
 
-Consider a namespaced plugin release after the standalone Agent Skills workflow is field-tested and versioning/licensing are settled.
+Consider namespaced plugin releases after field testing, versioning, and licensing are settled.
 
 ## Not planned
 
 - A custom replacement for native `/goal`.
-- One monolithic project goal that absorbs unrelated work.
+- A monolithic project goal that absorbs unrelated work.
+- Hidden auto-approval of product direction, destructive actions, legal conclusions, or risk acceptance.
 - A proprietary state database when repository artifacts or existing trackers are sufficient.
-- Automatic deployment, release, destructive migration, or credential authority.
+- Automatic deployment, release, destructive migration, security testing outside scope, or credential authority.

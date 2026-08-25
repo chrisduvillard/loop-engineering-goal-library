@@ -1,37 +1,95 @@
 # Contributing
 
-Changes should make the library safer, easier to use, easier to verify, more adaptive, or easier to reuse—not merely longer.
+Changes should make the library safer, easier to run unchanged, easier to verify, more adaptive, or more reusable—not merely longer.
 
 ## Canonical sources
 
-- Edit individual standalone preset files under `goals/`.
-- Do not hand-edit `GOAL_LIBRARY.md` or `SPECIALIST_LOOPS.md`.
-- Regenerate them with:
+- Goal identity and category metadata: `goals/catalog.json`
+- Individual launchers and fallbacks: `goals/*.md`
+- Shared shaping and input discovery: `skills/shape-goal/`
+- Shared execution behavior: `skills/goal-engine/`
+- Cross-cutting proof: `skills/goal-engine/references/assurance-overlays.md`
+
+Do not hand-edit generated catalog sections or collection files. Regenerate with:
 
 ```bash
 python3 scripts/sync_goal_docs.py --write
 ```
 
-- Shared execution behavior belongs in `skills/goal-engine/`.
-- Target, portfolio, and lifecycle behavior belongs in `skills/shape-goal/`.
-- Cross-cutting proof obligations belong in `skills/goal-engine/references/assurance-overlays.md`.
-- Project-specific facts never belong in the reusable global skills.
+Generated outputs:
+
+- `GOAL_LIBRARY.md`
+- `SPECIALIST_LOOPS.md`
+- `QUALITY_GOALS.md`
+- `goals/README.md`
+- The goal catalog section in `README.md`
+
+## Zero-friction launcher invariant
+
+The first `/goal` command in every canonical goal file must:
+
+- Run unchanged
+- Contain no repository-specific placeholder
+- Name both `shape-goal` and `goal-engine`
+- Require repository and connected-source search before user questions
+- Ask only unresolved material owner decisions
+- Forbid production edits before contract approval
+- State that shaping is not completion
+- Require passing acceptance evidence and reusable closeout
+
+The second command is a self-contained no-placeholder fallback.
+
+## Adding or changing a profile
+
+A new profile is justified only when the work has a distinct:
+
+- Iteration unit
+- Primary verifier
+- Failure mode
+- Keep-or-revert decision
+- Stopping logic
+
+Do not add a profile merely for a technology or framework.
+
+When adding a profile:
+
+1. Add it to `goals/catalog.json`.
+2. Add the canonical goal file.
+3. Add profile inputs to `skills/shape-goal/references/profile-inputs.md`.
+4. Add execution rules to `skills/goal-engine/references/loop-profiles.md`.
+5. Update relevant overlays and examples.
+6. Regenerate collections.
+7. Update version, changelog, validator, and README wording as needed.
+
+Use a dedicated quality profile when that concern is the primary outcome. Use an assurance overlay when it is secondary.
+
+## Changing input resolution
+
+Preserve these rules:
+
+- Search all available authoritative evidence before asking.
+- Facts are the agent's responsibility; decisions are the user's.
+- Ask one material decision at a time with evidence and a recommendation.
+- Do not ask the same question again without materially new evidence.
+- Do not auto-default product direction, acceptance thresholds, risk acceptance, destructive authority, or legal/compliance conclusions.
+- Do not allow shaping to satisfy the enclosing native goal.
 
 ## Versioned changes
 
 When behavior changes:
 
-1. Update `VERSION` according to semantic versioning.
+1. Update `VERSION`.
 2. Update both skills' `metadata.version`.
 3. Add a `CHANGELOG.md` entry.
-4. Explain migration or compatibility effects.
-5. Update examples and validators when a state schema changes.
+4. Explain compatibility and migration effects.
+5. Update examples and validators when schemas change.
 
-Do not add a license, release, tag, or publish permanent artifacts without owner approval.
+Do not add a license, tag, release, or permanent published artifact without owner approval.
 
 ## Validate locally
 
 ```bash
+python3 scripts/sync_goal_docs.py --write
 python3 scripts/sync_goal_docs.py --check
 python3 scripts/validate_repository.py
 python3 scripts/package_skills.py
@@ -42,50 +100,13 @@ Generated ZIPs belong in `dist/` and are ignored by Git.
 
 ## Strong proposals include
 
-- The friction or failure mode being addressed
-- Evidence that it occurs often enough to justify complexity
+- The friction or failure mode
+- Evidence that it recurs often enough to justify complexity
 - The smallest coherent change
 - A verifier or worked example
 - Compatibility and migration notes
-- Whether the change affects shaping, lifecycle, portfolio, execution, overlays, harness, a preset, or standalone mode
-
-## Preset, overlay, and custom-loop rules
-
-### Add or change an execution preset when
-
-- The pattern has a distinct control loop, verifier, failure mode, and stopping logic.
-- It recurs across multiple real goals or projects.
-- It cannot be expressed cleanly as an existing preset plus assurance overlays and contract evidence.
-
-Do not create presets for technologies, frameworks, or quality attributes alone.
-
-### Add or change an assurance overlay when
-
-- The concern cuts across multiple execution presets.
-- It adds stable proof, review, or authority obligations.
-- A project-specific overlay has recurred enough to justify global reuse.
-
-### Use Custom Contract-Driven when
-
-- The goal is measurable but no preset fits yet.
-- The contract can define iteration unit, verifier, keep-or-revert rule, review strategy, and stop condition.
-
-One unusual goal is not evidence for a new global preset.
-
-## Goal portfolio changes
-
-Preserve these invariants:
-
-- One native `/goal` session/worktree executes one dependency-safe leaf contract.
-- A different observable outcome gets a different Goal ID.
-- Priority changes do not silently rewrite contracts.
-- Closed results remain immutable and related goals link to them.
-- Parallel goals require isolation and explicit shared-resource coordination.
-
-## Project harness changes
-
-The Project Harness should link to canonical commands and scripts, record only verified mechanics, include freshness triggers, and remain vendor-neutral. Do not duplicate the entire README, CI configuration, or task runner.
+- Whether it affects shaping, lifecycle, execution, overlays, harness, catalog, or standalone mode
 
 ## Sensitive data
 
-Never commit credentials, private user data, raw production dumps, unredacted exploit-enabling evidence, or unnecessary large logs. Use synthetic examples, concise extracts, checksums, and stable approved references.
+Never commit credentials, private user data, production dumps, exploit-enabling evidence, or unnecessary large logs. Use synthetic examples, concise extracts, checksums, and approved stable references.

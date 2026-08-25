@@ -1,99 +1,108 @@
-# Skills + Goals + Adaptive Project State
+# Skills + Goals + Zero-Friction Execution
 
-The library separates reusable process, changing project priorities, one executable contract, native persistence, project mechanics, and durable evidence.
+The library separates reusable method, repository-specific truth, native persistence, and durable evidence.
 
 ```text
-Project needs and portfolio
-          │
-          ▼
-shape-goal             chooses, changes, pauses, splits, or resumes the next goal
-          │
-          ▼
-Goal Contract          stores one outcome, revision, proof, relationships, and boundaries
-          │
-          ▼
-native /goal           provides one-session continuation and completion evaluation
-          │
-          ▼
-goal-engine            applies one profile, assurance overlays, and project harness
-          │
-          ▼
-Evidence + archive     closes the goal, preserves learning, and informs what runs next
+Copied profile launcher
+        │
+        ▼
+shape-goal
+  - searches evidence
+  - resolves profile inputs
+  - asks owner decisions
+  - approves one contract
+        │
+        ▼
+Goal Contract
+  - one outcome
+  - proof and protection
+  - profile + overlays
+  - authority and exits
+        │
+        ▼
+goal-engine inside native /goal
+  - implements
+  - verifies
+  - reviews
+  - records
+  - detects drift
+        │
+        ▼
+Closeout + reusable knowledge
 ```
 
-## The layers
+## Why a launcher may begin before the exact target is known
+
+The strictest native-goal pattern shapes the contract first and activates `/goal` second. The zero-friction launchers support a deliberate two-phase meta-goal:
+
+1. Discover and approve the exact contract.
+2. Execute that contract to passing evidence.
+
+The approval boundary preserves safety. The launcher explicitly forbids production edits during shaping and forbids the evaluator from treating contract creation as completion.
+
+Users who prefer maximum control can always use the strict two-step flow.
+
+## Responsibilities
 
 | Layer | Responsibility | Must not do |
 |---|---|---|
-| Goal portfolio or existing tracker | Coordinate candidate, ready, active, paused, blocked, and closed goals; priority and dependencies | Replace individual contracts or silently redefine them |
-| `shape-goal` | Inspect evidence, manage lifecycle transitions, assign identity, select profile/overlays, and approve the next contract | Begin production implementation or invent owner decisions |
-| Goal Contract | Define one outcome, revision, scope, proof, protection, relationships, authority, harness, and exits | Become a backlog or giant process prompt |
-| Native `/goal` | Keep one contract running in one session and evaluate its finish condition | Grant permissions or choose new product direction |
-| `goal-engine` | Orient, implement, verify, review, detect drift, checkpoint, close, and preserve reusable outputs | Absorb unrelated work or weaken the contract |
-| Project harness | Store verified setup, run, reset, environment, and native-check mechanics reused across goals | Duplicate canonical scripts or preserve stale assumptions as fact |
-| Closeout archive | Preserve immutable contract, progress, result, relationships, and links to durable outputs | Become a secret store or raw log dump |
+| Goal catalog | Offer reusable control-loop choices | Pretend to encode repository-specific targets |
+| `shape-goal` | Search evidence, resolve inputs, ask decisions, manage lifecycle, approve the contract | Implement production changes or invent owner decisions |
+| Input specifications | Define what each profile needs | Turn defaults into hidden product decisions |
+| Goal Contract | Store one outcome, proof, protection, authority, relationships, and exits | Become an unbounded backlog |
+| Native `/goal` | Continue the current session toward the condition | Grant extra authority or redefine success |
+| `goal-engine` | Execute, verify, review, checkpoint, close, and preserve reusable outputs | Absorb unrelated work or weaken evidence |
+| Assurance overlays | Add cross-cutting proof | Replace the primary profile |
+| Project Harness | Preserve verified setup/run/reset/check mechanics | Duplicate stale instructions |
+| Portfolio | Coordinate several goals over time | Merge different outcomes into one active goal |
+| Closeout archive | Preserve immutable evidence and links to durable outputs | Become a secret store or raw log dump |
 
-## A project can have many goals
+## Zero-friction input resolution
 
-One project may have sequential goals, paused goals, competing candidates, dependency chains, or safely isolated parallel workstreams.
+The recommended command in every goal file names a profile but no repository-specific placeholder.
 
-One native `/goal` session or worktree executes one dependency-safe leaf goal. This keeps completion evidence coherent. Parallel goals require separate branches/worktrees, non-overlapping ownership, and explicit coordination of shared resources.
+`shape-goal` loads:
 
-Use an existing issue tracker or roadmap as the portfolio when possible. Otherwise use `docs/goals/PORTFOLIO.md`.
+- [`input-resolution.md`](skills/shape-goal/references/input-resolution.md)
+- [`profile-inputs.md`](skills/shape-goal/references/profile-inputs.md)
 
-### Lifecycle transitions
+It creates an input ledger, searches all available authoritative sources, applies only safe reversible defaults, and asks one unresolved material decision at a time with a recommendation.
 
-- **Clarify:** same semantics and Goal ID; record revision note.
-- **Amend:** same outcome, material contract change; pause, approve, increment revision.
-- **Reprioritize:** reorder portfolio; contracts remain unchanged.
-- **Pause / Resume:** preserve progress, branch/SHA, next action, and resume condition.
-- **Supersede:** different outcome replaces prior goal; archive and create a new Goal ID.
-- **Split:** create child goals and select one leaf.
-- **Merge:** combine only when outcome, evidence, and authority align.
-- **Cancel:** close with reason and reusable evidence.
+## Profiles and overlays
 
-At each checkpoint, `goal-engine` runs a goal-fit gate. A new user need is not automatically scope.
+A profile defines **how the work progresses**.
 
-## Thirteen presets are enough as presets—not as an exhaustive taxonomy
+An overlay defines **extra proof required**.
 
-The profiles capture common control-loop shapes:
+Example:
 
-- Completion and convergence
-- Requirements compliance
-- Milestone delivery
-- Audit and remediation
-- Product verification
-- Behavior-preserving transformation
-- Release-gate convergence
-- Incident recovery
-- Ecosystem upgrades
-- Data migration
-- Divergent-history integration
-- Measured champion-versus-challenger optimization
-- Bounded technical feasibility and decision evidence
+```text
+Primary profile: Frontend UI / UX / Accessibility
+Overlays:
+- Performance & Cost
+- Compatibility & Portability
+```
 
-They intentionally do not duplicate every project domain or quality attribute.
+When a quality concern is itself the main outcome, use its dedicated profile. When it is secondary to another outcome, add the overlay.
 
-### Assurance overlays
+## Multiple goals
 
-Security, reliability, performance, cost, UX, accessibility, data governance, compatibility, operability, documentation, and compliance are additive proof obligations selected in the contract.
+A project may have sequential, paused, blocked, competing, or safely parallel goals.
 
-### Custom Contract-Driven fallback
+```text
+Candidate → Ready → Active → Paused / Blocked → Closed
+```
 
-When no preset fits, the contract defines the iteration unit, verifier, keep-or-revert rule, review strategy, and objective stop condition. The [standalone custom fallback](skills/shape-goal/templates/custom-contract-driven-goal.md) preserves the same model without installed skills. A recurring custom pattern may later justify a new preset, but one unusual project should not expand the global taxonomy.
+One native `/goal` session or worktree executes one dependency-safe leaf contract. Parallel goals require isolated sessions/worktrees and explicit shared-resource coordination.
 
-## Reusable project harness
-
-Future goals should not rediscover how to install, run, reset, or verify the same repository. `goal-engine` uses existing instructions and scripts first; when they are fragmented or ambiguous, it creates or refreshes `docs/agent/PROJECT_HARNESS.md`.
-
-The harness remains vendor-neutral and records only verified mechanics. Platform-specific project skills may reference it without becoming the only source of truth.
+Lifecycle changes are handled through clarify, amend, reprioritize, pause, resume, supersede, split, merge, cancel, and close.
 
 ## Durable state
 
 ```text
 GOAL.md
 GOAL_PROGRESS.md
-docs/goals/PORTFOLIO.md   optional when several goals need coordination
+docs/goals/PORTFOLIO.md
 docs/goals/INDEX.md
 docs/goals/<goal-id>/
 ├── CONTRACT.md
@@ -101,8 +110,29 @@ docs/goals/<goal-id>/
 └── RESULT.md
 ```
 
-Closed evidence is immutable. Later work links to prior goals rather than rewriting their result.
+Closed evidence is immutable. Later work links to prior results rather than rewriting them.
 
-## Separation rule
+## Reusable project knowledge
 
-> **Portfolios coordinate needs. Skills carry method. Contracts carry one project's current truth. Harnesses carry verified mechanics. Native goals carry persistence. Archives carry evidence and reuse.**
+Verified recurring knowledge is promoted to:
+
+- Regression tests
+- ADRs and approved product/architecture documentation
+- Runbooks
+- Project Harness
+- Fixtures and design references
+- Scripts and task-runner commands
+- Benchmarks and evals
+- Residual-risk documentation
+
+## Extension rule
+
+Add a global profile only when repeated field use demonstrates a distinct:
+
+- Iteration unit
+- Primary verifier
+- Failure mode
+- Keep-or-revert decision
+- Stop condition
+
+Use Custom Contract-Driven for unusual one-off loops. Use project-specific overlays or skills for local recurring needs.

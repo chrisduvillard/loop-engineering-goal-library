@@ -1,17 +1,35 @@
 # Incident Recovery / Stabilization
 
-**Use when:** A severe regression or production-like incident must be contained, diagnosed, and recovered without compounding the damage.
+**Use when:** A severe regression or production-like incident must be contained, diagnosed, and recovered without compounding damage.
 
-## Recommended: skill-backed
+**In simple terms:** Contain damage, restore health, prove the cause, and add prevention.
 
-```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the Incident Recovery / Stabilization profile. Preserve evidence; separate containment, restoration, root cause, and prevention; and continue until recovery gates pass, the failure is no longer reproducible under defined conditions, and rollback/recovery is verified. Stop for unresolved safety uncertainty or a contract-defined blocker, approval boundary, budget, or two no-progress cycles; preserve a reusable closeout packet.
-```
+## Run unchanged — recommended
 
-## Standalone fallback
+Copy this command exactly. It uses `shape-goal` to discover and approve the missing inputs, then `goal-engine` to execute the result.
 
 ```text
-/goal Stabilize and recover [SYSTEM OR SCOPE] from [INCIDENT OR FAILURE] to [RECOVERY TARGET]. First preserve evidence and establish the actual state from incident reports, logs, metrics, traces, recent deploys/config/data changes, repository instructions/runbooks, native tests/CI, prior goal archives, and Git status/history; protect unrelated work and do not alter production or external systems without explicit approval. Separate containment, restoration, root cause, and prevention. Reproduce or otherwise verify the failure, map its blast radius, and identify the safest reversible mitigation. Then iterate: test one evidence-backed hypothesis, make the smallest reversible change, run repository-native targeted checks and realistic recovery scenarios, compare health with the pre-incident baseline, and keep only proven improvements. Add regression and observability coverage, independently review high-risk fixes, and record the timeline, evidence, decisions, and residual risk. Finish only when [RECOVERY GATES] pass, the failure is no longer reproducible under the defined conditions, and rollback/recovery is verified. Stop for an approval or external blocker, unresolved safety uncertainty, [BUDGET], or two no-progress cycles. At any terminal outcome, preserve a reusable closeout packet under the repository's goal-history convention (default `docs/goals/<goal-id>/`) containing `CONTRACT.md`, final `PROGRESS.md`, and `RESULT.md`; update the history index, promote verified reusable tests/docs/ADRs/runbooks/fixtures/tooling, and exclude secrets, private data, raw production dumps, and unnecessarily large logs. No production or destructive action without explicit approval.
+/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Incident Recovery / Stabilization objective. During shaping, load shape-goal's required-input specification for Incident Recovery / Stabilization; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Then hand off within this same goal to goal-engine to separate containment, restoration, root-cause proof, and prevention while preserving incident evidence; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
 ```
 
-**Why it works:** It prevents emergency work from becoming speculative cleanup and retains the incident timeline, proof, and prevention assets for the next response.
+## Inputs the skills resolve
+
+- Incident/failure definition and blast radius
+- Recovery target and health gates
+- Allowed containment actions
+- Evidence sources, rollback, and follow-up owner
+- Common contract inputs: outcome, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, goal relationships, state paths, and closeout paths.
+
+**Suggested assurance overlays:** Reliability & Recovery, Operability & Observability
+
+`shape-goal` must search the repository and connected authoritative sources before asking. It asks only material unresolved decisions, one at a time with a recommendation. The active `/goal` is not complete when the contract is shaped; execution and passing evidence are still required.
+
+## Run unchanged — self-contained fallback
+
+Use this command when the skills are unavailable. It reproduces the same shape-then-execute gate without requiring placeholders.
+
+```text
+/goal Determine, obtain approval for, and complete this repository's next Incident Recovery / Stabilization objective without requiring the user to prefill placeholders. Phase 1 — shape: establish the actual repository state from instructions, Git state/history, requirements, architecture, plans, prior goals, tests/CI, runtime behavior, and available authoritative tools or connected sources. Build an input ledger for the target, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, and the profile-specific inputs described in this goal. Search before asking; when a material decision cannot be derived, ask the user one question at a time, include the evidence and a recommended answer, record the decision, and continue until a concise Goal Contract is approved. Do not edit production before approval, and do not treat contract creation as completion. Phase 2 — execute: separate containment, restoration, root-cause proof, and prevention while preserving incident evidence. In particular, preserve evidence; prefer reversible containment; prove recovery and root cause separately. Make small coherent reversible changes; use repository-native checks; verify findings before fixing; add regression protection; review important diffs independently when practical; keep only changes that preserve or improve the verified baseline; and persist progress, failed approaches, evidence, reusable outputs, and the next action. Finish only when every approved acceptance and assurance item passes with surfaced evidence and protected behavior remains intact. Stop for a genuine external blocker, required approval, exhausted approved budget, material goal drift, or two consecutive no-progress cycles. At every terminal outcome, preserve a reusable closeout packet containing CONTRACT.md, final PROGRESS.md, and RESULT.md under the repository's goal-history convention, update the portfolio/history, promote durable tests/docs/ADRs/runbooks/fixtures/tooling, and never archive secrets, private data, production dumps, exploit-enabling evidence, or unnecessary large logs. Never perform destructive, deployment, release, credential, billing, or external-system actions without explicit approval.
+```
+
+**Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.

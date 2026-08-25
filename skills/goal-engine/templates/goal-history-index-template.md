@@ -1,6 +1,6 @@
 # Goal History
 
-This index points to immutable closeout packets. Coordinate non-closed goals in the repository's existing tracker or [`PORTFOLIO.md`](PORTFOLIO.md).
+This index points to immutable closeout packets. Coordinate non-closed goals in the repository's existing tracker or `docs/goals/PORTFOLIO.md`.
 
 | Goal ID | Revision | Closed | Outcome | Profile | Overlays | Target | Result | Related goals | Reusable outputs |
 |---|---:|---|---|---|---|---|---|---|---|

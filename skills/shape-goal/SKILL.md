@@ -4,7 +4,7 @@ description: Turn vague or changing project needs into an evidence-backed Goal C
 compatibility: Portable Agent Skills host. Reads repository evidence and writes planning/state artifacts; production implementation is intentionally out of scope.
 metadata:
   author: chrisduvillard
-  version: "0.2.0"
+  version: "0.3.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -103,7 +103,7 @@ Present at most three candidates with supporting evidence, expected value, depen
 
 ### The destination is still foggy
 
-Do not manufacture a target. Recommend wayfinding, product discovery, an experiment, or an ADR when no stable outcome or verifier exists.
+Do not manufacture a target. Recommend wayfinding or product discovery when no stable outcome exists. Use the Technical Spike / Feasibility preset when the product need is stable but a bounded technical unknown must be answered before implementation.
 
 ## 5. Assign durable identity and relationships
 
@@ -147,7 +147,7 @@ A target is not ready when it is a task list, implementation mechanism, vague as
 
 Choose one primary preset from [../goal-engine/references/loop-profiles.md](../goal-engine/references/loop-profiles.md) when it matches the dominant control loop.
 
-The eleven presets are **not project types and not a ceiling**. They cover common execution shapes. When none fits, select **Custom Contract-Driven** and define in the contract:
+The thirteen presets are **not project types and not a ceiling**. They cover common execution shapes, including measured champion-versus-challenger optimization and bounded technical feasibility work. When none fits, select **Custom Contract-Driven** and define in the contract:
 
 - Unit of iteration
 - Primary verifier

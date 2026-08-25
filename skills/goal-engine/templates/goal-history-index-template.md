@@ -1,20 +1,21 @@
 # Goal History
 
-This index points to durable closeout packets. Keep active state in the repository's existing plan/progress system or in `GOAL.md` and `GOAL_PROGRESS.md`.
+This index points to immutable closeout packets. Coordinate non-closed goals in the repository's existing tracker or [`PORTFOLIO.md`](PORTFOLIO.md).
 
-| Goal ID | Closed | Outcome | Profile | Target | Result | Reusable outputs |
-|---|---|---|---|---|---|---|
-| [GOAL ID] | [DATE] | [OUTCOME] | [PROFILE] | [ONE-LINE TARGET] | `docs/goals/[GOAL ID]/RESULT.md` | [TESTS / DOCS / ADRS / TOOLING] |
+| Goal ID | Revision | Closed | Outcome | Profile | Overlays | Target | Result | Related goals | Reusable outputs |
+|---|---:|---|---|---|---|---|---|---|---|
+| [GOAL ID] | [REV] | [DATE] | [OUTCOME] | [PROFILE] | [OVERLAYS OR NONE] | [ONE-LINE TARGET] | `docs/goals/[GOAL ID]/RESULT.md` | [IDS OR NONE] | [TESTS / DOCS / ADRS / HARNESS / TOOLING] |
 
 ## Archive layout
 
 ```text
 docs/goals/
-├── INDEX.md
+├── PORTFOLIO.md   optional active/ready/paused coordination
+├── INDEX.md       immutable closed history
 └── <goal-id>/
     ├── CONTRACT.md
     ├── PROGRESS.md
     └── RESULT.md
 ```
 
-Do not store secrets, credentials, private user data, raw production dumps, or unnecessarily large logs in the archive. Link to approved secure systems when evidence cannot be committed safely.
+Do not store secrets, credentials, private user data, raw production dumps, exploit-enabling evidence, or unnecessarily large logs. Link approved secure systems when evidence cannot be committed safely.

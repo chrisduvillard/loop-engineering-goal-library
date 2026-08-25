@@ -1,22 +1,33 @@
 # Goal Progress: [CONTRACT NAME]
 
-**Goal ID:** [GOAL ID]  
+**Goal ID / revision:** [GOAL ID] / [REVISION]  
+**Portfolio state / priority:** Active / [P0-P3]  
 **Contract:** [PATH OR ISSUE]  
 **Library:** [SOURCE] @ [VERSION OR COMMIT]  
-**Profile:** [EXECUTION PROFILE]  
-**Branch/SHA:** [BRANCH] / [SHA]  
+**Profile:** [EXECUTION PROFILE OR CUSTOM]  
+**Assurance overlays:** [LIST OR NONE]  
+**Project harness:** [PATH OR SOURCES]  
+**Branch/worktree/SHA:** [BRANCH] / [WORKTREE] / [SHA]  
 **Last checkpoint:** [DATE OR SESSION]  
 **No-progress count:** 0
 
+## Dependencies and goal fit
+
+- Parent goal: [ID OR NONE]
+- Depends on: [IDS OR NONE]
+- Related goals: [IDS OR NONE]
+- Current contract still fits user need: Yes / No / Review required
+- Last lifecycle decision: [NEW / AMEND / REPRIORITIZE / PAUSE / RESUME / SUPERSEDE / SPLIT / MERGE / CANCEL / NONE]
+
 ## Baseline
 
-- `[COMMAND OR WORKFLOW]` — Pass / Fail / Blocked / Not run — [RELEVANT RESULT]
+- `[COMMAND OR WORKFLOW]` — Pass / Fail / Blocked / Not run — [RESULT]
 - Preserved working changes: [PATHS OR NONE]
 - Known pre-existing failures: [LIST OR NONE]
 
-## Acceptance ledger
+## Acceptance and overlay ledger
 
-| ID | Acceptance item | Verifier | Status | Evidence |
+| ID | Acceptance or overlay item | Verifier | Status | Evidence |
 |---|---|---|---|---|
 | A1 | [CRITERION] | `[COMMAND OR FLOW]` | Not run | — |
 
@@ -28,16 +39,20 @@ Use only: `Pass`, `Fail`, `Blocked`, or `Not run`.
 
 ## Failed or reverted approaches
 
-- [APPROACH] — [WHY IT FAILED OR WAS REVERTED]
+- [APPROACH] — [WHY]
 
 ## Open contradictions and risks
 
-- [CONTRADICTION OR RISK] — [CURRENT DISPOSITION]
+- [CONTRADICTION OR RISK] — [DISPOSITION]
+
+## Reusable discoveries and harness updates
+
+- [TEST / FIXTURE / DOC / ADR / RUNBOOK / HARNESS / TOOLING]
 
 ## Blockers and approvals
 
-- [BLOCKER OR APPROVAL NEEDED] — [OWNER / EXTERNAL DEPENDENCY]
+- [BLOCKER OR APPROVAL] — [OWNER / DEPENDENCY]
 
 ## Next action
 
-[ONE HIGHEST-PRIORITY UNBLOCKED ACTION]
+[ONE HIGHEST-PRIORITY DEPENDENCY-SAFE UNBLOCKED ACTION]

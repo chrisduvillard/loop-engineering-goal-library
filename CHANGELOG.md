@@ -8,6 +8,26 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.2.0] - 2026-08-25
+
+### Added
+
+- Goal Portfolio support for candidate, ready, active, paused, blocked, and closed goals.
+- Explicit lifecycle transitions: clarify, amend, reprioritize, pause, resume, supersede, split, merge, cancel, and close.
+- Parent, dependency, priority, revision, and supersession relationships in Goal Contracts.
+- Assurance overlays for security/privacy, reliability/recovery, performance/cost, UX/accessibility, data governance, compatibility, operability, documentation, and compliance.
+- A `Custom Contract-Driven` fallback when none of the eleven presets fits.
+- A reusable project-harness template for setup, run, reset, realistic workflow, and repository-native verification knowledge.
+- A completed example portfolio showing one achieved goal and a different ready goal that follows it.
+
+### Changed
+
+- The eleven standalone goals are now described as high-value control-loop presets rather than an exhaustive list of project types.
+- `shape-goal` now manages changing priorities and multiple goals without silently overwriting the active contract.
+- `goal-engine` now performs a goal-fit gate at checkpoints and pauses for reshaping when the user's need materially changes.
+- One native `/goal` session or worktree is explicitly bound to one dependency-safe leaf contract; parallel goals require isolation and coordination.
+- Progress, result, history, README, architecture, and quick-reference artifacts now record profiles, overlays, portfolio state, harness reuse, and related goals.
+
 ## [0.1.0] - 2026-08-25
 
 ### Added
@@ -23,8 +43,8 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 ### Changed
 
-- Global installation is now the recommended default for reuse across projects.
-- Completed, blocked, stalled, and budget-exhausted goals now produce a reusable closeout archive.
+- Global installation is the recommended default for reuse across projects.
+- Completed, blocked, stalled, and budget-exhausted goals produce a reusable closeout archive.
 - Skill metadata records the library source and version for reproducibility.
 
 ### Known pre-release validation

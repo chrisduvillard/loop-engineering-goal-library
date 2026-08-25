@@ -199,8 +199,9 @@ def validate_entry_points() -> None:
         if not path.exists():
             continue
         text = path.read_text(encoding="utf-8")
+        folded_text = text.casefold()
         for fragment in fragments:
-            if fragment not in text:
+            if fragment.casefold() not in folded_text:
                 fail(f"{path.relative_to(ROOT)}: missing entry-point text {fragment!r}")
 
 

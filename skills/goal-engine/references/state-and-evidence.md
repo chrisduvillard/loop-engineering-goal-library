@@ -1,8 +1,8 @@
-# Goal Engine: State, Evidence, and Reuse
+# Goal Engine: State, Evidence, Portfolio, and Reuse
 
-Use the repository's existing plan, progress, issue, milestone, handoff, and history formats when they can represent the state below. Do **not** create a competing source of truth merely because templates exist.
+Use existing project trackers, plans, issues, milestones, progress files, handoffs, runbooks, and history formats when they can represent the state below. Do **not** create competing sources of truth merely because templates exist.
 
-When no suitable convention exists, use:
+Default simple mode:
 
 ```text
 GOAL.md
@@ -14,33 +14,68 @@ docs/goals/<goal-id>/
 └── RESULT.md
 ```
 
+When multiple non-closed goals need coordination and no suitable tracker exists, add:
+
+```text
+docs/goals/PORTFOLIO.md
+```
+
 Templates:
 
 - [../templates/goal-progress-template.md](../templates/goal-progress-template.md)
 - [../templates/goal-result-template.md](../templates/goal-result-template.md)
 - [../templates/goal-history-index-template.md](../templates/goal-history-index-template.md)
+- [../../shape-goal/templates/goal-portfolio-template.md](../../shape-goal/templates/goal-portfolio-template.md)
+- [../templates/project-harness-template.md](../templates/project-harness-template.md)
+
+## State layers
+
+- **Portfolio or existing tracker:** priorities, dependencies, lifecycle states, relationships, and review triggers across goals.
+- **Goal Contract:** one approved outcome, revision, evidence, protection, profile, overlays, authority, and exits.
+- **Progress state:** mutable baseline, ledger, attempts, blockers, no-progress count, and next action for one goal.
+- **Project harness:** verified setup, run, reset, environment, and native check mechanics reused across goals.
+- **History index and archive:** immutable terminal evidence and reusable outputs.
 
 ## Active-state rules
 
-- `GOAL.md` or its authoritative equivalent holds the approved contract.
-- `GOAL_PROGRESS.md` or the repository's existing state artifact holds mutable execution state.
-- One active goal must not silently overwrite another.
-- A closed or superseded goal must retain its own archive packet.
-- Link to authoritative requirements instead of duplicating them.
-- Record the library version/source commit so later readers can reproduce the workflow assumptions.
+- One native `/goal` session or worktree executes one dependency-safe leaf contract.
+- Multiple active project goals require isolated branches/worktrees, non-overlapping ownership, and explicit coordination.
+- One active goal must not silently overwrite, absorb, or redefine another.
+- A paused goal retains progress and a resume condition.
+- A closed, cancelled, or superseded goal retains its archive packet.
+- Link authoritative requirements instead of duplicating them.
+- Record library version/source and contract revision.
+
+## Goal lifecycle
+
+Use these portfolio states:
+
+```text
+Candidate
+Ready
+Active
+Paused
+Blocked
+Closed
+```
+
+Use these closed outcomes:
+
+```text
+Achieved
+Cancelled
+Superseded
+Approval required
+Budget exhausted
+Stalled
+Blocked
+```
+
+Priority changes do not change contract semantics. Keep the same Goal ID only while the observable outcome remains the same.
 
 ## Minimal progress state
 
-The progress template records:
-
-- Goal ID, contract, profile, library version, branch/SHA, and checkpoint
-- Verified baseline and preserved working changes
-- Acceptance ledger with exact verifiers
-- Completed changes
-- Failed or reverted approaches
-- Contradictions, risks, blockers, and approvals
-- No-progress count
-- One next highest-priority unblocked action
+Record Goal ID/revision, contract, portfolio state, profile, overlays, harness, library version, branch/worktree/SHA, baseline, preserved changes, acceptance ledger, completed changes, failed/reverted approaches, contradictions, blockers, approvals, no-progress count, goal-fit result, and one next action.
 
 Use only these acceptance statuses:
 
@@ -53,62 +88,49 @@ Not run
 
 ## Evidence quality
 
-Prefer evidence in this order:
+Prefer:
 
 1. Deterministic repository-native commands with exact results
 2. Reproduction or realistic runtime workflow
-3. Integration, E2E, UAT, security, performance, or migration evidence
+3. Integration, E2E, UAT, security, performance, migration, or overlay evidence
 4. Reviewed diff tied to the contract
 5. Stable rubric-based evaluation for subjective properties
 6. Code inspection or agent judgment only as supporting context
 
-An acceptance item is **Pass** only when its stated verifier has run successfully under the required conditions. “Implemented,” “reviewed,” or “looks correct” is not a verifier.
+An acceptance item is Pass only when its verifier ran successfully under required conditions. “Implemented,” “reviewed,” or “looks correct” is not proof.
 
 ## Baseline discipline
 
-- Record pre-existing failures before changing them.
-- Do not hide regressions by redefining the baseline after edits.
-- If a verifier must change because the requirement changed, obtain contract-required approval and explain the before/after semantics.
-- A narrower targeted check may guide an iteration; the contract's broader final gates still determine completion.
-- Preserve user-authored and unrelated working changes.
+- Record pre-existing failures before edits.
+- Do not redefine the baseline after changes to hide regressions.
+- Changing a verifier's semantics requires contract-defined approval.
+- Targeted checks guide iterations; broader final gates determine completion.
+- Preserve user-authored and unrelated work.
 
 ## Keep-or-revert rule
 
-Keep a change only when it:
+Keep a change only when it advances an acceptance item or verified blocker, preserves protected behavior, introduces no unexplained failure, and has a coherent reviewable diff. Otherwise revert only the agent-authored slice when safe.
 
-- Advances at least one contract acceptance item or removes a verified blocker
-- Preserves protected behavior
-- Does not introduce unexplained new failures
-- Has a coherent, reviewable diff
+## Goal-fit and no-progress accounting
 
-Otherwise revert only the agent-authored slice when safe. Never discard unrelated or user-authored work.
+At checkpoints record whether the current contract still fits the user's need.
 
-## No-progress accounting
+Return to `shape-goal` when priority, outcome, scope, proof, protection, authority, profile, overlays, dependencies, or lifecycle must materially change.
 
-Count a serious cycle as progress only when it produces at least one of:
-
-- New verified evidence
-- A smaller reproducible failure
-- A changed and testable hypothesis
-- A closed acceptance gap
-- A newly proven external blocker or approval boundary
-- A reusable verifier, fixture, or diagnostic that materially improves the next cycle
-
-Record no-progress cycles explicitly. Reset the count only when one of those outcomes occurs.
+Count a serious cycle as progress only when it produces new verified evidence, a smaller reproduction, a changed testable hypothesis, a closed gap, a proven blocker/approval boundary, or a reusable verifier/fixture/diagnostic/harness improvement that materially advances the next cycle.
 
 ## Checkpoint update
 
-At each meaningful checkpoint, surface and persist:
-
 ```text
-Goal ID:
-Profile:
+Goal ID / revision / portfolio state:
+Profile and overlays:
+Project harness:
 Current gap:
 Change made:
 Verifier and result:
 Acceptance items changed:
-Regression status:
-Review status:
+Regression and review status:
+Goal-fit result:
 Reusable discovery:
 No-progress count:
 Remaining highest-priority gap:
@@ -118,74 +140,30 @@ State artifact:
 
 ## Durable-knowledge promotion
 
-Before closeout, promote verified knowledge to its permanent home:
-
 | Knowledge | Preferred home |
 |---|---|
 | Corrected failure | Regression test |
 | Product or architecture decision | Approved document or ADR |
 | Operational recovery or release procedure | Runbook |
+| Stable setup/run/verification recipe | Project harness or project skill |
 | Stable benchmark or acceptance flow | Repository-owned script or test |
 | Reusable fixture or specimen | Maintained test-data path |
 | Important limitation | Product/architecture documentation or residual-risk record |
 
-Do not promote speculative observations or duplicate material already stored authoritatively.
+Promote only verified, recurring knowledge. Do not duplicate canonical material.
 
 ## Closeout archive
 
-Archive every terminal outcome, not only success:
+Archive terminal outcomes as `CONTRACT.md`, `PROGRESS.md`, and `RESULT.md`; update portfolio and history with Goal ID, revision, close date, outcome, profile, overlays, target, result link, related goals, and reusable outputs.
 
-- **Achieved**
-- **Blocked**
-- **Approval required**
-- **Budget exhausted**
-- **Stalled**
-- **Superseded**
+Paused goals are not terminal: preserve progress and resume condition without pretending they are complete.
 
-The archive contains:
-
-```text
-CONTRACT.md  approved target and boundaries
-PROGRESS.md  final ledger, evidence, attempts, blockers, and next action
-RESULT.md    outcome, delivered behavior, reuse outputs, and residual risk
-```
-
-Update `docs/goals/INDEX.md` or the repository's existing history index with:
-
-- Goal ID
-- Close date
-- Outcome
-- Profile
-- One-line target
-- Result link
-- Reusable outputs
-
-Preserve history. Do not edit an old result to make later work appear part of the original goal; create a new Goal ID and link related goals.
+Preserve history. Later work gets a new Goal ID or approved revision and links back.
 
 ## Sensitive-data guard
 
-Never commit:
-
-- Secrets, tokens, credentials, or private keys
-- Private user data
-- Raw production database dumps
-- Unredacted security evidence that increases exploitability
-- Large logs when a concise excerpt, checksum, or secure-system link is sufficient
-
-When evidence must stay outside Git, record a stable approved reference and the minimum metadata needed to retrieve it lawfully.
+Never commit secrets, tokens, credentials, private keys, private user data, raw production dumps, unredacted exploit-enabling evidence, or large logs when a concise extract, checksum, or approved secure reference is sufficient.
 
 ## Result quality
 
-A useful `RESULT.md` lets a fresh agent answer:
-
-- What was supposed to become true?
-- What actually happened?
-- Which exact evidence supports the outcome?
-- What behavior changed?
-- What did not change?
-- What failed or was reverted?
-- What durable knowledge was promoted?
-- What can be reused next time?
-- What residual risk or next action remains?
-
-A closeout packet is not a substitute for regression tests, ADRs, runbooks, or product documentation. It is the indexable evidence trail that links them together.
+A useful result lets a fresh agent answer what was intended, what happened, which evidence supports it, what changed, what remained protected, what failed or was reverted, what goal followed or was superseded, what knowledge was promoted, and what residual risk or next action remains.

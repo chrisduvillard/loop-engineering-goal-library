@@ -1,8 +1,8 @@
 # Goal Engine: Execution Profiles
 
-Select one primary profile from the approved Goal Contract. These are **overlays** on the universal Goal Engine loop, not replacements for the contract.
+Execution profiles are **control-loop presets**, not project types and not an exhaustive taxonomy. The Goal Contract always wins on outcome, scope, acceptance evidence, protected behavior, authority, and stop conditions.
 
-The Goal Contract always wins on outcome, scope, acceptance evidence, protected behavior, authority, and stop conditions.
+Choose one primary preset when it matches the dominant execution shape. Add cross-cutting proof through [assurance-overlays.md](assurance-overlays.md), not by creating a profile for every quality concern.
 
 ## 1. Brownfield Continue / Finish
 
@@ -38,7 +38,7 @@ The Goal Contract always wins on outcome, scope, acceptance evidence, protected 
 - Treat scanner, reviewer, and subagent findings as hypotheses until verified.
 - Rank verified findings by severity, confidence, and blast radius.
 - Fix root causes, add regression protection, and rerun affected broader gates.
-- Finish after no verified finding at or above the contract's severity bar remains and a final pass finds no new actionable evidence.
+- Finish after no verified finding at or above the severity bar remains and a final pass finds no new actionable evidence.
 
 ## 5. QA / Regression / UAT
 
@@ -46,7 +46,7 @@ The Goal Contract always wins on outcome, scope, acceptance evidence, protected 
 
 - Build a risk-based matrix of required flows, negative cases, data paths, configurations, and environments.
 - Exercise the real product from clean, realistic state.
-- Rerun the exact failed scenario after each fix, then the affected broader gates.
+- Rerun the exact failed scenario after each fix, then affected broader gates.
 - Finish only after a clean end-to-end pass of every required acceptance flow.
 
 ## 6. Safe Refactor / Modernization
@@ -56,7 +56,7 @@ The Goal Contract always wins on outcome, scope, acceptance evidence, protected 
 - Map consumers, APIs, formats, configuration, deployment assumptions, and hidden compatibility constraints.
 - Capture baseline behavior and add characterization coverage where protection is weak.
 - Change one structural seam at a time and preserve a fallback or rollback path.
-- Finish when the target structure is reached and before/after evidence proves equivalence except for explicitly approved changes.
+- Finish when the target structure is reached and before/after evidence proves equivalence except for approved changes.
 
 ## 7. Release Readiness
 
@@ -74,7 +74,7 @@ The Goal Contract always wins on outcome, scope, acceptance evidence, protected 
 - Separate containment, recovery, root-cause proof, and prevention.
 - Prefer reversible mitigations until the failure mechanism is understood.
 - Preserve logs, timelines, metrics, and reproductions needed for diagnosis.
-- Finish only when service health is verified, the root cause is evidenced, regression protection exists, and follow-up state is recorded.
+- Finish only when health is verified, root cause is evidenced, regression protection exists, and follow-up state is recorded.
 
 ## 9. Dependency / Framework Upgrade
 
@@ -83,32 +83,44 @@ The Goal Contract always wins on outcome, scope, acceptance evidence, protected 
 - Inventory direct and transitive dependencies, supported versions, official migration guidance, and ecosystem constraints.
 - Establish compatibility gates before changing versions.
 - Upgrade in coherent stages; inspect lockfiles and generated changes.
-- Finish when supported configurations pass, deprecated paths are handled as scoped, and rollback or recovery is documented.
+- Finish when supported configurations pass, scoped deprecations are handled, and recovery is documented.
 
 ## 10. Data Migration / Integrity
 
 **Use for:** Schema, format, backfill, or data movement where correctness and recovery matter.
 
-- Define invariants, reconciliation queries, idempotency, mixed-version behavior, and rollback before mutation.
-- Test with representative data, interruption, retry, and partial-failure scenarios.
-- Separate additive preparation, migration, verification, cutover, and destructive cleanup.
-- Finish when reconciliation proves integrity and required rollback/cutover evidence passes; destructive cleanup always follows the contract's approval boundary.
+- Define invariants, reconciliation, idempotency, mixed-version behavior, and rollback before mutation.
+- Test representative data, interruption, retry, and partial-failure scenarios.
+- Separate preparation, migration, verification, cutover, and destructive cleanup.
+- Finish when reconciliation proves integrity and required rollback/cutover evidence passes.
 
 ## 11. Branch Rescue / Integration
 
 **Use for:** Recovering valuable work from stale, divergent, or oversized branches.
 
-- Pin source and target SHAs and protect recovery refs before editing.
-- Decompose the branch into coherent behavioral slices rather than assuming the whole branch should merge.
-- Compare each slice with newer target behavior and choose merge, cherry-pick, port, rewrite, or discard based on evidence.
-- Finish when selected value is integrated and verified, rejected work is explained, and recovery remains possible until approval permits cleanup.
+- Pin source and target SHAs and protect recovery refs.
+- Decompose the branch into coherent behavioral slices.
+- Compare each slice with newer target behavior and choose the least risky transfer method.
+- Finish when selected value is integrated and verified, rejected work is explained, and recovery remains possible.
 
-## Combining profiles
+## Custom Contract-Driven
 
-Use one primary profile. A secondary profile may contribute a narrow technique—for example:
+**Use for:** A measurable engineering outcome whose dominant loop does not fit a preset.
 
-- QA acceptance matrices during a dependency upgrade
-- Data-integrity reconciliation during release readiness
-- Independent audit review during a safe refactor
+The contract must define:
 
-Do not combine profiles merely to make the process appear comprehensive. If two profiles imply materially different outcomes, return to `shape-goal` and split or clarify the contract.
+- One bounded unit of iteration
+- One primary verifier or stable evaluation rubric
+- A keep-or-revert decision
+- Review and regression obligations
+- Objective success, blocker, budget, and stall exits
+
+A custom profile is a safe fallback, not permission for vague work. If the same custom pattern recurs across several goals or projects, propose a new preset with field evidence.
+
+## Combining profiles and overlays
+
+Use one primary profile. A secondary profile may contribute a narrow technique—for example QA matrices during an upgrade or data reconciliation during release readiness.
+
+Use assurance overlays for security, reliability, performance, UX/accessibility, data governance, compatibility, operability, documentation, or compliance concerns.
+
+Do not combine profiles merely to appear comprehensive. If two profiles imply materially different outcomes, return to `shape-goal` and split or clarify the contract.

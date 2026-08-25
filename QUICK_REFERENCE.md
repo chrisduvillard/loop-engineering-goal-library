@@ -1,18 +1,29 @@
 # Quick Reference
 
-## Recommended Golden Set
+## Choose the right loop
 
-Keep these seven loops permanently:
+### Seven core loops
 
-1. **Brownfield Continue / Finish** — default autonomous project loop.
-2. **PRD / Spec Compliance** — requirements-driven convergence.
-3. **Next Milestone** — bounded roadmap execution.
-4. **Deep Audit + Remediation** — evidence-based discovery and repair.
-5. **QA / Regression / UAT** — actual-product verification.
-6. **Safe Refactor / Modernization** — behavior-preserving structural change.
-7. **Release Readiness** — convergence on pre-release gates.
+| Loop | Use it for |
+|---|---|
+| [**Brownfield Continue / Finish**](goals/01-brownfield-continue-finish.md) | Default autonomous continuation of an existing project |
+| [**PRD / Spec Compliance**](goals/02-prd-spec-compliance.md) | Requirements-driven convergence |
+| [**Next Milestone**](goals/03-next-milestone.md) | One bounded, dependency-safe delivery increment |
+| [**Deep Audit + Remediation**](goals/04-deep-audit-remediation.md) | Evidence-based discovery and root-cause repair |
+| [**QA / Regression / UAT**](goals/05-qa-regression-uat.md) | Actual-product and workflow verification |
+| [**Safe Refactor / Modernization**](goals/06-safe-refactor-modernization.md) | Behavior-preserving structural change |
+| [**Release Readiness**](goals/07-release-readiness.md) | Convergence on pre-release gates |
 
-For mature products such as Trading-Intel and AuraVoya, **Brownfield Continue / Finish** is the everyday default. Switch to a specialized loop when the target is clearly requirements compliance, product QA, architecture work, or release preparation.
+For mature products such as Trading-Intel and AuraVoya, **Brownfield Continue / Finish** is the everyday default.
+
+### Optional specialist extensions
+
+| Loop | Use it for |
+|---|---|
+| [**Incident Recovery / Stabilization**](goals/08-incident-recovery.md) | Separating containment, restoration, root cause, and prevention |
+| [**Dependency / Framework Upgrade**](goals/09-dependency-framework-upgrade.md) | Staged version upgrades with compatibility and rollback evidence |
+| [**Data Migration / Integrity**](goals/10-data-migration-integrity.md) | Reversible data changes with reconciliation and recovery checks |
+| [**Branch Rescue / Integration**](goals/11-branch-rescue-integration.md) | Recovering coherent work without overwriting a newer target branch |
 
 ---
 
@@ -40,12 +51,12 @@ First establish the repository’s actual state from applicable instructions, re
 
 ---
 
-## Vague Task → Strong Loop
+## Vague task → strong loop
 
-Convert an ordinary request using five questions:
+Ask five questions:
 
 1. **Outcome:** What observable state should be true?
-2. **Scope:** Which surfaces are included, and what must remain unchanged?
+2. **Scope:** What is included, and what must remain unchanged?
 3. **Verifier:** Which command, workflow, metric, or rubric proves success?
 4. **Iteration:** What is one safe change, and when is it kept or reverted?
 5. **Exit:** What counts as success, blocker, approval boundary, exhaustion, or stagnation?
@@ -60,22 +71,18 @@ Into:
 /goal Improve [SCOPE] from its verified baseline until [MEASURABLE TARGET] passes under [VERIFIER]. Make one small reversible change per cycle, keep only changes that improve the result without regressing repository-native gates, and record the evidence and next action. Stop on target, genuine blocker or approval boundary, exhausted budget, or two no-progress cycles; preserve unrelated work and perform no irreversible action without approval.
 ```
 
-The central rule:
-
-> Never ask an autonomous agent to “make things better.” Give it a state to reach, a check that decides, a boundary it cannot cross, and a record that lets the next iteration continue safely.
+> Give the agent a state to reach, a check that decides, a boundary it cannot cross, and a record the next iteration can trust.
 
 ---
 
-## Specialized work
+## Configure a core loop instead of inventing another
 
 | Area | Recommended treatment |
 |---|---|
-| Bug fixing | Use **Deep Audit + Remediation** scoped to one bug; use a normal task when it is a single reproduction/fix/check cycle. |
-| Security | Use **Deep Audit + Remediation** with a security standard, severity threshold, read-only discovery, and stricter approval boundaries. |
-| Reliability | Use **Deep Audit + Remediation** or **QA / Regression / UAT** with failure injection, recovery, idempotency, and observability gates. |
-| Performance | Use **Safe Refactor / Modernization** with a fixed benchmark, stable environment, baseline, and champion/challenger keep-or-revert rule. |
-| UI/UX | Use **QA / Regression / UAT** with real browser flows, screenshots, supported viewport matrix, accessibility checks, and an explicit design rubric. |
-| Technical debt | Use **Safe Refactor / Modernization** with an objective structural target rather than “clean up the code.” |
-| Documentation sync | Use **PRD / Spec Compliance** when documentation is authoritative; use **Release Readiness** for version, migration, operational, and release documentation. |
-
-Security and performance may justify saved configured variants, but they do not require different core loop mechanics.
+| Bug fixing | Scope **Deep Audit + Remediation** to one reproducible bug |
+| Security | Add a security standard, severity threshold, read-only discovery, and stricter approval boundaries |
+| Reliability | Add failure injection, recovery, idempotency, and observability gates |
+| Performance | Add a fixed benchmark, stable environment, baseline, and keep-or-revert rule |
+| UI/UX | Add real browser flows, screenshots, viewport coverage, accessibility checks, and a design rubric |
+| Technical debt | Give **Safe Refactor** an objective structural target rather than “clean up” |
+| Documentation sync | Use **PRD / Spec Compliance** or **Release Readiness**, depending on authority |

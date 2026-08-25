@@ -2,6 +2,13 @@
 
 The repository should add abstractions only when they remove more field friction than they create.
 
+## Implemented in `0.3.0`
+
+- A complete step-by-step README covering installation, shaping, approval, execution, goal changes, closeout, and reuse.
+- Plain-English selection guidance for every standalone goal.
+- Measured Optimization / Benchmark for fixed-protocol champion-versus-challenger loops.
+- Technical Spike / Feasibility for bounded Go / Conditional Go / No-Go investigations.
+
 ## Implemented in `0.2.0`
 
 - Multiple-goal portfolio and priority/dependency tracking.
@@ -16,6 +23,7 @@ The repository should add abstractions only when they remove more field friction
 
 - Run a complete multi-goal brownfield portfolio through live Codex `/goal` sessions.
 - Run comparable goals and a priority change through live Claude Code `/goal` sessions.
+- Field-test at least one Measured Optimization / Benchmark goal and one Technical Spike / Feasibility goal.
 - Compare evaluator behavior, compaction, skill retention, evidence visibility, pause/resume, and supersession quality.
 - Test two isolated parallel goals in separate worktrees without shared-state collisions.
 - Test global install, update, reinstall, and ZIP upload paths on macOS.

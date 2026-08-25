@@ -4,7 +4,7 @@ description: Execute one approved Goal Contract safely inside a native /goal loo
 compatibility: Portable Agent Skills host with repository read/write tools. Native /goal support is required for durable continuation and host-side completion evaluation.
 metadata:
   author: chrisduvillard
-  version: "0.2.0"
+  version: "0.3.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 

@@ -1,6 +1,6 @@
 # Custom Contract-Driven `/goal`
 
-**Use when:** The target is measurable, but none of the eleven execution presets matches the dominant control loop.
+**Use when:** The target is measurable, but none of the thirteen execution presets matches the dominant control loop.
 
 Do not use this as an escape hatch for a vague request. The approved Goal Contract must define:
 

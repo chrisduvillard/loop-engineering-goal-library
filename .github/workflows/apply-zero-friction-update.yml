@@ -11,53 +11,66 @@ jobs:
   apply:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
-      - name: Check out branch
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: codex/final-zero-friction-review
-          fetch-depth: 0
-
-      - name: Recover, verify, and apply reviewed archive
+      - name: Diagnose fragment
         shell: bash
         run: |
           python3 - <<'PY'
           from hashlib import sha256
           from pathlib import Path
-
-          def exact_or_window(path: str, size: int, expected: str) -> bytes:
-              data = Path(path).read_bytes()
-              if len(data) == size and sha256(data).hexdigest() == expected:
-                  return data
-              for start in range(0, len(data) - size + 1):
-                  candidate = data[start:start + size]
-                  if sha256(candidate).hexdigest() == expected:
-                      print(f"Recovered {path}: bytes {start}:{start + size}")
-                      return candidate
-              raise SystemExit(f"No verified {size}-byte payload found in {path}")
-
-          pieces = [
-              Path('.github/zero-friction-update.part00').read_bytes(),
-              exact_or_window('.github/zero-friction-update.part01', 12000, '9f649a4639fc3c597f505445a1f64d84f1062994cc325e05978d75c58e36b969'),
-              Path('.github/zero-friction-update.part02').read_bytes(),
-              Path('.github/zero-friction-update.part03').read_bytes(),
-              exact_or_window('.github/zero-friction-update.part04', 11400, '19be74035fe1a7631ec190a92cadc306c7dae310101f58c15f8b7c8c9965463d'),
-          ]
-          combined = b''.join(pieces)
-          if len(combined) != 59400:
-              raise SystemExit(f'Unexpected encoded payload length: {len(combined)}')
-          Path('/tmp/update.b64').write_bytes(combined)
+          expected = '''a60fcb20aa28d768b3aa8e11d483b2f0920e2c451bb4dada9456486ac5650d08
+          89694938aa4fdc33c50c8627c591693e00455231f4b28f3a09bee9cee1ad0950
+          b4fad8e7a3f3bcd25dc4f2fd039bd1a22c3b584bbc7c091934abe6d64e9d46fb
+          614c936a9947b1ec59fcbe739012c0a6bb9f91832016957a3bd820c906f869be
+          d3bd6cd416e53b0590987106a63593517da6a0e73710481f69a519eba472e792
+          eb4e9660e910423a24251e5db36b2d3a74572f08cc8037695c4b7a8f22a4ed34
+          39c285009af81e69a90d1d4e3456544c2dad994f74ab762f8304d04424c58691
+          c25fb04e4158d83153325d6fc7224171e3f5a950d303e478517f06fa5906aa74
+          d1c93494fd6d7884e7bf7b99129cb77ee497deaafc704e79e14a397d7e94921e
+          7cc5ec0cd645af2bb93cae14584be3206bed74da4c5ef659e7215e78fb25ca7b
+          37018e7f3f1034dde1b3f12d61ac97b7faff85205d554a9dd90d960575bfa710
+          e4295df3adc4ad94007ab27d608aad6e322ac1ad3427b1cb1fe3323a163e28c8
+          c28dec3205e19fb14e6d02f517a9800c1c682938129c899470c9e744c81709c0
+          124a6390b71a9f0e101777beb542dcc22e61c7ad0c6f11c5dd4a55a00603a0cd
+          4f89ce698962bf10585069235a1b911bcc7b4c19196b374236ed5f972b649ce9
+          12c9aeb542cd60c76d7cc439568e32f60a36ab2408915f8718dd8ec072c7758e
+          e097e3e1819ec278200ff353b22a2a09eb5d6a4e6523536e57fd213d9b263d59
+          370d5c4a95a1e87411deb69dd16c907d5d174a3176a1ae98da4ae6006fbf1018
+          44e9858b45402ed7af2362d4e61833709d4bda18531f2649cb9172ebaf0699ac
+          2d82cacb6d727e72587cfe99100075e1ef2522b5675f40ba8f35f4c753fa98cd
+          e975dcefc540f9becb91e49fff2e1ee8a3856de96678164498d1250b26b9b198
+          de76776f676f4a309c4eb90dfb6b3a66fafb45fffc99dc953ce4b417f8887196
+          44b1485ab4c71154276f183c5ba26ce2240b6ffa7899cc1bdbec69da901d7e9b
+          412906a5c670c5e2aac758bc50d5f43da28d782143b52c69199f6c7217eba9ce
+          e28106d0e4bca245450ac937dc7909fddb1ea38215b88a0147238562d179f142
+          e1f6872d6c4bd82c11815be62af16dda69572cd48161bfcfc1d3c3bab26777b0
+          c62f3564dc4a83e0b27fbcc982018f6e5156717c36ddc47c3b6390ee3b7e3f0d
+          30f4a35701390dcf99e234a606042fd30def1e53561917f0601880f856d31ab4
+          f64cbfef8edd2eeac18bf7033430e9ae66f9930fb9740337195b4c258096ce73
+          e2f03c4ddca1d051a1150b6efaef9e84a140ba100298c6ada53e1d57445e0da0
+          4c727629acd9347e7974ca3c762b36231abc5bafd9886ad2e45fc1c78c25c632
+          8c6c00144c9f9d07bc081e7665aa30703c61b61c56010698ffc96e4a86503b57
+          5275fa317f9d0f79e129279f4e59708ead96e65ebc92eef99ec875172fa352e1
+          3f8a3f40dc471f774b6212a2a99dcecc7d61c66cda1ee7d67998648402ddf3e8
+          80daf0eb6ae0a372ca71e37cfe4a46ea7fd376ab302a8dd8466ef909ad15a872
+          018cdc09a0aa87b3a877a0de84e7b63897b2a08ce33148820000524f1a09f458
+          54818c00cadd9c7ebfeea54868cf5fab45f3be99be67d2371155fa38c9e0e524
+          9afb5f2102862754c63976173453ff10bbda4602bef1144ad9c281360a9289ee
+          8b5336a4ed69892ec13316fd176d6918251c12194f7467994be7ae351d7ce779
+          086aaaae1e24626ba77f22e1b4e2b7c85214f74ececd2ce4a7acd46f22e655e4'''.split()
+          data = Path('.github/zf-fix-01a').read_bytes()
+          print('length', len(data), 'sha256', sha256(data).hexdigest())
+          mismatches=[]
+          for index, digest in enumerate(expected):
+              actual=sha256(data[index*100:(index+1)*100]).hexdigest()
+              if actual != digest:
+                  mismatches.append((index, index*100, actual))
+          print('MISMATCHES', mismatches)
+          if mismatches:
+              for index, start, actual in mismatches:
+                  print('REMOTE_CHUNK', index, data[start:start+100].decode())
+          raise SystemExit(1 if mismatches else 0)
           PY
-          base64 --decode /tmp/update.b64 > /tmp/update.tar.xz
-          echo "c4849a7dd575ee44807c9a8daffe5e9658125930785f6e497e362f202a0f88ca  /tmp/update.tar.xz" | sha256sum --check -
-          tar -xJf /tmp/update.tar.xz
-          rm -f .github/zero-friction-update.part* .github/zf-fix-*
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m "Apply final zero-friction deep review"
-          git push origin HEAD:codex/final-zero-friction-review

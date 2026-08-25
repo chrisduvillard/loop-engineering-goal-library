@@ -34,7 +34,7 @@ Use the repository's existing issue tracker, roadmap, milestone system, or proje
 
 ## Closed history
 
-See [`INDEX.md`](INDEX.md) or the repository's existing goal-history index for achieved, cancelled, superseded, stalled, blocked, and budget-exhausted closeout packets.
+See `docs/goals/INDEX.md` or the repository's existing goal-history index for achieved, cancelled, superseded, stalled, blocked, and budget-exhausted closeout packets.
 
 ## Transition log
 

@@ -54,7 +54,7 @@ Use an existing issue tracker or roadmap as the portfolio when possible. Otherwi
 
 At each checkpoint, `goal-engine` runs a goal-fit gate. A new user need is not automatically scope.
 
-## Eleven presets are enough as presets—not as an exhaustive taxonomy
+## Thirteen presets are enough as presets—not as an exhaustive taxonomy
 
 The profiles capture common control-loop shapes:
 
@@ -69,6 +69,8 @@ The profiles capture common control-loop shapes:
 - Ecosystem upgrades
 - Data migration
 - Divergent-history integration
+- Measured champion-versus-challenger optimization
+- Bounded technical feasibility and decision evidence
 
 They intentionally do not duplicate every project domain or quality attribute.
 

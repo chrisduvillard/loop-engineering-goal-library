@@ -1,129 +1,106 @@
-# Skills + Goals + Reusable State
+# Skills + Goals + Adaptive Project State
 
-The strongest workflow combines reusable skills, a project-specific contract, native goal persistence, and a durable closeout archive without confusing their roles.
+The library separates reusable process, changing project priorities, one executable contract, native persistence, project mechanics, and durable evidence.
 
 ```text
-Rough intent
-    │
-    ▼
-shape-goal skill             decides what done means
-    │
-    ▼
-Goal Contract                stores project-specific truth
-    │
-    ▼
-native /goal                 provides continuation and evaluation
-    │
-    ▼
-goal-engine skill            supplies safe execution discipline
-    │
-    ▼
-Passing or bounded outcome   produces terminal evidence
-    │
-    ▼
-Reusable closeout archive    preserves the contract, progress, result, and lessons
+Project needs and portfolio
+          │
+          ▼
+shape-goal             chooses, changes, pauses, splits, or resumes the next goal
+          │
+          ▼
+Goal Contract          stores one outcome, revision, proof, relationships, and boundaries
+          │
+          ▼
+native /goal           provides one-session continuation and completion evaluation
+          │
+          ▼
+goal-engine            applies one profile, assurance overlays, and project harness
+          │
+          ▼
+Evidence + archive     closes the goal, preserves learning, and informs what runs next
 ```
 
-## The five layers
+## The layers
 
 | Layer | Responsibility | Must not do |
 |---|---|---|
-| **`shape-goal`** | Read the repository, resolve material ambiguity, assign a Goal ID, select a profile, and persist the contract and state paths | Begin production implementation or invent owner decisions |
-| **Goal Contract** | Define outcome, scope, acceptance evidence, protected behavior, authority, stopping, library version, and archive paths | Contain a giant generic process prompt or duplicate every source document |
-| **Native `/goal`** | Keep work running across turns and evaluate the completion condition | Supply all methodology or grant extra permissions |
-| **`goal-engine`** | Orient, reconcile, implement, verify, review, checkpoint, detect stalls, and apply the selected profile | Redefine the target or weaken its verifier |
-| **Reusable closeout archive** | Preserve terminal evidence and link durable tests, ADRs, docs, runbooks, fixtures, scripts, and lessons | Become a secret store, raw log dump, or substitute for maintained product artifacts |
+| Goal portfolio or existing tracker | Coordinate candidate, ready, active, paused, blocked, and closed goals; priority and dependencies | Replace individual contracts or silently redefine them |
+| `shape-goal` | Inspect evidence, manage lifecycle transitions, assign identity, select profile/overlays, and approve the next contract | Begin production implementation or invent owner decisions |
+| Goal Contract | Define one outcome, revision, scope, proof, protection, relationships, authority, harness, and exits | Become a backlog or giant process prompt |
+| Native `/goal` | Keep one contract running in one session and evaluate its finish condition | Grant permissions or choose new product direction |
+| `goal-engine` | Orient, implement, verify, review, detect drift, checkpoint, close, and preserve reusable outputs | Absorb unrelated work or weaken the contract |
+| Project harness | Store verified setup, run, reset, environment, and native-check mechanics reused across goals | Duplicate canonical scripts or preserve stale assumptions as fact |
+| Closeout archive | Preserve immutable contract, progress, result, relationships, and links to durable outputs | Become a secret store or raw log dump |
 
-## Recommended lifecycle
+## A project can have many goals
 
-### 1. Install globally
+One project may have sequential goals, paused goals, competing candidates, dependency chains, or safely isolated parallel workstreams.
 
-```bash
-npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
-  --skill '*' --global --agent codex --agent claude-code --yes
-```
+One native `/goal` session or worktree executes one dependency-safe leaf goal. This keeps completion evidence coherent. Parallel goals require separate branches/worktrees, non-overlapping ownership, and explicit coordination of shared resources.
 
-### 2. Shape
+Use an existing issue tracker or roadmap as the portfolio when possible. Otherwise use `docs/goals/PORTFOLIO.md`.
 
-```text
-Claude Code: /shape-goal Continue this project
-Codex:       $shape-goal Continue this project
-```
+### Lifecycle transitions
 
-`shape-goal` checks for an existing active goal before creating state. It resumes, supersedes, or closes deliberately rather than overwriting history.
+- **Clarify:** same semantics and Goal ID; record revision note.
+- **Amend:** same outcome, material contract change; pause, approve, increment revision.
+- **Reprioritize:** reorder portfolio; contracts remain unchanged.
+- **Pause / Resume:** preserve progress, branch/SHA, next action, and resume condition.
+- **Supersede:** different outcome replaces prior goal; archive and create a new Goal ID.
+- **Split:** create child goals and select one leaf.
+- **Merge:** combine only when outcome, evidence, and authority align.
+- **Cancel:** close with reason and reusable evidence.
 
-### 3. Execute
+At each checkpoint, `goal-engine` runs a goal-fit gate. A new user need is not automatically scope.
 
-```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use the selected execution profile. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve a reusable closeout packet and leave a restartable handoff.
-```
+## Eleven presets are enough as presets—not as an exhaustive taxonomy
 
-### 4. Checkpoint
+The profiles capture common control-loop shapes:
 
-Use the repository's existing progress system when possible. Otherwise:
+- Completion and convergence
+- Requirements compliance
+- Milestone delivery
+- Audit and remediation
+- Product verification
+- Behavior-preserving transformation
+- Release-gate convergence
+- Incident recovery
+- Ecosystem upgrades
+- Data migration
+- Divergent-history integration
+
+They intentionally do not duplicate every project domain or quality attribute.
+
+### Assurance overlays
+
+Security, reliability, performance, cost, UX, accessibility, data governance, compatibility, operability, documentation, and compliance are additive proof obligations selected in the contract.
+
+### Custom Contract-Driven fallback
+
+When no preset fits, the contract defines the iteration unit, verifier, keep-or-revert rule, review strategy, and objective stop condition. The [standalone custom fallback](skills/shape-goal/templates/custom-contract-driven-goal.md) preserves the same model without installed skills. A recurring custom pattern may later justify a new preset, but one unusual project should not expand the global taxonomy.
+
+## Reusable project harness
+
+Future goals should not rediscover how to install, run, reset, or verify the same repository. `goal-engine` uses existing instructions and scripts first; when they are fragmented or ambiguous, it creates or refreshes `docs/agent/PROJECT_HARNESS.md`.
+
+The harness remains vendor-neutral and records only verified mechanics. Platform-specific project skills may reference it without becoming the only source of truth.
+
+## Durable state
 
 ```text
 GOAL.md
 GOAL_PROGRESS.md
+docs/goals/PORTFOLIO.md   optional when several goals need coordination
+docs/goals/INDEX.md
+docs/goals/<goal-id>/
+├── CONTRACT.md
+├── PROGRESS.md
+└── RESULT.md
 ```
 
-The mutable progress state records the baseline, acceptance ledger, completed changes, failed or reverted approaches, blockers, no-progress count, and next action.
-
-### 5. Close and reuse
-
-Every terminal outcome is archived:
-
-```text
-docs/goals/
-├── INDEX.md
-└── <goal-id>/
-    ├── CONTRACT.md
-    ├── PROGRESS.md
-    └── RESULT.md
-```
-
-A goal may end as Achieved, Blocked, Approval required, Budget exhausted, Stalled, or Superseded. Only Achieved is success, but every outcome can preserve useful evidence.
-
-Verified learning moves to its maintained home:
-
-- fixed failures → regression tests
-- product or architecture decisions → approved docs or ADRs
-- operational knowledge → runbooks
-- reusable workflows → tests or scripts
-- representative data → maintained fixtures
-- important limitations → residual-risk documentation
-
-## Why not make every profile a skill?
-
-Eleven near-duplicate skills would:
-
-- Crowd discovery and increase trigger ambiguity
-- Duplicate the brownfield safety kernel
-- Drift as common rules evolve
-- Force users to choose a process before the target is understood
-- Confuse reusable method with project-specific completion conditions
-
-Instead, `goal-engine` has eleven execution profiles. The Goal Contract selects one primary profile. Canonical files under [`goals/`](goals/) remain standalone fallbacks, and consolidated libraries are generated automatically.
-
-## Reproducibility
-
-Every Goal Contract records:
-
-- Stable Goal ID
-- Library source and skill version or source commit
-- Contract, progress, archive, and history-index paths
-- Execution profile
-- Baseline and acceptance verifiers
-- Approval and stopping boundaries
-
-The repository itself records:
-
-- [`VERSION`](VERSION)
-- [`CHANGELOG.md`](CHANGELOG.md)
-- deterministic skill ZIP packages and checksums
-- CI validation and Agent Skills CLI discovery
-- a [complete example cycle](examples/complete-brownfield-cycle/)
+Closed evidence is immutable. Later work links to prior goals rather than rewriting their result.
 
 ## Separation rule
 
-> **Skills carry reusable process. Contracts carry project truth. Native goals carry persistence. Archives carry reusable evidence.**
+> **Portfolios coordinate needs. Skills carry method. Contracts carry one project's current truth. Harnesses carry verified mechanics. Native goals carry persistence. Archives carry evidence and reuse.**

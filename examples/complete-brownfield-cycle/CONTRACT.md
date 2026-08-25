@@ -1,13 +1,22 @@
 # Goal Contract: Portfolio Import v1.4
 
 **Status:** Closed  
+**Outcome:** Achieved  
 **Goal ID:** 2026-08-25-portfolio-import-v1-4  
+**Revision:** 1  
+**Priority:** P1  
 **Owner:** Product owner  
 **Created:** 2026-08-25  
 **Last updated:** 2026-08-25  
-**Library:** chrisduvillard/loop-engineering-goal-library @ 0.1.0  
-**Current branch/SHA:** `codex/portfolio-import-v1-4` / `abc1234`  
-**Execution profile:** PRD / Spec Compliance  
+**Library:** chrisduvillard/loop-engineering-goal-library @ 0.2.0  
+**Current branch/worktree/SHA:** `codex/portfolio-import-v1-4` / isolated worktree / `def5678`  
+**Primary profile:** PRD / Spec Compliance  
+**Assurance overlays:** Data Integrity & Governance; Compatibility & Portability  
+**Project harness:** `docs/agent/PROJECT_HARNESS.md`  
+**Parent goal:** none  
+**Depends on:** none  
+**Supersedes:** none  
+**Portfolio:** `docs/goals/PORTFOLIO.md`  
 **Progress state:** `GOAL_PROGRESS.md`  
 **Archive path:** `docs/goals/2026-08-25-portfolio-import-v1-4/`
 
@@ -17,7 +26,7 @@
 
 ## Why this is next
 
-The approved v1.4 PRD is the current milestone, CSV import is already stable, and XLSX parsing is the only verified product gap blocking completion.
+The approved v1.4 PRD is the current P1 milestone, CSV import is stable, and XLSX parsing is the only verified product gap blocking completion.
 
 ## In scope
 
@@ -29,8 +38,8 @@ The approved v1.4 PRD is the current milestone, CSV import is already stable, an
 
 ## Out of scope
 
-- New broker integrations
-- Import performance optimization
+- Broker adapters
+- Performance optimization
 - Redesign outside the import workflow
 - Production deployment or release
 
@@ -46,37 +55,55 @@ The approved v1.4 PRD is the current milestone, CSV import is already stable, an
 
 ## Protected behavior
 
-- Existing CSV imports
-- Existing portfolio export formats
-- User-authored working changes outside the import feature
+- Existing CSV imports and portfolio exports
 - Public error codes consumed by the frontend
+- User-authored working changes outside the feature
 
 ## Baseline and known exceptions
 
-- `python -m pytest tests/imports` — Fail — 4 XLSX date cases failed
+- `python -m pytest tests/imports` — Fail — 64 passed, 4 failed
 - `python scripts/run_import_uat.py` — Fail — 9/12 passed
 - `python -m pytest tests/exports` — Pass — 42 passed
 - Preserved working changes: `notes/local-investigation.md`
-- Known pre-existing failures or accepted risks: none
+- Known exceptions: none
+
+## Execution pattern
+
+### Primary profile
+
+PRD / Spec Compliance — maintain a requirement-to-evidence map and never weaken the PRD or export verifiers.
+
+### Assurance overlays
+
+- Data Integrity & Governance — verify date semantics, malformed/blank cells, and no unexplained data drift.
+- Compatibility & Portability — preserve CSV, export formats, and public error codes.
+
+## Goal relationships and change policy
+
+- Parent / children: none
+- Dependencies: none
+- Related goal: `2026-08-26-import-performance-budget` follows this goal but is a different outcome.
+
+Performance work is explicitly out of scope and receives a new Goal ID rather than being appended here.
+
+## Goal-drift review triggers
+
+Re-run `shape-goal` if the PRD changes, a production incident interrupts the work, or performance becomes a higher priority before correctness is complete.
 
 ## Authority boundaries
 
-Explicit approval is required before:
-
-- Merge, push, tag, release, deployment, or production changes
-- Destructive data or infrastructure operations
-- Credential, billing, account, secret, or external-system changes
-- Removing export compatibility or changing public error codes
+Explicit approval is required before merge, push, tag, release, deployment, destructive operations, credential changes, removal of export compatibility, or changes to public error codes.
 
 **Explicitly authorized actions:** local repository edits and repository-native verification only
 
 ## Stop and escalation
 
-- **Success:** Every acceptance item passes with surfaced evidence and protected behavior has not regressed.
-- **Blocked:** A named external dependency or owner decision prevents progress.
-- **Approval required:** The next action crosses an authority boundary.
-- **Budget:** 20 serious implementation cycles.
-- **Stalled:** Two serious iterations produce neither new evidence nor measurable progress.
+- Success: every acceptance and overlay item passes.
+- Blocked: named external dependency or owner decision.
+- Approval required: authority boundary crossed.
+- Budget: 20 serious implementation cycles.
+- Stalled: two no-progress cycles.
+- Goal drift: pause and reshape rather than silently expand scope.
 
 ## Sources of truth
 
@@ -84,26 +111,22 @@ Explicit approval is required before:
 - `tests/imports/`
 - `tests/exports/`
 - `scripts/run_import_uat.py`
-- Repository instructions and current Git history
-
-## Execution profile notes
-
-**Primary profile:** PRD / Spec Compliance
-
-Maintain a requirement-to-evidence map. Do not weaken the import PRD or existing export verifiers.
+- Repository instructions and Git history
 
 ## Reuse and closeout
 
-The closeout packet is stored at `docs/goals/2026-08-25-portfolio-import-v1-4/`.
+Archive: `docs/goals/2026-08-25-portfolio-import-v1-4/`
 
-**Expected reusable outputs:** regression tests, one parser fixture, and one documented normalization rule
+**Expected reusable outputs:** regression tests, parser fixture, normalization rule, and verified harness commands
 
 ## Native `/goal` command
 
 ```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use the PRD / Spec Compliance profile. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve a reusable closeout packet and leave a restartable handoff.
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its PRD / Spec Compliance profile, Data Integrity & Governance and Compatibility & Portability overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
 
-## Approval record
+## Revision and approval record
 
-- 2026-08-25 — Product owner approved this contract, archive path, and authority boundaries.
+| Revision | Date | Change | Lifecycle decision | Approved by |
+|---|---|---|---|---|
+| 1 | 2026-08-25 | Initial contract | New | Product owner |

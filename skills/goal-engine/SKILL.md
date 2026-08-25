@@ -1,238 +1,199 @@
 ---
 name: goal-engine
-description: Execute an approved Goal Contract safely inside a native /goal loop for a mature repository. Use when a goal points to GOAL.md, an issue, PRD, milestone, or other approved contract and needs brownfield orientation, profile-specific execution, repository-native verification, regression protection, durable progress state, reusable closeout archives, and bounded autonomous continuation. Do not use to invent or materially redefine the target; use shape-goal first.
+description: Execute one approved Goal Contract safely inside a native /goal loop while adapting to project goal portfolios, contract revisions, assurance overlays, and repository-specific harnesses. Use for brownfield orientation, profile- or custom-loop execution, native verification, regression protection, durable state, reusable closeout, and bounded autonomy. Use shape-goal when the target or lifecycle must materially change.
 compatibility: Portable Agent Skills host with repository read/write tools. Native /goal support is required for durable continuation and host-side completion evaluation.
 metadata:
   author: chrisduvillard
-  version: "0.1.0"
+  version: "0.2.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
 # Goal Engine
 
-Execute an approved outcome without losing brownfield safety or the knowledge created along the way.
+Execute one approved outcome without losing brownfield safety, adapting silently to a different goal, or discarding knowledge.
 
-> **Skill = method · Goal Contract = project truth · native `/goal` = persistence · archive = reusable memory**
-
-Do not reopen settled product decisions merely because implementation is difficult. Do not silently reinterpret the contract to make completion easier.
+> **Profile = loop shape · overlays = cross-cutting proof · harness = project mechanics · contract = project truth · native `/goal` = persistence**
 
 ## Required inputs
 
 Identify:
 
-1. The approved Goal Contract path or authoritative issue/spec.
-2. The stable Goal ID.
-3. The execution profile named by the contract.
-4. The repository's existing progress or handoff artifact.
-5. The closeout archive and history-index paths.
-6. The library version or source commit recorded by the contract.
+1. Approved Goal Contract, stable Goal ID, and revision.
+2. Lifecycle state, priority, dependencies, parent/related goals, and portfolio path when applicable.
+3. Primary execution profile or custom-loop definition.
+4. Assurance overlays.
+5. Project harness or authoritative setup/run/verify sources.
+6. Progress, archive, history, library-version, branch/worktree, and authority information.
 
-If the outcome, scope, acceptance evidence, protected behavior, authority boundaries, stop conditions, or durable state paths are materially unresolved, stop before production edits and use `shape-goal`.
+If the outcome, evidence, protected behavior, lifecycle, or durable paths are materially unresolved, stop before production edits and use `shape-goal`.
 
 ## Native-goal boundary
 
-This skill supplies execution discipline; it does not replace the host's native `/goal` mechanism.
+This skill supplies execution discipline; it does not replace native `/goal`.
 
-- **Inside an active `/goal`:** execute the contract and continue across turns.
-- **Outside an active `/goal`:** validate the contract and return the copy-ready command below. Do not pretend a normal turn has durable continuation or an independent completion evaluator.
+- **Inside an active `/goal`:** execute one contract and continue across turns.
+- **Outside an active `/goal`:** validate the contract and return a copy-ready native command.
+
+One native goal session should execute one dependency-safe leaf contract. Parallel project goals require isolated sessions/worktrees, non-overlapping ownership, and explicit coordination.
 
 ```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the execution profile named in the contract. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve a reusable closeout packet and leave a restartable handoff.
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
 
 ## 1. Orient from actual state
 
-Before any persistent change, read the applicable:
+Read applicable repository instructions, contract and sources, architecture, plans, portfolio, prior goal archives, progress/handoffs, project harness, native scripts/CI/tests, runtime entry points, Git status/diff/branch/HEAD/worktrees, and relevant history.
 
-- Repository and agent instructions
-- Goal Contract and its authoritative sources
-- Specifications, PRDs, architecture docs, ADRs, and domain vocabulary
-- Approved plans, milestones, progress files, prior goal archives, and handoffs
-- Native scripts, tests, CI, release gates, and runtime entry points
-- Git status, diff, branch, HEAD, and relevant history
-
-Protect uncommitted, user-authored, and unrelated work. Never discard or overwrite changes merely to obtain a clean tree.
+Protect uncommitted, user-authored, and unrelated work. Never obtain a clean tree by discarding it.
 
 ## 2. Reconcile before trusting
 
-Documentation, plans, tests, code, runtime behavior, and Git history may disagree. Record material contradictions and reconcile them using:
+Resolve documentation, plan, code, test, runtime, portfolio, and Git contradictions using:
 
-1. Explicit authority in repository instructions or the Goal Contract
-2. Later approved decisions over older drafts
+1. Explicit authority in repository instructions or contract
+2. Later approved decisions over drafts
 3. Current executable evidence over unsupported status claims
-4. Owner escalation when materially different product outcomes remain plausible
+4. Owner escalation when materially different outcomes remain plausible
 
-A stale checklist is not proof that work remains. Existing code is not proof that a requirement is satisfied.
+A stale checklist is not proof that work remains; existing code is not proof that a requirement passes.
 
-## 3. Validate the contract and lifecycle
+## 3. Validate lifecycle and isolation
 
-Proceed only when all are true:
+Proceed only when:
 
-- The contract is approved and names one observable outcome.
-- It has a stable Goal ID.
-- In-scope and out-of-scope boundaries are understandable to a fresh agent.
-- Every acceptance item has an observable verifier or evidence form.
-- Protected behavior and compatibility constraints are named.
-- Authority and irreversible-action boundaries are explicit.
-- Success, blocker, budget, and stalled exits are defined.
-- The selected execution profile is compatible with the outcome.
-- Progress and archive paths are defined.
-- No different active goal would be overwritten.
+- The contract is Approved or Active and names one outcome.
+- Goal ID, revision, profile/custom loop, overlays, state, and archive paths are defined.
+- Dependencies are satisfied or explicitly handled.
+- Scope, verifiers, protected behavior, authority, review triggers, and exits are clear.
+- The branch/worktree is compatible with the active portfolio entry.
+- No different active goal, shared mutable resource, or unrelated work will be overwritten.
 
-Contract clauses override profile defaults. A profile may strengthen safety but may not weaken acceptance criteria or expand authority.
+A contract may strengthen a profile or overlay, but profiles and overlays may not weaken the contract or expand authority.
 
-## 4. Load the execution profile
+## 4. Load the execution pattern
 
-Read [references/loop-profiles.md](references/loop-profiles.md) and apply the profile selected by the contract. Use only one primary profile; borrow a secondary profile's verifier or review technique only when it materially improves evidence without expanding scope.
+Read [references/loop-profiles.md](references/loop-profiles.md).
 
-## 5. Establish the verified baseline
+- Apply one primary preset when selected.
+- For **Custom Contract-Driven**, require an explicit iteration unit, primary verifier, keep-or-revert rule, review strategy, and stop condition.
+- Borrow a narrow technique from another profile only when it improves evidence without changing the outcome.
 
-Discover repository-native checks rather than assuming a language, framework, or package manager. Record:
+Read [references/assurance-overlays.md](references/assurance-overlays.md) and apply each selected overlay as additional acceptance, review, and authority obligations.
 
-- Current branch and SHA
-- Working-tree changes that must be preserved
-- Relevant checks and their exact results
-- Known pre-existing failures and accepted exceptions
-- Current acceptance-item status
-- The next highest-priority unblocked gap
+## 5. Reuse the project harness
 
-Use [references/state-and-evidence.md](references/state-and-evidence.md) when the repository lacks an established state format. Its templates are:
+Use the repository's verified setup, run, reset, and check commands. Do not rediscover them every goal.
 
-- [templates/goal-progress-template.md](templates/goal-progress-template.md)
-- [templates/goal-result-template.md](templates/goal-result-template.md)
-- [templates/goal-history-index-template.md](templates/goal-history-index-template.md)
+When current sources are absent, contradictory, or repeatedly rediscovered:
 
-## 6. Initialize durable state safely
+1. Verify the commands and supported environments.
+2. Update an existing authoritative document or create `docs/agent/PROJECT_HARNESS.md` from [templates/project-harness-template.md](templates/project-harness-template.md).
+3. Link to canonical scripts rather than copying them.
+4. Mark unverified assumptions and freshness triggers.
 
-Use the repository's existing plan, issue, progress, handoff, and history system when it can represent the contract.
+A stale harness is a hypothesis, not authority.
 
-Otherwise:
+## 6. Establish the verified baseline
 
-```text
-GOAL.md
-GOAL_PROGRESS.md
-docs/goals/INDEX.md
-docs/goals/<goal-id>/
-```
+Record branch/SHA/worktree, preserved changes, exact native checks and results, known pre-existing failures, acceptance status, dependencies, no-progress count, and the next highest-priority unblocked gap.
 
-Rules:
-
-- Never create a second active progress source when one already exists.
-- Never overwrite another active goal.
-- Preserve the exact baseline before edits.
-- Record library version/source, Goal ID, contract, profile, branch/SHA, no-progress count, and next action.
-- Keep secrets, credentials, private user data, raw production dumps, and oversized logs out of committed state.
+Use [references/state-and-evidence.md](references/state-and-evidence.md) and its templates when the repository lacks an established format.
 
 ## 7. Run the brownfield loop
 
 Repeat:
 
-1. **Select** the highest-priority unblocked gap that advances the contract.
-2. **Verify** that the gap is real before changing code.
-3. **Change** the smallest coherent, reversible production slice.
+1. **Select** the highest-priority dependency-safe unblocked gap in the contract.
+2. **Verify** the gap is real.
+3. **Change** the smallest coherent reversible production slice.
 4. **Check** it with the smallest relevant repository-native verifier.
-5. **Protect** the fix with regression coverage when a failure was corrected.
-6. **Review** the diff for scope drift, hidden contract changes, unrelated edits, and new risk.
-7. **Broaden** verification at meaningful checkpoints: integration, E2E, UAT, security, performance, migration, or release gates as applicable.
-8. **Keep or revert** based on evidence; never retain a change that worsens the verified state without explicit approval.
-9. **Record** evidence, failed or reverted approaches, remaining gaps, blockers, reusable discoveries, and the next action.
-10. **Repeat** without asking what to do next when repository evidence and the contract answer it.
+5. **Protect** corrected failures with regression coverage.
+6. **Review** scope drift, contract changes, unrelated edits, and new risk.
+7. **Apply overlays** and broaden verification at meaningful checkpoints.
+8. **Keep or revert** based on evidence.
+9. **Record** evidence, attempts, reusable discoveries, portfolio-relevant changes, and next action.
+10. **Repeat** without asking what comes next when contract and evidence answer it.
 
 Do not stop at planning, scaffolding, documentation, analysis, or test creation while production implementation required by the contract remains.
 
-## 8. Surface evidence for the evaluator
+## 8. Run the goal-fit gate at checkpoints
 
-The native goal evaluator may only see the conversation, not the filesystem or commands independently. Surface concise evidence after each checkpoint:
+Check whether the approved contract still represents the user's current need.
 
-- Command or workflow run
-- Relevant exit status and result
-- Acceptance items changed to Pass, Fail, Blocked, or Not run
-- Regressions checked
-- Diff or behavior reviewed
-- No-progress count
-- Remaining gap and next action
-- State artifact updated
+Continue without interruption when new information is merely an implementation detail or clarification.
 
-Never claim completion from code inspection, task counts, an agent assertion, or a weakened verifier.
+Pause and use `shape-goal` when any of these is material:
 
-## 9. Review independently where it matters
+- A different observable outcome is requested
+- Priority changes affect which goal should run
+- Scope, acceptance evidence, protected behavior, authority, or stop conditions must change
+- A new incident or external event should interrupt the current goal
+- The goal should split, merge, pause, resume, cancel, or supersede
+- The primary profile or required overlays no longer match the dominant risk
 
-Use a fresh reviewer or isolated subagent for high-blast-radius, security, authorization, migration, concurrency, reliability, architecture, or subjective UI/UX changes when practical. Give it the contract, relevant diff, and acceptance criteria—not the implementer's persuasive narrative.
+Do not silently expand scope. Preserve progress before switching.
 
-Treat reviewer and scanner findings as hypotheses. Reproduce or otherwise verify them before remediation.
+## 9. Surface evidence for the evaluator
 
-## 10. Detect stalls and circular work
+After each checkpoint, surface concise command/workflow results, acceptance-status changes, regressions checked, review status, overlays exercised, no-progress count, remaining gap, goal-fit result, and state path.
 
-A no-progress cycle is a serious iteration that produces none of:
+The evaluator may not inspect files or run tools independently. “Implemented,” task counts, code inspection, or a weakened verifier are not completion evidence.
+
+## 10. Review independently where it matters
+
+Use fresh review or isolated subagents for high-blast-radius, security, authorization, migration, concurrency, reliability, architecture, compliance, or subjective UX changes when practical. Provide contract, diff, evidence, and relevant overlays—not the implementer's persuasive narrative.
+
+Treat findings as hypotheses until reproduced or otherwise verified.
+
+## 11. Detect stalls and circular work
+
+Progress requires at least one of:
 
 - New verified evidence
-- A reduced failing case
-- A changed, testable hypothesis
-- A closed acceptance gap
-- A newly identified genuine blocker
-- A reusable diagnostic, fixture, or verifier that materially improves the next cycle
+- Reduced reproducible failure
+- Changed testable hypothesis
+- Closed acceptance gap
+- Newly proven blocker or approval boundary
+- Reusable verifier, fixture, diagnostic, or harness improvement that materially advances the next cycle
 
-Do not repeat an unchanged deterministic failure or retry the same approach without a reason state has changed. After two consecutive no-progress cycles, stop as **Stalled**, preserve evidence, and leave a restartable handoff. Stalled is not success.
+After two consecutive no-progress cycles, stop as Stalled, preserve state, and leave a restartable handoff. Do not repeat unchanged deterministic failures.
 
-## 11. Respect authority boundaries
+## 12. Respect authority boundaries
 
-The contract controls permission. Unless it explicitly authorizes the action, require approval before:
-
-- Merge, push, tag, publish, deploy, release, or production mutation
-- Destructive data, schema, infrastructure, or branch operations
-- Credential, billing, account, secret, or external-system changes
-- Irreversible migrations or removal of rollback paths
+Unless explicitly authorized, require approval before merge, push, tag, publish, deploy, release, production mutation, destructive data/schema/infrastructure/branch actions, credential/billing/account changes, or removal of recovery paths.
 
 Autonomous continuation never implies broader authority.
 
-## 12. Promote durable knowledge
+## 13. Promote durable knowledge
 
-Before closeout, move reusable knowledge out of transient chat and into the correct repository-owned location:
+Move verified recurring knowledge to regression tests, approved docs/ADRs, runbooks, project harness, fixtures, scripts, benchmarks, or residual-risk records. Do not permanently document speculation or duplicate authoritative material.
 
-- Corrected failures → regression tests
-- Stable product or architecture decisions → approved docs or ADRs
-- Operational procedures → runbooks
-- Reusable fixtures, commands, scripts, or benchmarks → maintained repository paths
-- Important limitations → documented residual risk
+## 14. Preserve lifecycle state and closeout
 
-Do not turn every observation into permanent documentation. Promote only knowledge that is verified, likely to recur, and useful to a future maintainer or agent.
+- **Paused** is non-terminal: persist progress, resume condition, branch/SHA, and portfolio state.
+- **Achieved, Cancelled, Superseded, Blocked, Approval required, Budget exhausted, and Stalled** receive terminal closeout packets when the repository treats the run as closed.
 
-## 13. Preserve the closeout packet
+At closeout:
 
-At every terminal outcome—Achieved, Blocked, Approval required, Budget exhausted, or Stalled:
+1. Snapshot `CONTRACT.md`, `PROGRESS.md`, and `RESULT.md` under the archive path.
+2. Update history and portfolio.
+3. Link reusable outputs and related goals.
+4. Record library version and contract revision.
+5. Exclude secrets, private data, raw production dumps, exploit-enabling evidence, and unnecessary logs.
 
-1. Snapshot the approved contract as `CONTRACT.md`.
-2. Snapshot the final progress state as `PROGRESS.md`.
-3. Create `RESULT.md` from the result template.
-4. Store them under the contract's archive path.
-5. Update the repository's existing goal-history index or `docs/goals/INDEX.md`.
-6. Link reusable tests, ADRs, runbooks, fixtures, commands, and tooling.
-7. Record the exact library version or source commit.
-8. Exclude secrets, private data, raw production dumps, and unnecessary logs.
+Closed evidence is immutable. Later work gets a new Goal ID or approved revision and links back.
 
-Preserve history rather than rewriting a prior result. If the goal was superseded, archive the superseded contract and link to its replacement.
+## 15. Finish with evidence
 
-## 14. Finish with evidence
-
-Declare success only when:
-
-- Every in-scope acceptance item passes with surfaced evidence.
-- Protected behavior and the relevant baseline have not regressed.
-- Required broader gates pass.
-- Important changes have been reviewed and unexplained diffs resolved.
-- Progress, handoff, release, and contract state are current.
-- Durable knowledge has been promoted where appropriate.
-- The closeout packet and history index are complete.
-- The working tree contains no unexplained changes created by the run.
+Declare success only when every acceptance item passes, protected behavior and baseline are preserved, required overlay and broader gates pass, important changes are reviewed, durable state and knowledge are current, the closeout packet is complete, and the working tree has no unexplained agent-created changes.
 
 Close with:
 
-- **Outcome:** Achieved, Blocked, Approval required, Budget exhausted, or Stalled
-- **Acceptance evidence:** concise item-by-item results
-- **Changes:** production behavior delivered
-- **Regression status:** checks and protected behavior
-- **Reusable outputs:** tests, docs, ADRs, fixtures, commands, or tooling
-- **Residual risk:** bounded and explicit
-- **State artifact:** updated path or issue
-- **Archive:** closeout packet path
+- **Outcome:** Achieved / Paused / Cancelled / Superseded / Blocked / Approval required / Budget exhausted / Stalled
+- **Goal ID / revision / portfolio state**
+- **Acceptance and overlay evidence**
+- **Delivered behavior and regression status**
+- **Reusable outputs and harness updates**
+- **Residual risk**
+- **State and archive paths**
 - **Next action:** only when not achieved

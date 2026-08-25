@@ -19,13 +19,40 @@ jobs:
           ref: codex/final-zero-friction-review
           fetch-depth: 0
 
-      - name: Verify and apply reviewed archive
+      - name: Recover, verify, and apply reviewed archive
         shell: bash
         run: |
-          cat .github/zero-friction-update.part* | base64 --decode > /tmp/update.tar.xz
+          python3 - <<'PY'
+          from hashlib import sha256
+          from pathlib import Path
+
+          def exact_or_window(path: str, size: int, expected: str) -> bytes:
+              data = Path(path).read_bytes()
+              if len(data) == size and sha256(data).hexdigest() == expected:
+                  return data
+              for start in range(0, len(data) - size + 1):
+                  candidate = data[start:start + size]
+                  if sha256(candidate).hexdigest() == expected:
+                      print(f"Recovered {path}: bytes {start}:{start + size}")
+                      return candidate
+              raise SystemExit(f"No verified {size}-byte payload found in {path}")
+
+          pieces = [
+              Path('.github/zero-friction-update.part00').read_bytes(),
+              exact_or_window('.github/zero-friction-update.part01', 12000, '9f649a4639fc3c597f505445a1f64d84f1062994cc325e05978d75c58e36b969'),
+              Path('.github/zero-friction-update.part02').read_bytes(),
+              Path('.github/zero-friction-update.part03').read_bytes(),
+              exact_or_window('.github/zero-friction-update.part04', 11400, '19be74035fe1a7631ec190a92cadc306c7dae310101f58c15f8b7c8c9965463d'),
+          ]
+          combined = b''.join(pieces)
+          if len(combined) != 59400:
+              raise SystemExit(f'Unexpected encoded payload length: {len(combined)}')
+          Path('/tmp/update.b64').write_bytes(combined)
+          PY
+          base64 --decode /tmp/update.b64 > /tmp/update.tar.xz
           echo "c4849a7dd575ee44807c9a8daffe5e9658125930785f6e497e362f202a0f88ca  /tmp/update.tar.xz" | sha256sum --check -
           tar -xJf /tmp/update.tar.xz
-          rm -f .github/zero-friction-update.part*
+          rm -f .github/zero-friction-update.part* .github/zf-fix-*
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A

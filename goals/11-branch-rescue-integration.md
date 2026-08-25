@@ -1,0 +1,9 @@
+# Branch Rescue / Integration
+
+**Use when:** Valuable work is stranded in a stale, divergent, oversized, or partially conflicting branch and must be recovered safely.
+
+```text
+/goal Safely recover and integrate the valuable work from [SOURCE BRANCH OR COMMITS] into [TARGET BRANCH] while preserving newer target behavior and unrelated work. Establish the actual refs/SHAs, clean or dirty state, divergence, target baseline, relevant requirements/issues/PRs/tests, and source intent from Git history; create a recovery point before changes. Inventory source changes by coherent behavior and classify each slice as already present, obsolete, conflicting, unsafe, or worth porting; verify every classification against current code and executable evidence. Port the smallest dependency-complete slices using the least risky method, resolving conflicts by current contracts and tests rather than taking either side wholesale. After each slice, run repository-native targeted checks, add regression coverage where needed, review the diff, and keep only changes that preserve or improve the target baseline. Never overwrite newer target work or import unrelated source history. Finish only when every source slice is accounted for, all selected behavior passes affected broader gates with surfaced evidence, and the target contains no unexplained changes. Stop for an owner decision on irreconcilable intent, approval/external blocker, [BUDGET], or two no-progress cycles; leave a path matrix and restartable handoff. Do not merge, push, delete, or rewrite branches without explicit approval.
+```
+
+**Why it works:** It treats a branch as a collection of behavioral slices rather than an all-or-nothing merge candidate. The accounting matrix preserves useful intent while protecting newer work and making every discarded or ported change explainable.

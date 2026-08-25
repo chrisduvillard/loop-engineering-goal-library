@@ -1,9 +1,11 @@
 # Goal Contract: [NAME]
 
-**Status:** Proposed  
+**Status:** Proposed / Approved / Superseded  
 **Owner:** [OWNER]  
 **Last updated:** [DATE]  
-**Current branch/SHA:** [OPTIONAL]
+**Current branch/SHA:** [OPTIONAL]  
+**Execution profile:** [PROFILE]  
+**Progress state:** [EXISTING ARTIFACT OR `GOAL_PROGRESS.md`]
 
 ## Target
 
@@ -23,40 +25,64 @@
 
 ## Acceptance evidence
 
-- [ ] [Exact command, workflow, measurement, or observable artifact]
-- [ ] No new failures relative to the recorded baseline
-- [ ] Important changes reviewed and unexplained diffs resolved
+| ID | Criterion | Verifier or observable evidence | Status |
+|---|---|---|---|
+| A1 | [MEASURABLE END STATE] | `[EXACT COMMAND]` or [REALISTIC WORKFLOW / ARTIFACT] | Not run |
+| A2 | No new failures relative to the recorded baseline | [RELEVANT BROADER GATES] | Not run |
+| A3 | Important changes reviewed and unexplained diffs resolved | [REVIEW EVIDENCE] | Not run |
+
+An item becomes **Pass** only when its stated evidence has been produced under the required conditions.
 
 ## Protected behavior
 
-- [Existing contract, workflow, compatibility requirement, user work, or local modification that must survive]
+- [Existing contract, workflow, compatibility requirement, user work, local modification, or performance characteristic that must survive]
+
+## Baseline and known exceptions
+
+- `[COMMAND OR WORKFLOW]` — Pass / Fail / Blocked / Not run — [RELEVANT RESULT]
+- Preserved working changes: [PATHS OR NONE]
+- Known pre-existing failures or accepted risks: [LIST OR NONE]
 
 ## Authority boundaries
 
 Explicit approval is required before:
 
-- Deployment, publishing, release, merge, or production changes
-- Destructive data or infrastructure operations
-- Credential, billing, account, or external-system changes
-- [Repository-specific boundary]
+- Deployment, publishing, release, merge, push, tag, or production changes unless expressly authorized here
+- Destructive data, schema, branch, or infrastructure operations
+- Credential, billing, account, secret, or external-system changes
+- Removal of a required rollback or recovery path
+- [REPOSITORY-SPECIFIC BOUNDARY]
+
+**Explicitly authorized actions:** [NONE OR PRECISE LIST]
 
 ## Stop and escalation
 
-- **Success:** Every acceptance item passes with surfaced evidence.
+- **Success:** Every acceptance item passes with surfaced evidence and protected behavior has not regressed.
 - **Blocked:** A named external dependency, credential, hardware resource, lawful-access requirement, or owner decision prevents progress.
+- **Approval required:** The next useful action crosses an authority boundary above.
 - **Budget:** [TURN, TIME, OR COST BOUND]
 - **Stalled:** Two serious iterations produce neither new evidence nor measurable progress.
 
-Blocked, budget-exhausted, and stalled outcomes require a restartable handoff and are not success.
+Blocked, approval-required, budget-exhausted, and stalled outcomes require a restartable handoff and are not success.
 
 ## Sources of truth
 
-- [Approved issue, PRD, plan, milestone, architecture document, test suite, or other authoritative source]
+- [APPROVED ISSUE, PRD, PLAN, MILESTONE, ARCHITECTURE DOCUMENT, TEST SUITE, OR OTHER AUTHORITATIVE SOURCE]
 
-## Baseline and known exceptions
+List contradictions that remain relevant and their disposition rather than silently choosing one source.
 
-- [Relevant current check results, pre-existing failures, unresolved contradictions, or accepted risks]
+## Execution profile notes
 
-## Selected loop
+**Primary profile:** [ONE OF THE CORE OR SPECIALIST PROFILES]
 
-[Brownfield Continue / Finish, PRD / Spec Compliance, Next Milestone, Deep Audit + Remediation, QA / Regression / UAT, Safe Refactor / Modernization, Release Readiness, or a specialist loop]
+[Only profile-specific constraints that are not already captured above. Do not duplicate the whole profile.]
+
+## Native `/goal` command
+
+```text
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [THIS PATH OR ISSUE]. Use the execution profile named in the contract. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; leave a restartable handoff.
+```
+
+## Approval record
+
+- [DATE] — [OWNER] approved this contract and its authority boundaries.

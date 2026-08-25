@@ -12,7 +12,7 @@ _None._
 
 | Goal ID | Priority | Outcome | Profile | Assurance overlays | Depends on | Contract | Why next |
 |---|---|---|---|---|---|---|---|
-| 2026-08-26-import-performance-budget | P2 | The verified import workflow meets the approved large-file latency and memory budget without changing import results | Safe Refactor / Modernization | Performance & Cost; Data Integrity & Governance | 2026-08-25-portfolio-import-v1-4 | To be shaped | Product behavior is now correct; performance work can use the stable fixture and tests created by the completed goal |
+| 2026-08-26-import-performance-budget | P2 | The verified import workflow meets the approved large-file latency and memory budget without changing import results | Measured Optimization / Benchmark | Performance & Cost; Data Integrity & Governance | 2026-08-25-portfolio-import-v1-4 | To be shaped | Product behavior is now correct; a fixed benchmark can use the stable fixture and tests created by the completed goal |
 
 ## Paused or blocked
 

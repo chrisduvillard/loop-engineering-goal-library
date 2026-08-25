@@ -1,18 +1,28 @@
 # Core `/goal` Library
 
-These seven loops form the recommended permanent toolkit for long-running coding-agent work in mature repositories.
+These seven profiles form the recommended permanent toolkit for long-running coding-agent work in mature repositories.
 
-## Before you start: define the target
+## Recommended: skills + native goal
 
-A `/goal` should execute an approved target, not discover product direction while already looping. `TARGET` may be a verifiable end state or a pointer to an approved Goal Contract, issue, PRD, milestone, or acceptance checklist.
+Install both skills:
 
-When you only know something like “continue this project,” run [`/shape-goal`](skills/shape-goal/SKILL.md) first:
-
-```text
-/shape-goal Continue this project
+```bash
+npx skills add chrisduvillard/loop-engineering-goal-library --skill '*'
 ```
 
-It reads the repository, reconciles the actual state, asks only material owner decisions, persists a concise Goal Contract, selects the right loop, and returns the exact `/goal` command.
+When the target is unclear:
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Continue this project` | `$shape-goal Continue this project` |
+
+Then use the universal skill-backed command:
+
+```text
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the execution profile named in the contract. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; leave a restartable handoff.
+```
+
+The commands below are **standalone fallbacks**. They embed the execution discipline directly for environments where `shape-goal` and `goal-engine` are not installed.
 
 ---
 
@@ -48,7 +58,7 @@ It reads the repository, reconciles the actual state, asks only material owner d
 /goal Complete the next coherent unblocked milestone toward [OBJECTIVE]. Orient from the actual repository and reconcile applicable instructions, specifications, approved plans, progress/handoffs, tests, CI, and Git state; protect uncommitted and unrelated work. Select the highest-priority dependency-safe milestone that materially advances the objective and can be finished end-to-end without unnecessary scope expansion, then define its acceptance evidence before editing. Implement the required production behavior through small reversible changes, run repository-native relevant checks after each meaningful change, add regression coverage, review the diff, and update existing progress state. Do not substitute planning, scaffolding, documentation, or tests for required implementation. Finish when that milestone—not the entire backlog—meets its acceptance criteria and affected broader gates pass with surfaced evidence. Stop only for a genuine external or approval blocker, [BUDGET], or two consecutive no-progress cycles; leave a restartable handoff. No irreversible or external-system action without explicit approval.
 ```
 
-**Why it works:** It constrains autonomy to one meaningful delivery unit without prescribing low-level tasks. The milestone’s evidence contract prevents both premature stopping and uncontrolled backlog expansion.
+**Why it works:** It constrains autonomy to one meaningful delivery unit without prescribing low-level tasks. The milestone's evidence contract prevents both premature stopping and uncontrolled backlog expansion.
 
 ---
 
@@ -96,4 +106,4 @@ It reads the repository, reconciles the actual state, asks only material owner d
 /goal Bring [VERSION OR SCOPE] to release-ready—not released—under the repository-defined release criteria. Establish the actual state and reconcile release documentation, specifications, CI, Git history and working changes, open blockers, versioning and changelog, migrations, security, reliability and performance gates, deployment assumptions, and rollback instructions; protect unrelated and uncommitted work. Turn the actual release gates into a concise checklist and capture their baseline. Work the highest-risk unblocked failure first: verify it, make the smallest reversible production fix, add regression protection, run repository-native targeted checks, then rerun clean or production-like full gates at appropriate checkpoints. Use an independent final review and verify every finding; do not hide failures, weaken gates, or expand scope. Update release, progress, and handoff artifacts. Finish only when every required gate passes with surfaced evidence, no release-blocking finding remains, artifacts, documentation, configuration, migrations, and rollback instructions are consistent, and the working tree has no unexplained changes. Do not tag, publish, deploy, merge, push, or alter production without explicit approval. Stop for an external or approval blocker, [BUDGET], or two no-progress cycles; leave a restartable release handoff.
 ```
 
-**Why it works:** It distinguishes preparing a release from executing irreversible release actions. The loop converges on the repository’s real gates instead of imposing a generic checklist.
+**Why it works:** It distinguishes preparing a release from executing irreversible release actions. The loop converges on the repository's real gates instead of imposing a generic checklist.

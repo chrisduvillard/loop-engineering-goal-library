@@ -22,3 +22,11 @@ jobs:
 
       - name: Validate skills, goals, and links
         run: python scripts/validate_repository.py
+
+      - name: Verify Agent Skills CLI discovery
+        shell: bash
+        run: |
+          output="$(npx -y skills add . --list)"
+          printf '%s\n' "$output"
+          grep -q "shape-goal" <<<"$output"
+          grep -q "goal-engine" <<<"$output"

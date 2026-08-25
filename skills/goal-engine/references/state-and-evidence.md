@@ -1,50 +1,54 @@
-# Goal Engine: State and Evidence
+# Goal Engine: State, Evidence, and Reuse
 
-Use the repository's existing plan, progress, issue, milestone, or handoff format when it can represent the state below. Do **not** create a competing source of truth merely because this template exists.
+Use the repository's existing plan, progress, issue, milestone, handoff, and history formats when they can represent the state below. Do **not** create a competing source of truth merely because templates exist.
 
-When no suitable artifact exists, create `GOAL_PROGRESS.md` beside `GOAL.md`.
+When no suitable convention exists, use:
+
+```text
+GOAL.md
+GOAL_PROGRESS.md
+docs/goals/INDEX.md
+docs/goals/<goal-id>/
+├── CONTRACT.md
+├── PROGRESS.md
+└── RESULT.md
+```
+
+Templates:
+
+- [../templates/goal-progress-template.md](../templates/goal-progress-template.md)
+- [../templates/goal-result-template.md](../templates/goal-result-template.md)
+- [../templates/goal-history-index-template.md](../templates/goal-history-index-template.md)
+
+## Active-state rules
+
+- `GOAL.md` or its authoritative equivalent holds the approved contract.
+- `GOAL_PROGRESS.md` or the repository's existing state artifact holds mutable execution state.
+- One active goal must not silently overwrite another.
+- A closed or superseded goal must retain its own archive packet.
+- Link to authoritative requirements instead of duplicating them.
+- Record the library version/source commit so later readers can reproduce the workflow assumptions.
 
 ## Minimal progress state
 
-```markdown
-# Goal Progress: [CONTRACT NAME]
+The progress template records:
 
-**Contract:** [PATH OR ISSUE]  
-**Profile:** [EXECUTION PROFILE]  
-**Branch/SHA:** [BRANCH] / [SHA]  
-**Last checkpoint:** [DATE OR SESSION]
+- Goal ID, contract, profile, library version, branch/SHA, and checkpoint
+- Verified baseline and preserved working changes
+- Acceptance ledger with exact verifiers
+- Completed changes
+- Failed or reverted approaches
+- Contradictions, risks, blockers, and approvals
+- No-progress count
+- One next highest-priority unblocked action
 
-## Baseline
+Use only these acceptance statuses:
 
-- `[COMMAND OR WORKFLOW]` — Pass / Fail / Blocked / Not run — [RELEVANT RESULT]
-- Preserved working changes: [PATHS OR NONE]
-- Known pre-existing failures: [LIST OR NONE]
-
-## Acceptance ledger
-
-| ID | Acceptance item | Verifier | Status | Evidence |
-|---|---|---|---|---|
-| A1 | [CRITERION] | `[COMMAND OR FLOW]` | Not run | — |
-
-## Completed changes
-
-- [PRODUCTION CHANGE] — [EVIDENCE]
-
-## Failed or reverted approaches
-
-- [APPROACH] — [WHY IT FAILED OR WAS REVERTED]
-
-## Open contradictions and risks
-
-- [CONTRADICTION OR RISK] — [CURRENT DISPOSITION]
-
-## Blockers and approvals
-
-- [BLOCKER OR APPROVAL NEEDED] — [OWNER / EXTERNAL DEPENDENCY]
-
-## Next action
-
-[ONE HIGHEST-PRIORITY UNBLOCKED ACTION]
+```text
+Pass
+Fail
+Blocked
+Not run
 ```
 
 ## Evidence quality
@@ -64,8 +68,9 @@ An acceptance item is **Pass** only when its stated verifier has run successfull
 
 - Record pre-existing failures before changing them.
 - Do not hide regressions by redefining the baseline after edits.
-- If a verifier must change because the requirement changed, obtain the contract-required approval and explain the before/after semantics.
+- If a verifier must change because the requirement changed, obtain contract-required approval and explain the before/after semantics.
 - A narrower targeted check may guide an iteration; the contract's broader final gates still determine completion.
+- Preserve user-authored and unrelated working changes.
 
 ## Keep-or-revert rule
 
@@ -87,6 +92,7 @@ Count a serious cycle as progress only when it produces at least one of:
 - A changed and testable hypothesis
 - A closed acceptance gap
 - A newly proven external blocker or approval boundary
+- A reusable verifier, fixture, or diagnostic that materially improves the next cycle
 
 Record no-progress cycles explicitly. Reset the count only when one of those outcomes occurs.
 
@@ -95,6 +101,7 @@ Record no-progress cycles explicitly. Reset the count only when one of those out
 At each meaningful checkpoint, surface and persist:
 
 ```text
+Goal ID:
 Profile:
 Current gap:
 Change made:
@@ -102,38 +109,83 @@ Verifier and result:
 Acceptance items changed:
 Regression status:
 Review status:
+Reusable discovery:
 No-progress count:
 Remaining highest-priority gap:
 Blocker or approval needed:
+State artifact:
 ```
 
-## Completion packet
+## Durable-knowledge promotion
 
-```markdown
-## Goal closeout
+Before closeout, promote verified knowledge to its permanent home:
 
-**Outcome:** Achieved / Blocked / Approval required / Budget exhausted / Stalled
+| Knowledge | Preferred home |
+|---|---|
+| Corrected failure | Regression test |
+| Product or architecture decision | Approved document or ADR |
+| Operational recovery or release procedure | Runbook |
+| Stable benchmark or acceptance flow | Repository-owned script or test |
+| Reusable fixture or specimen | Maintained test-data path |
+| Important limitation | Product/architecture documentation or residual-risk record |
 
-### Acceptance evidence
+Do not promote speculative observations or duplicate material already stored authoritatively.
 
-| ID | Status | Evidence |
-|---|---|---|
+## Closeout archive
 
-### Delivered behavior
+Archive every terminal outcome, not only success:
 
-- [CHANGE]
+- **Achieved**
+- **Blocked**
+- **Approval required**
+- **Budget exhausted**
+- **Stalled**
+- **Superseded**
 
-### Regression and review status
+The archive contains:
 
-- [CHECKS, PROTECTED BEHAVIOR, AND REVIEW]
-
-### Residual risk
-
-- [BOUNDED RISK OR NONE]
-
-### Restart information
-
-- State artifact: [PATH OR ISSUE]
-- Branch/SHA: [BRANCH] / [SHA]
-- Next action: [ONLY WHEN NOT ACHIEVED]
+```text
+CONTRACT.md  approved target and boundaries
+PROGRESS.md  final ledger, evidence, attempts, blockers, and next action
+RESULT.md    outcome, delivered behavior, reuse outputs, and residual risk
 ```
+
+Update `docs/goals/INDEX.md` or the repository's existing history index with:
+
+- Goal ID
+- Close date
+- Outcome
+- Profile
+- One-line target
+- Result link
+- Reusable outputs
+
+Preserve history. Do not edit an old result to make later work appear part of the original goal; create a new Goal ID and link related goals.
+
+## Sensitive-data guard
+
+Never commit:
+
+- Secrets, tokens, credentials, or private keys
+- Private user data
+- Raw production database dumps
+- Unredacted security evidence that increases exploitability
+- Large logs when a concise excerpt, checksum, or secure-system link is sufficient
+
+When evidence must stay outside Git, record a stable approved reference and the minimum metadata needed to retrieve it lawfully.
+
+## Result quality
+
+A useful `RESULT.md` lets a fresh agent answer:
+
+- What was supposed to become true?
+- What actually happened?
+- Which exact evidence supports the outcome?
+- What behavior changed?
+- What did not change?
+- What failed or was reverted?
+- What durable knowledge was promoted?
+- What can be reused next time?
+- What residual risk or next action remains?
+
+A closeout packet is not a substitute for regression tests, ADRs, runbooks, or product documentation. It is the indexable evidence trail that links them together.

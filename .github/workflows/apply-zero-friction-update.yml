@@ -41,14 +41,13 @@ jobs:
           if len(part04) != 11400 or sha256(part04).hexdigest() != '19be74035fe1a7631ec190a92cadc306c7dae310101f58c15f8b7c8c9965463d':
               raise SystemExit('Part 04 checksum mismatch')
 
-          pieces = [
+          combined = b''.join([
               Path('.github/zero-friction-update.part00').read_bytes(),
               part01,
               Path('.github/zero-friction-update.part02').read_bytes(),
               Path('.github/zero-friction-update.part03').read_bytes(),
               part04,
-          ]
-          combined = b''.join(pieces)
+          ])
           if len(combined) != 59400:
               raise SystemExit(f'Unexpected encoded payload length: {len(combined)}')
           Path('/tmp/update.b64').write_bytes(combined)
@@ -56,6 +55,8 @@ jobs:
           base64 --decode /tmp/update.b64 > /tmp/update.tar.xz
           echo "c4849a7dd575ee44807c9a8daffe5e9658125930785f6e497e362f202a0f88ca  /tmp/update.tar.xz" | sha256sum --check -
           tar -xJf /tmp/update.tar.xz
+          cp .github/workflows/validate.yml /tmp/reviewed-validate.yml
+          git checkout HEAD -- .github/workflows/validate.yml
           rm -f .github/zero-friction-update.part* .github/zf-fix-*
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

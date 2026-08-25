@@ -8,6 +8,7 @@ Turn vague intent into an approved target, then keep Codex or Claude Code workin
 
 [![OpenAI Codex](https://img.shields.io/badge/OpenAI%20Codex-compatible-111827?style=flat-square&logo=openai&logoColor=white)](https://developers.openai.com/codex/use-cases/follow-goals/)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757?style=flat-square)](https://docs.anthropic.com/en/docs/claude-code/goal)
+[![Validation](https://img.shields.io/github/actions/workflow/status/chrisduvillard/loop-engineering-goal-library/validate.yml?branch=main&style=flat-square&label=validation)](https://github.com/chrisduvillard/loop-engineering-goal-library/actions/workflows/validate.yml)
 ![Brownfield first](https://img.shields.io/badge/focus-brownfield--first-2563EB?style=flat-square)
 ![Skills](https://img.shields.io/badge/agent%20skills-2-7C3AED?style=flat-square)
 ![Goals](https://img.shields.io/badge/goal%20profiles-11-16A34A?style=flat-square)

@@ -8,6 +8,22 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.3.0] - 2026-08-25
+
+### Added
+
+- A complete README walkthrough from installation and goal shaping through native `/goal` execution, changing priorities, closeout, and reuse.
+- A plain-English README guide covering every standalone goal and when to use it.
+- **Measured Optimization / Benchmark** for fixed-protocol champion-versus-challenger improvement loops.
+- **Technical Spike / Feasibility** for bounded technical investigation and Go / Conditional Go / No-Go decisions.
+
+### Changed
+
+- The library now contains seven core and six specialist standalone goals, for thirteen presets total.
+- `shape-goal`, Goal Contract templates, quick reference, architecture, and validation now recognize all thirteen presets.
+- The specialist library now includes optimization and feasibility profiles.
+- The worked example's follow-on performance goal now uses the dedicated optimization profile.
+
 ## [0.2.0] - 2026-08-25
 
 ### Added
@@ -23,11 +39,11 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 ### Changed
 
-- The eleven standalone goals are now described as high-value control-loop presets rather than an exhaustive list of project types.
-- `shape-goal` now manages changing priorities and multiple goals without silently overwriting the active contract.
-- `goal-engine` now performs a goal-fit gate at checkpoints and pauses for reshaping when the user's need materially changes.
+- The eleven standalone goals are described as high-value control-loop presets rather than an exhaustive list of project types.
+- `shape-goal` manages changing priorities and multiple goals without silently overwriting the active contract.
+- `goal-engine` performs a goal-fit gate at checkpoints and pauses for reshaping when the user's need materially changes.
 - One native `/goal` session or worktree is explicitly bound to one dependency-safe leaf contract; parallel goals require isolation and coordination.
-- Progress, result, history, README, architecture, and quick-reference artifacts now record profiles, overlays, portfolio state, harness reuse, and related goals.
+- Progress, result, history, README, architecture, and quick-reference artifacts record profiles, overlays, portfolio state, harness reuse, and related goals.
 
 ## [0.1.0] - 2026-08-25
 

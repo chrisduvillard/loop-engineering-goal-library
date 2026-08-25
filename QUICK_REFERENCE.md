@@ -42,7 +42,7 @@ Use the existing issue tracker or roadmap when possible. Otherwise create `docs/
 
 ## Coverage model
 
-The eleven standalone goals are presets, not a ceiling:
+The thirteen standalone goals are presets, not a ceiling:
 
 ```text
 Primary execution profile
@@ -66,6 +66,8 @@ Primary execution profile
 | Upgrade a dependency/framework/runtime | Dependency / Framework Upgrade |
 | Transform schema or stored data | Data Migration / Integrity |
 | Recover divergent branch value | Branch Rescue / Integration |
+| Improve a stable metric against a fixed baseline | Measured Optimization / Benchmark |
+| Answer a bounded technical unknown before production | Technical Spike / Feasibility |
 | None fits | Custom Contract-Driven |
 
 ### Assurance overlays
@@ -108,7 +110,7 @@ Never commit secrets, credentials, private data, raw production dumps, exploit-e
 
 ## Standalone custom fallback
 
-When none of the eleven presets fits and the skills are not installed, use [`custom-contract-driven-goal.md`](skills/shape-goal/templates/custom-contract-driven-goal.md). It requires the contract to define a bounded iteration, verifier, keep-or-revert rule, review strategy, and stop condition.
+When none of the thirteen presets fits and the skills are not installed, use [`custom-contract-driven-goal.md`](skills/shape-goal/templates/custom-contract-driven-goal.md). It requires the contract to define a bounded iteration, verifier, keep-or-revert rule, review strategy, and stop condition.
 
 ## Update
 

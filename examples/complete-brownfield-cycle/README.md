@@ -12,7 +12,7 @@ Rough request
 
 ## Scenario
 
-A mature portfolio application already imports CSV files and exports portfolios. The first outcome completes spreadsheet import v1.4 without regressing exports. After correctness is proven, a separate performance goal becomes ready; it is not silently appended to the completed contract.
+A mature portfolio application already imports CSV files and exports portfolios. The first outcome completes spreadsheet import v1.4 without regressing exports. After correctness is proven, a separate **Measured Optimization / Benchmark** goal becomes ready to improve latency and memory against the new stable baseline; it is not silently appended to the completed contract.
 
 ## Files
 
@@ -40,4 +40,4 @@ docs/goals/
     └── RESULT.md
 ```
 
-Durable knowledge lives in maintained tests, docs, ADRs, runbooks, fixtures, scripts, and the project harness—not only in the archive.
+Durable knowledge lives in maintained tests, docs, ADRs, runbooks, fixtures, scripts, benchmarks, and the project harness—not only in the archive.

@@ -26,6 +26,8 @@ SPECIALIST_GOALS = (
     "09-dependency-framework-upgrade.md",
     "10-data-migration-integrity.md",
     "11-branch-rescue-integration.md",
+    "12-measured-optimization-benchmark.md",
+    "13-technical-spike-feasibility.md",
 )
 
 
@@ -81,7 +83,7 @@ def render_documents() -> dict[Path, str]:
         ),
         ROOT / "SPECIALIST_LOOPS.md": render_collection(
             "Specialist `/goal` Extensions",
-            "Four optional profiles for incidents, ecosystem upgrades, data migrations, and divergent branches. The core library remains the default.",
+            "Six optional profiles for incidents, ecosystem upgrades, data migrations, divergent branches, measured optimization, and technical feasibility. The core library remains the default.",
             SPECIALIST_GOALS,
         ),
     }

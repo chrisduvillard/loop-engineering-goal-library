@@ -3,7 +3,7 @@
 > [!NOTE]
 > Generated from the canonical files under [`goals/`](goals/). Edit those files, then run `python3 scripts/sync_goal_docs.py --write`.
 
-Four optional profiles for incidents, ecosystem upgrades, data migrations, and divergent branches. The core library remains the default.
+Six optional profiles for incidents, ecosystem upgrades, data migrations, divergent branches, measured optimization, and technical feasibility. The core library remains the default.
 
 ---
 
@@ -60,3 +60,31 @@ Four optional profiles for incidents, ecosystem upgrades, data migrations, and d
 **Why it works:** It treats a branch as behavioral slices, preserves a path matrix, and records reusable integration decisions rather than hiding them in a one-off merge.
 
 **Standalone fallback:** [Open the complete profile](goals/11-branch-rescue-integration.md).
+
+---
+
+## [Measured Optimization / Benchmark](goals/12-measured-optimization-benchmark.md)
+
+**Use when:** A measurable property such as latency, throughput, cost, memory, build time, model quality, ranking accuracy, or another stable metric must improve without regressing required behavior.
+
+```text
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the Measured Optimization / Benchmark profile. Freeze the benchmark protocol and verified baseline, test one coherent challenger at a time, keep only meaningful improvements produced under the same conditions without violating must-pass gates, and continue until the target is reached or the contract-defined experiment budget or stagnation exit applies; preserve a reusable closeout packet.
+```
+
+**Why it works:** It uses a fixed champion-versus-challenger loop, so every retained change has comparable evidence and every rejected idea becomes reusable optimization knowledge rather than repeated guesswork.
+
+**Standalone fallback:** [Open the complete profile](goals/12-measured-optimization-benchmark.md).
+
+---
+
+## [Technical Spike / Feasibility](goals/13-technical-spike-feasibility.md)
+
+**Use when:** A bounded technical unknown must be answered before committing to a production implementation, architecture, vendor, migration, or other costly or risky direction.
+
+```text
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the Technical Spike / Feasibility profile. Keep the investigation isolated, define the decision questions and Go / Conditional Go / No-Go criteria before experimenting, test the smallest representative prototype under realistic constraints, and continue until every question has an evidence-backed answer and a follow-on recommendation; preserve a reusable closeout packet and do not silently turn the spike into production implementation.
+```
+
+**Why it works:** It treats knowledge and a decision—not prototype volume—as the deliverable, keeps exploratory code from leaking into production, and saves the evidence needed to shape the next goal confidently.
+
+**Standalone fallback:** [Open the complete profile](goals/13-technical-spike-feasibility.md).

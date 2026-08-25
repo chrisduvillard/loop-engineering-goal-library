@@ -1,0 +1,17 @@
+# Technical Spike / Feasibility
+
+**Use when:** A bounded technical unknown must be answered before committing to a production implementation, architecture, vendor, migration, or other costly or risky direction.
+
+## Recommended: skill-backed
+
+```text
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the Technical Spike / Feasibility profile. Keep the investigation isolated, define the decision questions and Go / Conditional Go / No-Go criteria before experimenting, test the smallest representative prototype under realistic constraints, and continue until every question has an evidence-backed answer and a follow-on recommendation; preserve a reusable closeout packet and do not silently turn the spike into production implementation.
+```
+
+## Standalone fallback
+
+```text
+/goal Determine whether [APPROACH, VENDOR, ARCHITECTURE, OR TECHNIQUE] is feasible for [USE CASE] under [CONSTRAINTS], and produce a Go / Conditional Go / No-Go recommendation. First establish the actual repository state from applicable instructions, requirements, architecture, prior decisions and goals, native scripts/CI/tests, runtime behavior, supported environments, and Git status/diff/history; protect user, uncommitted, unrelated, and production work. Before building, define the bounded decision questions, alternatives, representative scenarios or data, success and rejection thresholds, evidence required, experiment budget, cleanup rule, and which artifacts may survive the spike. Work in an isolated branch, worktree, sandbox, fixture, or clearly disposable path. Then repeat: test one material assumption with the smallest prototype, adapter, simulation, or experiment that can answer it; use repository-native checks and realistic constraints; compare alternatives consistently; verify documentation claims with executable evidence where practical; record results, failure modes, integration cost, operational risk, limitations, and the next unanswered question; and discard or revert experiments that do not produce reusable evidence. Do not weaken the decision criteria, mutate production, commit to a vendor, or silently convert exploratory code into production implementation. Finish only when every decision question has an evidence-backed answer, the recommendation and its conditions are explicit, important assumptions have been independently reviewed where practical, and any approved follow-on production work is captured as a separate Goal Contract, issue, or milestone. Stop for a contract-defined blocker, approval boundary, exhausted [SPIKE BUDGET], proof that the approach is infeasible, or two consecutive no-progress cycles. At any terminal outcome, preserve a reusable closeout packet under the repository's goal-history convention (default `docs/goals/<goal-id>/`) containing `CONTRACT.md`, final `PROGRESS.md`, and `RESULT.md`; update the history index, retain only approved reusable tests/docs/ADRs/runbooks/fixtures/tooling, clean up disposable artifacts, and exclude secrets, private data, raw production dumps, exploit-enabling evidence, and unnecessarily large logs. Never purchase services, accept binding terms, send sensitive data externally, or cross another irreversible boundary without explicit approval.
+```
+
+**Why it works:** It treats knowledge and a decision—not prototype volume—as the deliverable, keeps exploratory code from leaking into production, and saves the evidence needed to shape the next goal confidently.

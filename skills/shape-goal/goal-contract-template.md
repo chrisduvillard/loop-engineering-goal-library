@@ -60,7 +60,7 @@ An item becomes **Pass** only when its stated evidence has been produced under t
 
 ### Primary profile
 
-[ONE OF THE ELEVEN PRESETS OR CUSTOM CONTRACT-DRIVEN]
+[ONE OF THE THIRTEEN PRESETS OR CUSTOM CONTRACT-DRIVEN]
 
 For a custom profile, define:
 

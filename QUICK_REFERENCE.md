@@ -106,6 +106,10 @@ Never commit secrets, credentials, private data, raw production dumps, exploit-e
 /goal Follow goal-engine to complete GOAL.md using its profile, overlays, and project harness. Stop only when every acceptance item passes with surfaced evidence, or when a contract-defined blocker, approval boundary, budget, goal-drift review, or two-cycle stall applies; preserve reusable state and leave a restartable handoff.
 ```
 
+## Standalone custom fallback
+
+When none of the eleven presets fits and the skills are not installed, use [`custom-contract-driven-goal.md`](skills/shape-goal/templates/custom-contract-driven-goal.md). It requires the contract to define a bounded iteration, verifier, keep-or-revert rule, review strategy, and stop condition.
+
 ## Update
 
 ```bash

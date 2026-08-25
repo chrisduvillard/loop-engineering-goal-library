@@ -20,28 +20,17 @@ SPECIALIST_GOALS = list(sync_goal_docs.SPECIALIST_GOALS)
 ALL_GOALS = CORE_GOALS + SPECIALIST_GOALS
 
 PRESET_NAMES = (
-    "Brownfield Continue / Finish",
-    "PRD / Spec Compliance",
-    "Next Milestone",
-    "Deep Audit + Remediation",
-    "QA / Regression / UAT",
-    "Safe Refactor / Modernization",
-    "Release Readiness",
-    "Incident Recovery / Stabilization",
-    "Dependency / Framework Upgrade",
-    "Data Migration / Integrity",
+    "Brownfield Continue / Finish", "PRD / Spec Compliance", "Next Milestone",
+    "Deep Audit + Remediation", "QA / Regression / UAT", "Safe Refactor / Modernization",
+    "Release Readiness", "Incident Recovery / Stabilization",
+    "Dependency / Framework Upgrade", "Data Migration / Integrity",
     "Branch Rescue / Integration",
 )
 
 ASSURANCE_OVERLAYS = (
-    "Security & Privacy",
-    "Reliability & Recovery",
-    "Performance & Cost",
-    "UX & Accessibility",
-    "Data Integrity & Governance",
-    "Compatibility & Portability",
-    "Operability & Observability",
-    "Documentation & Knowledge Transfer",
+    "Security & Privacy", "Reliability & Recovery", "Performance & Cost",
+    "UX & Accessibility", "Data Integrity & Governance", "Compatibility & Portability",
+    "Operability & Observability", "Documentation & Knowledge Transfer",
     "Compliance & Auditability",
 )
 
@@ -51,8 +40,8 @@ REQUIRED_PATHS = (
     "SKILLS_AND_GOALS.md", "skills/shape-goal/SKILL.md",
     "skills/shape-goal/goal-contract-template.md",
     "skills/shape-goal/templates/goal-portfolio-template.md",
-    "skills/goal-engine/SKILL.md",
-    "skills/goal-engine/references/loop-profiles.md",
+    "skills/shape-goal/templates/custom-contract-driven-goal.md",
+    "skills/goal-engine/SKILL.md", "skills/goal-engine/references/loop-profiles.md",
     "skills/goal-engine/references/assurance-overlays.md",
     "skills/goal-engine/references/state-and-evidence.md",
     "skills/goal-engine/templates/project-harness-template.md",
@@ -64,8 +53,7 @@ REQUIRED_PATHS = (
     "examples/complete-brownfield-cycle/PORTFOLIO.md",
     "examples/complete-brownfield-cycle/CONTRACT.md",
     "examples/complete-brownfield-cycle/PROGRESS.md",
-    "examples/complete-brownfield-cycle/RESULT.md",
-    ".github/workflows/validate.yml",
+    "examples/complete-brownfield-cycle/RESULT.md", ".github/workflows/validate.yml",
 )
 
 
@@ -96,7 +84,6 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, str], dict[str, str]]:
     if len(parts) < 3:
         fail(f"{path.relative_to(ROOT)}: unterminated YAML frontmatter")
         return {}, {}
-
     top: dict[str, str] = {}
     metadata: dict[str, str] = {}
     in_metadata = False
@@ -211,7 +198,6 @@ def validate_profiles_and_overlays() -> None:
             fail("loop-profiles.md: missing Custom Contract-Driven fallback")
         if "not an exhaustive taxonomy" not in text:
             fail("loop-profiles.md: presets are not described as non-exhaustive")
-
     overlays_path = require("skills/goal-engine/references/assurance-overlays.md")
     if overlays_path.exists():
         text = overlays_path.read_text(encoding="utf-8")
@@ -220,6 +206,14 @@ def validate_profiles_and_overlays() -> None:
                 fail(f"Assurance overlay missing: {name}")
         if "Project-specific overlay" not in text:
             fail("assurance-overlays.md: missing project-specific extension rule")
+    custom_path = require("skills/shape-goal/templates/custom-contract-driven-goal.md")
+    if custom_path.exists():
+        text = custom_path.read_text(encoding="utf-8")
+        for fragment in ("Custom Contract-Driven", "## Standalone fallback", "keep-or-revert", "reusable closeout packet"):
+            if fragment not in text:
+                fail(f"{custom_path.relative_to(ROOT)}: missing {fragment!r}")
+        if not extract_goal_command(text):
+            fail(f"{custom_path.relative_to(ROOT)}: no standalone /goal found")
 
 
 def require_fragments(path: Path, fragments: tuple[str, ...]) -> None:
@@ -239,20 +233,19 @@ def validate_state_and_examples() -> None:
         "## Goal-drift review triggers", "## Reuse and closeout", "## Native `/goal` command",
     ))
     require_fragments(require("skills/shape-goal/templates/goal-portfolio-template.md"), (
-        "## Active", "## Ready", "## Paused or blocked", "## Candidates",
-        "## Transition log", "One active goal per native `/goal` session or worktree",
+        "## Active", "## Ready", "## Paused or blocked", "## Candidates", "## Transition log",
+        "One active goal per native `/goal` session or worktree",
     ))
     require_fragments(require("skills/goal-engine/templates/project-harness-template.md"), (
-        "## Setup", "## Run", "## Repository-native verification",
-        "## Realistic workflows", "## Freshness triggers",
+        "## Setup", "## Run", "## Repository-native verification", "## Realistic workflows", "## Freshness triggers",
     ))
     require_fragments(require("skills/goal-engine/references/state-and-evidence.md"), (
-        "GOAL.md", "GOAL_PROGRESS.md", "docs/goals/PORTFOLIO.md",
-        "Candidate", "Active", "Goal-fit", "Project harness", "Closeout archive",
+        "GOAL.md", "GOAL_PROGRESS.md", "docs/goals/PORTFOLIO.md", "Candidate", "Active",
+        "Goal-fit", "Project harness", "Closeout archive",
     ))
     require_fragments(require("skills/goal-engine/templates/goal-progress-template.md"), (
-        "Goal ID / revision", "Portfolio state / priority", "Assurance overlays",
-        "Project harness", "## Dependencies and goal fit", "## Acceptance and overlay ledger",
+        "Goal ID / revision", "Portfolio state / priority", "Assurance overlays", "Project harness",
+        "## Dependencies and goal fit", "## Acceptance and overlay ledger",
     ))
     require_fragments(require("skills/goal-engine/templates/goal-result-template.md"), (
         "Goal ID / revision", "Cancelled", "Superseded", "Assurance overlays",
@@ -305,25 +298,11 @@ def validate_markdown_links() -> None:
 
 def validate_entry_points() -> None:
     checks = {
-        require("README.md"): (
-            "Install once, use everywhere", "Run or change a project", "Eleven presets",
-            "Project Harness", "PORTFOLIO.md", "shape-goal", "goal-engine",
-        ),
-        require("INSTALL.md"): (
-            "install globally", "Verify the installation", "Update", "Build reusable ZIP packages",
-        ),
-        require("QUICK_REFERENCE.md"): (
-            "Multiple goals over time", "Coverage model", "Assurance overlays",
-            "Project Harness", "Ultra-short default",
-        ),
-        require("SKILLS_AND_GOALS.md"): (
-            "A project can have many goals", "Custom Contract-Driven",
-            "Reusable project harness", "native /goal",
-        ),
-        require("ROADMAP.md"): (
-            "Implemented in `0.2.0`", "Before `1.0.0`", "live Codex",
-            "live Claude Code", "license",
-        ),
+        require("README.md"): ("Install once, use everywhere", "Run or change a project", "Eleven presets", "standalone custom fallback", "Project Harness", "PORTFOLIO.md", "shape-goal", "goal-engine"),
+        require("INSTALL.md"): ("install globally", "Verify the installation", "Update", "Build reusable ZIP packages"),
+        require("QUICK_REFERENCE.md"): ("Multiple goals over time", "Coverage model", "Assurance overlays", "Standalone custom fallback", "Project Harness", "Ultra-short default"),
+        require("SKILLS_AND_GOALS.md"): ("A project can have many goals", "Custom Contract-Driven", "standalone custom fallback", "Reusable project harness", "native /goal"),
+        require("ROADMAP.md"): ("Implemented in `0.2.0`", "Before `1.0.0`", "live Codex", "live Claude Code", "license"),
     }
     for path, fragments in checks.items():
         if not path.exists():
@@ -343,10 +322,7 @@ def validate_scripts_and_ci() -> None:
     workflow = require(".github/workflows/validate.yml")
     if workflow.exists():
         text = workflow.read_text(encoding="utf-8")
-        for fragment in (
-            "actions/checkout@v7", "actions/setup-python@v7", "actions/upload-artifact@v7",
-            "skills@1.5.23", "scripts/sync_goal_docs.py --check", "scripts/package_skills.py",
-        ):
+        for fragment in ("actions/checkout@v7", "actions/setup-python@v7", "actions/upload-artifact@v7", "skills@1.5.23", "scripts/sync_goal_docs.py --check", "scripts/package_skills.py"):
             if fragment not in text:
                 fail(f"{workflow.relative_to(ROOT)}: missing {fragment!r}")
 
@@ -370,7 +346,7 @@ def main() -> int:
     print("Repository validation passed.")
     print(f"- version {version}")
     print("- 2 portable skills")
-    print("- 11 canonical execution presets plus Custom Contract-Driven fallback")
+    print("- 11 canonical execution presets plus packaged Custom Contract-Driven fallback")
     print(f"- {len(ASSURANCE_OVERLAYS)} assurance overlays")
     print("- multi-goal portfolio and lifecycle schemas")
     print("- reusable project harness, progress, result, history, and closeout schemas")

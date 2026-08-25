@@ -57,7 +57,7 @@ See [`INSTALL.md`](INSTALL.md) for project-local, temporary-use, update, and ZIP
 /goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
 
-Claude Code currently allows one active `/goal` per session, which matches the library's one-contract-per-session rule. Parallel project goals should use isolated sessions and worktrees. 
+Claude Code currently allows one active `/goal` per session, which matches the library's one-contract-per-session rule. Parallel project goals should use isolated sessions and worktrees.
 
 ### 3. Preserve the result and choose what follows
 
@@ -102,7 +102,7 @@ The seven core presets cover continuation, specification compliance, milestones,
 
 Cross-cutting concerns—security, reliability, performance, cost, UX, accessibility, data governance, compatibility, operability, documentation, and compliance—are selected as [assurance overlays](skills/goal-engine/references/assurance-overlays.md), not duplicated into dozens of goals.
 
-When no preset fits, the Goal Contract defines a **Custom Contract-Driven** loop with an iteration unit, verifier, keep-or-revert rule, review strategy, and objective stop condition.
+When no preset fits, the Goal Contract defines a **Custom Contract-Driven** loop with an iteration unit, verifier, keep-or-revert rule, review strategy, and objective stop condition. A [standalone custom fallback](skills/shape-goal/templates/custom-contract-driven-goal.md) is included for environments without installed skills.
 
 ## Reuse project knowledge instead of rediscovering it
 
@@ -112,7 +112,7 @@ Verified learning is promoted to regression tests, ADRs, product docs, runbooks,
 
 ## No skills installed?
 
-Every file under [`goals/`](goals/) contains a self-contained standalone `/goal`. Start with the [core library](GOAL_LIBRARY.md), [specialist library](SPECIALIST_LOOPS.md), or [quick reference](QUICK_REFERENCE.md).
+Every file under [`goals/`](goals/) contains a self-contained standalone `/goal`. Start with the [core library](GOAL_LIBRARY.md), [specialist library](SPECIALIST_LOOPS.md), [custom fallback](skills/shape-goal/templates/custom-contract-driven-goal.md), or [quick reference](QUICK_REFERENCE.md).
 
 ## Explore
 

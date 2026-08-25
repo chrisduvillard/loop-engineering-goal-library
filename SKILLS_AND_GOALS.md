@@ -78,7 +78,7 @@ Security, reliability, performance, cost, UX, accessibility, data governance, co
 
 ### Custom Contract-Driven fallback
 
-When no preset fits, the contract defines the iteration unit, verifier, keep-or-revert rule, review strategy, and objective stop condition. A recurring custom pattern may later justify a new preset, but one unusual project should not expand the global taxonomy.
+When no preset fits, the contract defines the iteration unit, verifier, keep-or-revert rule, review strategy, and objective stop condition. The [standalone custom fallback](skills/shape-goal/templates/custom-contract-driven-goal.md) preserves the same model without installed skills. A recurring custom pattern may later justify a new preset, but one unusual project should not expand the global taxonomy.
 
 ## Reusable project harness
 

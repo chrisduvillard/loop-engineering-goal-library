@@ -197,7 +197,7 @@ If the user requested read-only shaping, return the contract and launch packet w
 /goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
 
-Also provide the matching standalone fallback. Do not duplicate the entire standalone prompt into the contract.
+Also provide the matching standalone preset. When **Custom Contract-Driven** is selected, use [templates/custom-contract-driven-goal.md](templates/custom-contract-driven-goal.md). Do not duplicate the entire standalone prompt into the contract.
 
 ## 12. End with a launch packet
 

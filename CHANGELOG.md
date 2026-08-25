@@ -17,6 +17,7 @@ The project follows semantic versioning while it is field-tested. Versions below
 - Parent, dependency, priority, revision, and supersession relationships in Goal Contracts.
 - Assurance overlays for security/privacy, reliability/recovery, performance/cost, UX/accessibility, data governance, compatibility, operability, documentation, and compliance.
 - A `Custom Contract-Driven` fallback when none of the eleven presets fits.
+- A packaged standalone custom `/goal` fallback for environments without installed skills.
 - A reusable project-harness template for setup, run, reset, realistic workflow, and repository-native verification knowledge.
 - A completed example portfolio showing one achieved goal and a different ready goal that follows it.
 

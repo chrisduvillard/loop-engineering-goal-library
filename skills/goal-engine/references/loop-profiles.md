@@ -103,6 +103,24 @@ Choose one primary preset when it matches the dominant execution shape. Add cros
 - Compare each slice with newer target behavior and choose the least risky transfer method.
 - Finish when selected value is integrated and verified, rejected work is explained, and recovery remains possible.
 
+## 12. Measured Optimization / Benchmark
+
+**Use for:** Improving a stable metric such as latency, throughput, cost, memory, build time, model quality, or ranking accuracy without regressing required behavior.
+
+- Freeze the benchmark protocol, representative workload, environment, sampling rule, tolerance, and must-pass floors before optimizing.
+- Capture a reproducible baseline and treat the current best result as the champion.
+- Change one coherent factor per challenger, rerun the same benchmark and regression gates, and keep only meaningful improvements.
+- Finish when the target is reproduced under the fixed protocol or the contract's experiment budget or stagnation exit applies.
+
+## 13. Technical Spike / Feasibility
+
+**Use for:** Resolving a bounded technical unknown before committing to a production implementation, architecture, vendor, migration, or other costly direction.
+
+- Define the decision questions, alternatives, representative constraints, Go / Conditional Go / No-Go thresholds, budget, and cleanup rule before prototyping.
+- Keep experiments isolated and build only the smallest prototype, simulation, or adapter needed to answer one material assumption.
+- Treat knowledge and an evidence-backed recommendation as the deliverable; do not silently convert exploratory code into production.
+- Finish when every question is answered, limitations and risks are recorded, and any approved follow-on work has its own Goal Contract or issue.
+
 ## Custom Contract-Driven
 
 **Use for:** A measurable engineering outcome whose dominant loop does not fit a preset.
@@ -119,7 +137,7 @@ A custom profile is a safe fallback, not permission for vague work. If the same 
 
 ## Combining profiles and overlays
 
-Use one primary profile. A secondary profile may contribute a narrow technique—for example QA matrices during an upgrade or data reconciliation during release readiness.
+Use one primary profile. A secondary profile may contribute a narrow technique—for example QA matrices during an upgrade, data reconciliation during release readiness, or a fixed benchmark during a refactor.
 
 Use assurance overlays for security, reliability, performance, UX/accessibility, data governance, compatibility, operability, documentation, or compliance concerns.
 

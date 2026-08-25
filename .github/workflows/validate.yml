@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,22 +12,37 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
-      - name: Validate skills, goals, and links
+      - name: Validate repository contract
         run: python scripts/validate_repository.py
+
+      - name: Verify generated goal libraries
+        run: python scripts/sync_goal_docs.py --check
 
       - name: Verify Agent Skills CLI discovery
         shell: bash
         run: |
-          output="$(npx -y skills add . --list)"
+          output="$(npx -y skills@1.5.23 add . --list)"
           printf '%s\n' "$output"
           grep -q "shape-goal" <<<"$output"
           grep -q "goal-engine" <<<"$output"
+
+      - name: Package reusable skills
+        run: python scripts/package_skills.py
+
+      - name: Upload reusable skill packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: loop-engineering-skill-packages
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30

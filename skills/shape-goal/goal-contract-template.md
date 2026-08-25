@@ -1,11 +1,15 @@
 # Goal Contract: [NAME]
 
-**Status:** Proposed / Approved / Superseded  
+**Status:** Proposed / Approved / Superseded / Closed  
+**Goal ID:** [YYYY-MM-DD-SHORT-SLUG OR ISSUE/MILESTONE ID]  
 **Owner:** [OWNER]  
+**Created:** [DATE]  
 **Last updated:** [DATE]  
+**Library:** chrisduvillard/loop-engineering-goal-library @ [SKILL METADATA VERSION OR SOURCE COMMIT]  
 **Current branch/SHA:** [OPTIONAL]  
 **Execution profile:** [PROFILE]  
-**Progress state:** [EXISTING ARTIFACT OR `GOAL_PROGRESS.md`]
+**Progress state:** [EXISTING ARTIFACT OR `GOAL_PROGRESS.md`]  
+**Archive path:** [EXISTING CONVENTION OR `docs/goals/[GOAL ID]/`]
 
 ## Target
 
@@ -35,7 +39,7 @@ An item becomes **Pass** only when its stated evidence has been produced under t
 
 ## Protected behavior
 
-- [Existing contract, workflow, compatibility requirement, user work, local modification, or performance characteristic that must survive]
+- [Existing contract, workflow, compatibility requirement, user work, local modification, data invariant, or performance characteristic that must survive]
 
 ## Baseline and known exceptions
 
@@ -77,12 +81,30 @@ List contradictions that remain relevant and their disposition rather than silen
 
 [Only profile-specific constraints that are not already captured above. Do not duplicate the whole profile.]
 
+## Reuse and closeout
+
+At every terminal outcome—Achieved, Blocked, Approval required, Budget exhausted, or Stalled:
+
+- Preserve a closeout packet at the archive path:
+  - `CONTRACT.md` — this approved contract or an exact snapshot
+  - `PROGRESS.md` — final acceptance ledger, evidence, attempts, blockers, and next action
+  - `RESULT.md` — outcome, delivered behavior, regression status, residual risk, and reusable lessons
+- Update `docs/goals/INDEX.md` or the repository's existing goal-history index.
+- Promote durable knowledge to the correct permanent home:
+  - corrected failures → regression tests
+  - hard-to-reverse decisions → ADRs or approved product documentation
+  - operational procedures → runbooks
+  - reusable fixtures, commands, or tooling → repository-owned paths
+- Do not archive secrets, credentials, private user data, raw production dumps, or unnecessarily large logs.
+
+**Expected reusable outputs:** [TESTS / FIXTURES / ADRS / RUNBOOKS / COMMANDS / NONE]
+
 ## Native `/goal` command
 
 ```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [THIS PATH OR ISSUE]. Use the execution profile named in the contract. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; leave a restartable handoff.
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [THIS PATH OR ISSUE]. Use the execution profile named in the contract. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve a reusable closeout packet and leave a restartable handoff.
 ```
 
 ## Approval record
 
-- [DATE] — [OWNER] approved this contract and its authority boundaries.
+- [DATE] — [OWNER] approved this contract, archive path, and authority boundaries.

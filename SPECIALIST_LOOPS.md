@@ -1,6 +1,18 @@
 # Specialist `/goal` Extensions
 
-The seven core loops remain the recommended permanent toolkit. These optional extensions are worth saving because incidents, ecosystem upgrades, data changes, and divergent branches have distinct failure modes that a generic loop can easily miss.
+These four profiles are worth keeping because incidents, ecosystem upgrades, data changes, and divergent branches have distinct failure modes that a generic loop can easily miss.
+
+## Recommended: skills + native goal
+
+After `shape-goal` has approved the target and selected one of these specialist profiles, run:
+
+```text
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the execution profile named in the contract. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; leave a restartable handoff.
+```
+
+The commands below are **standalone fallbacks** for environments where `goal-engine` is not installed.
+
+---
 
 ## Incident Recovery / Stabilization
 

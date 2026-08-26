@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[Goal Contract path or issue]"
 metadata:
   author: chrisduvillard
-  version: "0.4.0"
+  version: "0.5.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -16,6 +16,16 @@ metadata:
 Execute one approved outcome without losing brownfield safety, changing the goal silently, reopening settled decisions without cause, or discarding reusable knowledge.
 
 > **Profile = loop shape · overlays = additional proof · harness = project mechanics · shaping history = decision trail · contract = project truth · native `/goal` = persistence**
+
+## Non-negotiable invariants
+
+- Execute only an approved contract and the approval shaping round recorded by it.
+- Read the contract, shaping history, repository instructions, harness, progress, and Git state before editing.
+- Preserve user and unrelated work; keep changes small, reversible, verified, and reviewable.
+- Never treat shaping, planning, test creation, or documentation alone as completion when production behavior remains.
+- Surface evaluator-visible evidence, protect corrected failures, and keep only changes that preserve or improve the verified state.
+- Material goal drift pauses execution and appends a new shaping round; prior decisions remain immutable.
+- Autonomous continuation never expands deployment, destructive, credential, billing, security-testing, legal, or production authority.
 
 ## Zero-friction handoff
 

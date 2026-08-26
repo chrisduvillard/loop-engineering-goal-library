@@ -17,6 +17,17 @@ import sync_goal_docs  # noqa: E402
 ERRORS: list[str] = []
 PLACEHOLDER = re.compile(r"\[[A-Z][A-Z0-9 _/.,:+-]{2,}\]")
 ACTION_PIN = re.compile(r"uses:\s+[^@\s]+@([0-9a-f]{40})(?:\s+#.*)?$")
+ASSURANCE_OVERLAYS = {
+    "Security & Privacy",
+    "Reliability & Recovery",
+    "Performance & Cost",
+    "UX & Accessibility",
+    "Data Integrity & Governance",
+    "Compatibility & Portability",
+    "Operability & Observability",
+    "Documentation & Knowledge Transfer",
+    "Compliance & Auditability",
+}
 
 
 def fail(message: str) -> None:
@@ -105,7 +116,7 @@ def validate_catalog(catalog: dict) -> list[dict]:
     keys = [item.get("key") for item in categories]
     if keys != ["core", "specialist", "quality"]:
         fail(f"Unexpected category order: {keys}")
-    expected_counts = {"core": 7, "specialist": 6, "quality": 9}
+    expected_counts = {"core": 7, "specialist": 6, "quality": 11}
     counts = {key: 0 for key in expected_counts}
     seen_ids: set[str] = set()
     seen_files: set[str] = set()
@@ -126,8 +137,8 @@ def validate_catalog(catalog: dict) -> list[dict]:
         for field in ("title", "simple", "use_when"):
             if not item.get(field):
                 fail(f"Catalog goal {filename}: missing {field}")
-    if len(goals) != 22:
-        fail(f"Expected 22 goals, found {len(goals)}")
+    if len(goals) != 24:
+        fail(f"Expected 24 goals, found {len(goals)}")
     if counts != expected_counts:
         fail(f"Unexpected category counts: {counts}")
     return goals
@@ -158,6 +169,19 @@ def validate_goal_files(catalog_goals: list[dict]) -> None:
             continue
         text = path.read_text(encoding="utf-8")
         lower = text.lower()
+        suggested = re.search(
+            r"^\*\*Suggested assurance overlays:\*\*\s*(.+)$",
+            text,
+            flags=re.MULTILINE,
+        )
+        if not suggested:
+            fail(f"goals/{item['file']}: missing suggested assurance overlays")
+        else:
+            raw_overlays = suggested.group(1).strip()
+            if not raw_overlays.lower().startswith(("none by default", "select only")):
+                for overlay in (part.strip() for part in raw_overlays.split(",")):
+                    if overlay not in ASSURANCE_OVERLAYS:
+                        fail(f"goals/{item['file']}: unknown assurance overlay {overlay!r}")
         if not text.startswith(f"# {item['title']}\n"):
             fail(f"goals/{item['file']}: title differs from catalog")
         for field, marker in (("use_when", "**Use when:**"), ("simple", "**In simple terms:**")):
@@ -176,6 +200,9 @@ def validate_goal_files(catalog_goals: list[dict]) -> None:
             fail(f"goals/{item['file']}: expected exactly 2 /goal commands, found {len(commands)}")
             continue
         recommended, fallback = commands
+        for command_index, command in enumerate(commands, start=1):
+            if len(command) > 4000:
+                fail(f"goals/{item['file']}: command {command_index} exceeds 4,000 characters ({len(command)})")
 
         if PLACEHOLDER.search(recommended):
             fail(f"goals/{item['file']}: recommended launcher contains placeholder {PLACEHOLDER.search(recommended).group(0)!r}")
@@ -201,7 +228,7 @@ def validate_goal_files(catalog_goals: list[dict]) -> None:
             if fragment not in fallback:
                 fail(f"goals/{item['file']}: fallback missing {fragment!r}")
 
-        if "secrets" not in lower or "private data" not in lower:
+        if "secrets" not in lower or not any(term in lower for term in ("private data", "private personal", "confidential business")):
             fail(f"goals/{item['file']}: sensitive-data guard is incomplete")
         if item["title"] not in profile_text:
             fail(f"profile-inputs.md: missing {item['title']}")
@@ -320,7 +347,8 @@ def validate_state_and_docs() -> None:
         "skills/goal-engine/templates/goal-result-template.md",
         "skills/goal-engine/templates/goal-history-index-template.md",
         "scripts/package_skills.py", "scripts/sync_goal_docs.py",
-        "scripts/validate_repository.py", ".github/workflows/validate.yml",
+        "scripts/sync_goal_launchers.py", "scripts/validate_shaping_history_diff.py",
+        "scripts/validate_repository.py", ".github/dependabot.yml", ".github/workflows/validate.yml",
         "examples/complete-brownfield-cycle/README.md",
         "examples/complete-brownfield-cycle/SHAPING.md",
         "examples/complete-brownfield-cycle/PORTFOLIO.md",
@@ -337,9 +365,10 @@ def validate_state_and_docs() -> None:
         require(path)
 
     require_absent(".github/workflows/apply-zero-friction-update.yml")
+    require_absent(".github/workflows/apply-final-specialist-review.yml")
 
     require_fragments(require("CURRENT_IMPLEMENTATION.md"), (
-        "Version `0.4.0`", "22 zero-friction goal profiles", "## Shaping history", "## Verification",
+        "Version `0.5.0`", "24 zero-friction goal profiles", "## Shaping history", "## Verification",
     ))
     require_fragments(require("README.md"), (
         "## Quick start", "Every question and answer is saved immediately",
@@ -365,7 +394,7 @@ def validate_state_and_docs() -> None:
     ))
     require_fragments(require("skills/shape-goal/templates/shaping-history-template.md"), (
         "## Current decision index", "## Round R1", "### Questions and answers",
-        "**Exact question:**", "**User answer:**", "## Corrections and supersessions",
+        "**Exact question:**", "**User answer:**", "Blocked", "## Approval record", "## Corrections and supersessions",
     ))
     require_fragments(require("skills/goal-engine/references/state-and-evidence.md"), (
         "Shaping history", "## Shaping-history rules", "approval round", "├── SHAPING.md",
@@ -463,7 +492,8 @@ def validate_scripts_and_ci() -> None:
                 fail(f".github/workflows/validate.yml: action is not pinned to a full commit SHA: {line.strip()}")
         text = workflow.read_text(encoding="utf-8")
         for fragment in (
-            "skills@1.5.23", "scripts/sync_goal_docs.py --check",
+            "skills@1.5.23", "fetch-depth: 0", "scripts/sync_goal_launchers.py --check",
+            "scripts/sync_goal_docs.py --check", "scripts/validate_shaping_history_diff.py",
             "scripts/package_skills.py", "scripts/validate_repository.py",
         ):
             if fragment not in text:
@@ -490,9 +520,9 @@ def main() -> int:
     print("Repository validation passed.")
     print(f"- version {version}")
     print("- 2 portable skills with host metadata")
-    print("- 22 zero-friction recommended launchers")
-    print("- 22 self-contained no-placeholder fallbacks")
-    print("- 7 core, 6 specialist, and 9 quality profiles")
+    print("- 24 zero-friction recommended launchers")
+    print("- 24 self-contained no-placeholder fallbacks")
+    print("- 7 core, 6 specialist, and 11 quality profiles")
     print("- profile-specific input resolution and append-only shaping rounds")
     print("- durable question/answer history with corrections and approval linkage")
     print("- multi-goal portfolio, project harness, and reusable closeout")

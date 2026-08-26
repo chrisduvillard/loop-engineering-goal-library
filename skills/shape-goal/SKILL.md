@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[continue | new goal | deepen | profile | goal ID | changed need]"
 metadata:
   author: chrisduvillard
-  version: "0.4.0"
+  version: "0.5.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -20,6 +20,16 @@ Turn rough or changing intent into one safe, approved, executable contract while
 ```text
 project need → evidence search → shaping rounds → approved contract → goal-engine
 ```
+
+## Non-negotiable invariants
+
+- No production edit before an explicitly approved Goal Contract.
+- Search repository and connected authoritative evidence before asking the user.
+- Save every asked question and safe answer in append-only `SHAPING.md`; corrections append and supersede.
+- A dissatisfied user may request repeated deeper, non-duplicate shaping rounds.
+- Use the actual persisted contract reference in every handoff; `GOAL.md` is only the default fallback.
+- Contract creation is not completion: after approval, hand off to `goal-engine` and continue until evidence passes.
+- Material goal drift pauses execution and reopens shaping without rewriting prior decisions.
 
 ## Invocation modes
 
@@ -126,7 +136,7 @@ When evidence cannot resolve a material choice:
 - Normalize the answer into a contract decision and record its contract impact
 - Continue until every material input is resolved or a genuine blocker exists
 
-Preserve the user's answer verbatim when safe and useful. Redact secrets, credentials, private personal data, raw production data, and exploit-enabling details; store a safe decision summary plus an approved secure reference instead.
+Preserve the user's answer verbatim when safe and useful. Redact secrets, credentials, private personal data, confidential business or customer information, third-party restricted material, raw production data, and exploit-enabling details; store a safe decision summary plus an approved secure reference instead.
 
 Do not ask users to find repository facts, commands, paths, or implementation details that tools can discover.
 
@@ -288,7 +298,7 @@ docs/goals/<goal-id>/
 
 ## 13. Handoff to goal-engine
 
-For a normal shaping session, return the copy-ready command:
+For a normal shaping session, render the copy-ready command with the **actual persisted contract path or authoritative issue/spec reference**. Use `GOAL.md` only when it is the resolved contract location. Example:
 
 ```text
 /goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its selected execution profile, assurance overlays, project harness, and shaping decision record. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.

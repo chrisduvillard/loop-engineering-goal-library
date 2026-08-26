@@ -17,7 +17,7 @@
       "key": "quality",
       "title": "Product and quality goals",
       "collection": "QUALITY_GOALS.md",
-      "intro": "Nine focused loops for frontend, documentation, security, reliability, APIs, operations, developer experience, data quality, and audit readiness."
+      "intro": "Eleven focused loops for frontend, documentation, security, reliability, APIs, operations, developer experience, data quality, test/CI health, infrastructure/deployment, and audit readiness."
     }
   ],
   "goals": [
@@ -196,6 +196,22 @@
       "category": "quality",
       "simple": "Map controls to implementation and evidence, close technical gaps, and leave an auditable package for qualified human review.",
       "use_when": "A repository or system must produce implementation evidence for an approved control set without falsely self-certifying legal or regulatory compliance."
+    },
+    {
+      "id": "23",
+      "file": "23-test-suite-ci-health.md",
+      "title": "Test Suite / CI Health",
+      "category": "quality",
+      "simple": "Find flaky, misleading, slow, skipped, or environment-dependent checks and turn the test pipeline into reliable evidence.",
+      "use_when": "Automated tests and CI must become trustworthy, deterministic, appropriately fast, and consistent with local development."
+    },
+    {
+      "id": "24",
+      "file": "24-infrastructure-deployment-readiness.md",
+      "title": "Infrastructure / Deployment Readiness",
+      "category": "quality",
+      "simple": "Verify that the system can be provisioned and deployed consistently, diagnosed after rollout, and safely rolled back before a human authorizes production change.",
+      "use_when": "Infrastructure, environment configuration, deployment automation, smoke checks, and rollback must be proven ready without silently changing production."
     }
   ]
 }

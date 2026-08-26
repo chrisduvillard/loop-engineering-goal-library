@@ -26,5 +26,7 @@ Canonical zero-friction launchers. The first command in every file runs unchange
 | 20 | [Developer Experience / Tooling](20-developer-experience-tooling.md) | Product and quality goals | Make the common developer path work from clean state with clear commands and actionable failures. |
 | 21 | [Data Quality / Pipeline Assurance](21-data-quality-pipeline-assurance.md) | Product and quality goals | Define data invariants, test the real pipeline, correct root causes, and make quality continuously observable. |
 | 22 | [Compliance / Audit Readiness](22-compliance-audit-readiness.md) | Product and quality goals | Map controls to implementation and evidence, close technical gaps, and leave an auditable package for qualified human review. |
+| 23 | [Test Suite / CI Health](23-test-suite-ci-health.md) | Product and quality goals | Find flaky, misleading, slow, skipped, or environment-dependent checks and turn the test pipeline into reliable evidence. |
+| 24 | [Infrastructure / Deployment Readiness](24-infrastructure-deployment-readiness.md) | Product and quality goals | Verify that the system can be provisioned and deployed consistently, diagnosed after rollout, and safely rolled back before a human authorizes production change. |
 
 The machine-readable source is [`catalog.json`](catalog.json).

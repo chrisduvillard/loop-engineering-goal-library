@@ -1,5 +1,8 @@
 # Loop Engineering for AI Coding Agents
 
+> [!IMPORTANT]
+> This file is the **historical research foundation**, not the current copy-ready implementation. The live workflow, zero-friction launchers, shaping history, and profile catalog are maintained in [`README.md`](README.md), [`CURRENT_IMPLEMENTATION.md`](CURRENT_IMPLEMENTATION.md), and [`goals/`](goals/). Placeholder commands later in this report are preserved as research history.
+
 *Research checked against current sources on August 25, 2026.*
 
 ## Executive conclusion

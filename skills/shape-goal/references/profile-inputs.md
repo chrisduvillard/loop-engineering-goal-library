@@ -458,6 +458,44 @@ Do not ask the user for facts that repository evidence or connected authoritativ
 - Separate technical evidence from legal interpretation.
 - Preserve chain of evidence and approval boundaries.
 
+## 23. Test Suite / CI Health
+
+**Use for:** Automated tests and CI must become trustworthy, deterministic, appropriately fast, and consistent with local development.
+
+**Required profile inputs**
+
+- Test and CI topology, owners, supported environments, and required gates
+- Flake rate, failure classes, skipped or quarantined coverage, runtime, and feedback targets
+- Reproduction protocol, fixtures, caches, services, retries, parallelism, and isolation boundaries
+- Local/CI parity, diagnostic quality, completion evidence, and forbidden verifier weakening
+
+**Suggested overlays:** Reliability & Recovery, Documentation & Knowledge Transfer, Performance & Cost
+
+**Execution emphasis**
+
+- Treat the test pipeline as an evidence system, not merely a command that should turn green.
+- Reproduce and classify flaky, misleading, slow, skipped, or environment-dependent checks.
+- Fix root causes, preserve required coverage, and prove clean local/CI parity repeatedly.
+
+## 24. Infrastructure / Deployment Readiness
+
+**Use for:** Infrastructure, environment configuration, deployment automation, smoke checks, and rollback must be proven ready without silently changing production.
+
+**Required profile inputs**
+
+- Target environments, infrastructure scope, ownership, dependencies, and parity expectations
+- Infrastructure-as-code, configuration, secret-reference, artifact, migration, and pipeline sources of truth
+- Provisioning validation, smoke/health checks, observability, failure scenarios, and rollback evidence
+- Production authority, maintenance/change windows, residual-risk policy, and readiness criteria
+
+**Suggested overlays:** Reliability & Recovery, Operability & Observability, Security & Privacy, Compatibility & Portability
+
+**Execution emphasis**
+
+- Reconcile infrastructure and application assumptions as one deployment surface.
+- Validate through approved non-production, ephemeral, dry-run, or simulated environments.
+- Prove artifacts, configuration, migrations, health signals, failure handling, and rollback without silently exercising production authority.
+
 ## Custom Contract-Driven
 
 Use only when none of the presets matches the dominant loop. Resolve:

@@ -2,15 +2,17 @@
 
 The repository should add abstractions only when they remove more field friction than they create.
 
-## Implemented in `0.4.0`
+## Implemented through `0.5.0`
 
 - Twenty-two zero-friction profile launchers with no required placeholder replacement.
 - Two-phase bootstrap: exhaustive goal shaping and approval followed by execution inside the same native `/goal`.
 - Profile-specific input definitions and a search-before-asking decision protocol.
-- Dedicated frontend, documentation, security, reliability, API, observability, developer-experience, data-quality, and audit-readiness profiles.
+- Dedicated frontend, documentation, security, reliability, API, observability, developer-experience, data-quality, test/CI-health, infrastructure/deployment-readiness, and audit-readiness profiles.
 - Machine-readable goal catalog and generated README/catalog collections.
 - OpenAI skill host metadata.
-- Immutable GitHub Action pins and stronger launcher validation.
+- Immutable GitHub Action pins, native-goal length checks, append-only shaping-history diff validation, and stronger launcher validation.
+- Repository-visibility and information-classification rules for shaping answers.
+- Current CLI prerequisites and symlink/copy troubleshooting.
 - A real repository closeout packet documenting the deep review.
 
 ## Before `1.0.0`

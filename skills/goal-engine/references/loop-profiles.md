@@ -202,6 +202,24 @@ Choose one primary profile when it matches the dominant execution shape. Use a d
 - Separate technical evidence from legal interpretation.
 - Preserve chain of evidence and approval boundaries.
 
+## 23. Test Suite / CI Health
+
+**Use for:** Making automated tests and CI reliable evidence rather than a flaky, slow, or misleading gate.
+
+- Map suites, environments, fixtures, services, retries, skips, quarantines, caches, and workflow dependencies.
+- Reproduce and classify flakes, false positives/negatives, hidden skips, isolation failures, and local/CI drift.
+- Fix root causes without weakening required assertions or silently excluding difficult coverage.
+- Finish only after repeated clean runs meet the approved determinism, runtime, diagnostic, coverage, and parity gates.
+
+## 24. Infrastructure / Deployment Readiness
+
+**Use for:** Proving infrastructure and deployment mechanics ready without performing an unauthorized production rollout.
+
+- Reconcile infrastructure-as-code, configuration, artifacts, migrations, application assumptions, and environment differences.
+- Validate provisioning and deployment stages in approved non-production, ephemeral, dry-run, or simulated environments.
+- Exercise smoke checks, health signals, failure handling, observability, and rollback together.
+- Finish at evidence-backed readiness; never provision or mutate production without explicit contract authority.
+
 ## Custom Contract-Driven
 
 **Use for:** A measurable engineering outcome whose dominant loop does not fit a preset.

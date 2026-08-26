@@ -2,10 +2,10 @@
 
 The original [`FULL_REPORT.md`](FULL_REPORT.md) is the research foundation. The live implementation has evolved through field-oriented design reviews.
 
-## Version `0.4.0`
+## Version `0.5.0`
 
 ```text
-22 zero-friction goal profiles
+24 zero-friction goal profiles
 + shape-goal
 + goal-engine
 + profile-specific input specifications
@@ -45,7 +45,7 @@ Incident recovery, ecosystem upgrades, data migration, branch rescue, measured o
 
 ### Product and quality
 
-Frontend UI/UX/accessibility, documentation, security/privacy, reliability/resilience, API compatibility, observability/operability, developer experience, data quality, and audit readiness.
+Frontend UI/UX/accessibility, documentation, security/privacy, reliability/resilience, API compatibility, observability/operability, developer experience, data quality, test/CI health, infrastructure/deployment readiness, and audit readiness.
 
 Custom Contract-Driven remains the fallback for unusual loops.
 
@@ -80,6 +80,7 @@ docs/goals/<goal-id>/
 - Repository facts are searched before users are questioned.
 - Only material owner decisions are asked.
 - Questions are one at a time with evidence and a recommendation.
+- Public repositories never receive confidential strategy or restricted answers verbatim; safe summaries link approved secure evidence.
 - Every asked question and answer is saved, unless sensitive content requires a redacted summary and secure reference.
 - Corrections append and supersede prior answers rather than rewriting them.
 - Production execution begins only from an explicitly approved shaping round.

@@ -76,7 +76,7 @@ The recommended command in every goal file names a profile but no repository-spe
 - [`profile-inputs.md`](skills/shape-goal/references/profile-inputs.md)
 - [`shaping-history.md`](skills/shape-goal/references/shaping-history.md)
 
-It creates an input ledger, searches all available authoritative sources, applies only safe reversible defaults, and asks one unresolved material decision at a time with a recommendation.
+It creates an input ledger, searches all available authoritative sources, applies only safe reversible defaults, checks repository visibility and information classification, and asks one unresolved material decision at a time with a recommendation.
 
 ## Durable shaping rounds
 
@@ -111,7 +111,7 @@ Overlays:
 - Compatibility & Portability
 ```
 
-When a quality concern is itself the main outcome, use its dedicated profile. When it is secondary to another outcome, add the overlay.
+When a quality concern is itself the main outcome, use its dedicated profile—including Test Suite / CI Health and Infrastructure / Deployment Readiness. When it is secondary to another outcome, add the overlay.
 
 ## Multiple goals
 

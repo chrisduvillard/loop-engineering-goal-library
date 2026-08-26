@@ -89,6 +89,8 @@ A deepening round reads all previous rounds, selects an unexplored or weak lens,
 | Improve logs, metrics, alerts, and runbooks | Observability / Operability |
 | Improve setup, build, test, or debug workflows | Developer Experience / Tooling |
 | Assure pipeline and dataset quality | Data Quality / Pipeline Assurance |
+| Make tests and CI trustworthy | Test Suite / CI Health |
+| Prove infrastructure and deployment readiness | Infrastructure / Deployment Readiness |
 | Prepare technical evidence for an audit | Compliance / Audit Readiness |
 | None fits | Custom Contract-Driven |
 

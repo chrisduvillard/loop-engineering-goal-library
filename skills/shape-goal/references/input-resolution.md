@@ -1,8 +1,10 @@
 # Shape Goal: Input Resolution Protocol
 
-Use this protocol whenever a launcher is copied unchanged and the repository-specific target, scope, evidence, or boundaries are not already approved.
+Use this protocol whenever the repository-specific target, scope, evidence, or boundaries are not already approved.
 
 Read [shaping-history.md](shaping-history.md) before asking any user question.
+
+> **Question barrier:** search first, save one question, ask it, and end the turn immediately. The user's next normal reply is the answer.
 
 ## The input ledger
 
@@ -10,14 +12,14 @@ Create a concise ledger before asking questions:
 
 | Input | Status | Evidence, decision, or question source |
 |---|---|---|
-| Outcome | Unresolved / Evidence / Safe default / Owner decision | [SOURCE OR R1-Q1] |
+| Outcome | Unresolved / Evidence / Safe default / Owner decision | Source or `R1-Q1` |
 | Scope and exclusions | ... | ... |
 | Acceptance evidence | ... | ... |
 | Protected behavior | ... | ... |
 | Authority boundaries | ... | ... |
 | Profile-specific inputs | ... | ... |
 
-Do not persist an approved contract while any material row is unresolved. Link every owner-decision row to its saved question-and-answer ID.
+Do not persist an approved contract while a material row remains unresolved. Link every owner-decision row to its saved question-and-answer ID.
 
 ## Create or resume shaping history
 
@@ -34,7 +36,7 @@ Before asking:
 3. Check whether the decision was already answered, deferred, declined, corrected, or superseded.
 4. Ask again only when materially new evidence changes the choice.
 
-The shaping record is append-only. Corrections create a new question/decision entry and reference the prior one.
+The shaping record is append-only. Corrections create a new decision entry and reference the prior one.
 
 ## Search before asking
 
@@ -53,7 +55,7 @@ Triangulate important claims. A stale plan, checkbox, code presence, or one revi
 
 ## Visibility and information classification
 
-Before persisting a verbatim answer, determine repository visibility and whether the answer contains confidential business strategy, customer commitments, unreleased roadmap, commercial terms, or third-party restricted material. Store a redacted normalized decision plus an approved secure reference when repository storage is not appropriate.
+Before persisting a verbatim answer, determine repository visibility and whether the answer contains confidential business strategy, customer commitments, unreleased roadmap, commercial terms, or third-party restricted material. Store a redacted normalized decision plus an approved secure reference when repository storage is inappropriate.
 
 ## Safe defaults
 
@@ -61,7 +63,7 @@ Use a default without asking only when it is reversible, low-risk, consistent wi
 
 Never default:
 
-- The product outcome when several materially different outcomes are plausible
+- Product outcome when several materially different outcomes are plausible
 - Removal of compatibility or protected behavior
 - Destructive, production, credential, billing, release, legal, or external-system authority
 - Acceptance thresholds that determine whether the user considers the work successful
@@ -71,48 +73,52 @@ Never default:
 
 After searchable sources are exhausted:
 
-1. Assign the next stable round/question ID, such as `R1-Q2`.
+1. Assign the next stable question ID, such as `R1-Q2`.
 2. State the unresolved decision.
-3. Summarize the evidence and conflict.
+3. Summarize the relevant evidence and conflict.
 4. Present no more than three materially different options.
 5. Recommend one option and explain the trade-off.
-6. Ask one direct question.
-7. After the answer, append the exact question and the user's answer to `SHAPING.md` immediately.
-8. Record a normalized decision, contract impact, and any superseded answer.
-9. Update the input ledger and contract draft.
-10. Do not ask the same question again unless new evidence materially changes it.
+6. Save the exact proposed question in `SHAPING.md`.
+7. Ask one direct question.
+8. **End the turn immediately.** Do not call tools, continue research, ask another question, or begin background work.
+
+When the user replies:
+
+1. Treat the normal reply as the answer; never require a Steer message.
+2. Append the exact safe answer to `SHAPING.md` immediately.
+3. Record the normalized decision, contract impact, and any superseded answer.
+4. Update the input ledger and contract draft.
+5. Continue only after the answer is safely persisted.
 
 Questions should be concrete and easy to answer. Do not ask users to discover file paths, commands, implementation details, or repository facts that the agent can inspect.
 
-Preserve the answer verbatim when safe and useful. For secrets, credentials, private personal data, confidential business/customer information, third-party restricted material, raw production data, or exploit-enabling detail, store a redacted decision summary and an approved secure reference instead.
+For secrets, credentials, private personal data, confidential business/customer information, third-party restricted material, raw production data, or exploit-enabling detail, store a redacted decision summary and approved secure reference instead of the sensitive text.
 
 ## Standard and deeper rounds
 
 The first round resolves the minimum material decisions required for readiness.
 
-When the user is not satisfied or asks for another batch of questions, open a new deepening round:
+When the user is not satisfied or requests another batch of questions, open a deepening round:
 
 1. Read every prior question and answer.
 2. Build a gap map for weak assumptions, hidden scope, missing failure cases, and fragile evidence.
 3. Select the most valuable unexplored lens.
-4. Ask one non-duplicate material question at a time.
+4. Ask one non-duplicate material question at a time through the question barrier.
 5. Close the round with new decisions, contract changes, remaining uncertainty, and a readiness recommendation.
 
 The user may request repeated rounds. Each round must add decision value; repeated questions without new evidence count as no progress.
 
 ## Exhaustive, not circular
 
-“Relentless” means continuing until every material input is resolved, not repeating searches or questions.
+“Relentless” means continuing across interactive turns until every material input is resolved, not refusing to return control or repeating searches and questions.
 
-Stop a shaping round only when:
+Stop a shaping round when:
 
 - The current contract is ready for approval
 - A named external source, credential, lawful-access constraint, or unavailable decision owner blocks resolution
 - The user declines or defers a material decision
 - The approved shaping budget is exhausted
 - The user pauses and the shaping history preserves the exact resume state
-
-A shaping blocker is not successful completion of the enclosing `/goal`.
 
 ## Round close and approval gate
 
@@ -123,7 +129,7 @@ At the end of each round, surface:
 - Remaining uncertainty or deferred decisions
 - Recommended disposition
 
-Offer:
+Ask one disposition question and end the turn:
 
 ```text
 Approve the current Goal Contract
@@ -131,26 +137,18 @@ Run another deeper shaping round
 Pause shaping and preserve the current state
 ```
 
-Before production edits, surface a compact contract review:
+Approval is itself a shaping answer. Persist the user's explicit response and the approved contract revision before changing lifecycle state.
 
-- Outcome
-- Scope and exclusions
-- Acceptance evidence
-- Protected behavior
-- Primary profile and overlays
-- Authority boundaries
-- Budget and stop conditions
-- State, shaping-history, and archive paths
-- Approval shaping round
+Before approval, surface a compact review of outcome, scope, exclusions, evidence, protected behavior, profile, overlays, authority, budget, stop conditions, state paths, and approval round.
 
-Ask for explicit approval unless the user has already approved an authoritative artifact containing the same semantics. After approval, persist the contract and hand off to `goal-engine`.
+## Execution handoff after approval
 
-## Handoff inside a zero-friction `/goal`
+Interactive shaping finishes before native `/goal` execution begins.
 
-When `shape-goal` was activated by a copied `/goal` launcher:
+1. Persist the approved Goal Contract and approval answer.
+2. Render a copy-ready `/goal` command using the actual persisted contract path or authoritative issue/specification.
+3. Save that command in the contract's launcher field.
+4. Return it to the user.
+5. Do not execute it automatically.
 
-1. Surface the approved target, acceptance evidence, and approval shaping round in the conversation for the native evaluator.
-2. State that shaping is complete but the enclosing goal is **not** complete.
-3. Invoke or load `goal-engine`.
-4. Continue execution against the approved contract.
-5. Do not return terminal success until the contract's evidence passes.
+If an advanced autonomous preflight reaches an unresolved owner decision, save one proposed question and stop as **Approval required**. Do not ask the question while the active `/goal` continues; tell the user to resume `shape-goal` outside `/goal`.

@@ -2,7 +2,7 @@
 
 # Loop Engineering `/goal` Library
 
-**Choose the kind of outcome. The skills discover the missing inputs, ask only what matters, and keep working until evidence says it is done.**
+**Choose the kind of outcome. The skills discover the missing inputs, preserve every decision, ask only what matters, and keep working until evidence says it is done.**
 
 Portable Agent Skills and zero-friction `/goal` launchers for OpenAI Codex, Anthropic Claude Code, and mature brownfield repositories.
 
@@ -14,14 +14,14 @@ Portable Agent Skills and zero-friction `/goal` launchers for OpenAI Codex, Anth
 ![Goals](https://img.shields.io/badge/zero--friction%20goals-22-16A34A?style=flat-square)
 
 ```text
-Choose profile → Search evidence → Ask decisions → Approve contract
+Choose profile → Search evidence → Ask + save decisions → Approve contract
                → Execute → Verify → Archive → Reuse
 ```
 
 </div>
 
 > [!IMPORTANT]
-> Every recommended goal command runs unchanged. It first activates `shape-goal` to discover the exact target, scope, evidence, protections, and boundaries. Production edits start only after the Goal Contract is approved; `goal-engine` then executes it until the approved evidence passes.
+> Every recommended goal command runs unchanged. It first activates `shape-goal` to discover the exact target, scope, evidence, protections, and boundaries. Every question and answer is preserved in an append-only shaping history. Production edits start only after the Goal Contract is approved; `goal-engine` then executes it until the approved evidence passes.
 
 ## Quick start
 
@@ -61,7 +61,7 @@ Examples:
 |---|---|
 | `/shape-goal Continue this project` | `$shape-goal Continue this project` |
 
-`shape-goal` will inspect the repository, select a profile, and return the exact native `/goal` command.
+`shape-goal` inspects the repository, selects a profile, and returns the exact native `/goal` command.
 
 ### 4. Let the skills resolve the inputs
 
@@ -69,16 +69,45 @@ The launcher builds an input ledger and searches, in order:
 
 1. Repository and agent instructions
 2. Git state, branches/worktrees, and relevant history
-3. Current and previous goals, progress, portfolio, and handoffs
-4. PRDs, specifications, issues, plans, ADRs, and architecture
+3. Current and previous goals, shaping histories, progress, portfolio, and handoffs
+4. PRDs, specifications, issues, plans, ADRs, architecture, and design references
 5. Scripts, CI, tests, fixtures, benchmarks, and release gates
 6. Runtime behavior, screenshots, logs, and generated artifacts
 7. Connected authoritative systems available to the host
 8. Official external documentation when current platform or standard facts matter
 
-Only unresolved **owner decisions** are asked. Questions are one at a time, include a recommendation, and are recorded so they are not asked again.
+Only unresolved **owner decisions** are asked. Questions are one at a time and include the evidence, options, recommendation, and trade-off.
 
-### 5. Approve the Goal Contract
+Every question and answer is saved immediately under the stable Goal ID:
+
+```text
+docs/goals/<goal-id>/SHAPING.md
+```
+
+The record is append-only. If the user later changes an answer, the skill adds a correction and marks the earlier decision superseded instead of rewriting history. Sensitive answers are redacted and linked to an approved secure source rather than committed verbatim.
+
+### 5. Go deeper when the first contract is not enough
+
+The initial shaping round resolves the minimum material decisions required for a safe contract. If the target still feels shallow, incomplete, or wrong, request another round:
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Deepen the current goal` | `$shape-goal Deepen the current goal` |
+| `/shape-goal Run another shaping round for goal-id` | `$shape-goal Run another shaping round for goal-id` |
+
+The skill reads every previous question and answer, identifies weak assumptions or unexplored lenses, and asks a new **non-duplicate** sequence of one-at-a-time questions. Useful lenses include user value, journeys, non-goals, edge cases, compatibility, UI/UX, data, security, recovery, performance, cost, maintenance, ownership, and authority.
+
+You can run multiple deepening rounds. Each round is saved with stable IDs such as `R2-Q3`, summarized, and linked to the revised contract.
+
+At the end of a round, choose:
+
+```text
+Approve the current Goal Contract
+Run another deeper shaping round
+Pause shaping and preserve the current state
+```
+
+### 6. Approve the Goal Contract
 
 Before production changes, review:
 
@@ -87,10 +116,11 @@ Before production changes, review:
 - **Protection** — What behavior, data, compatibility, and user work must survive?
 - **Authority** — Which destructive, production, credential, release, or external actions still need approval?
 - **Exit** — What counts as success, blocker, budget exhaustion, goal drift, or stall?
+- **Decision trace** — Which shaping round and answers formed the contract?
 
-The contract is saved in an existing authoritative issue/spec when possible, otherwise in `GOAL.md`.
+The contract is saved in an existing authoritative issue/spec when possible, otherwise in `GOAL.md`. It records the shaping-history path, completed rounds, last round, and approval round.
 
-### 6. Execution continues automatically
+### 7. Execution continues automatically
 
 After approval, `shape-goal` hands off inside the same native `/goal` to `goal-engine`.
 
@@ -101,7 +131,9 @@ Orient → Reconcile → Select → Verify gap → Change → Check
 
 Shaping is **not** completion. The goal ends successfully only when every approved acceptance and assurance gate passes with surfaced evidence.
 
-### 7. Follow progress and reuse the result
+If a new need or dissatisfaction materially changes the contract during execution, `goal-engine` preserves progress and returns to `shape-goal` for a new appended shaping round. It never silently expands scope.
+
+### 8. Follow progress and reuse the result
 
 When the repository has no stronger convention:
 
@@ -113,16 +145,17 @@ docs/goals/
 ├── PORTFOLIO.md          optional non-closed goal coordination
 ├── INDEX.md              closed-goal history
 └── <goal-id>/
-    ├── CONTRACT.md
-    ├── PROGRESS.md
-    └── RESULT.md
+    ├── SHAPING.md        every asked question, answer, correction, and round summary
+    ├── CONTRACT.md       approved outcome and boundaries
+    ├── PROGRESS.md       evidence, attempts, blockers, and next action
+    └── RESULT.md         outcome, delivered behavior, lessons, and residual risk
 ```
 
 Verified learning is promoted to regression tests, ADRs, product docs, runbooks, fixtures, scripts, benchmarks, design references, or the reusable Project Harness.
 
 ### When a new need appears
 
-Run `shape-goal` again. It will clarify, amend, reprioritize, pause, resume, split, merge, supersede, cancel, or create a different Goal ID. It never silently appends an unrelated request to the active contract.
+Run `shape-goal` again. It will clarify, amend, reprioritize, pause, resume, split, merge, supersede, cancel, or create a different Goal ID. It never silently appends an unrelated request to the active contract, and it never discards the prior shaping history.
 
 Parallel goals use separate sessions and worktrees with explicit dependency and shared-resource coordination.
 
@@ -130,9 +163,11 @@ Parallel goals use separate sessions and worktrees with explicit dependency and 
 
 Suppose you want the agent to improve a mature frontend but you do not know every screen, viewport, browser, design reference, or acceptance check.
 
-Open [`goals/14-frontend-ui-ux-accessibility.md`](goals/14-frontend-ui-ux-accessibility.md), copy **Run unchanged — recommended**, and paste it into Codex or Claude Code. The command itself tells `shape-goal` to discover those inputs, ask only unresolved product choices, obtain approval, then hand off to `goal-engine` for browser-based implementation and verification.
+Open [`goals/14-frontend-ui-ux-accessibility.md`](goals/14-frontend-ui-ux-accessibility.md), copy **Run unchanged — recommended**, and paste it into Codex or Claude Code. The command tells `shape-goal` to discover those inputs, save every necessary product question and answer, let you request deeper rounds, obtain approval, then hand off to `goal-engine` for browser-based implementation and verification.
 
 No placeholder replacement is required.
+
+See the [complete shaping and brownfield example](examples/complete-brownfield-cycle/) for two saved rounds, an approved contract, execution evidence, and a follow-on portfolio goal.
 
 <!-- goal-catalog:start -->
 
@@ -208,11 +243,12 @@ The zero-friction commands intentionally combine shaping and execution inside on
 
 ```text
 1. /shape-goal or $shape-goal
-2. Review and approve GOAL.md
-3. Paste the /goal command returned by shape-goal
+2. Review saved shaping rounds and GOAL.md
+3. Approve, deepen again, or pause
+4. Paste the /goal command returned by shape-goal after approval
 ```
 
-Both modes use the same contract, profiles, overlays, state, and evidence rules.
+Both modes use the same contract, profiles, overlays, shaping history, state, and evidence rules.
 
 ## Deep-review guarantees
 
@@ -221,6 +257,9 @@ CI verifies that:
 - Every recommended launcher contains no unresolved placeholders
 - Every launcher invokes both `shape-goal` and `goal-engine`
 - All profile-specific required inputs exist in the shaping skill
+- Durable shaping-history references and templates are packaged
+- The contract, progress, result, and history schemas link shaping rounds
+- The worked example preserves questions and answers across multiple rounds
 - The README catalog matches the machine-readable goal catalog
 - Generated core, specialist, and quality libraries are synchronized
 - Skill metadata and versions match

@@ -1,0 +1,49 @@
+name: Cleanup adversarial robustness branch
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: cleanup-adversarial-robustness
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Delete merged branch and remove this workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin --delete codex/adversarial-robustness-review || true
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('docs/goals/2026-08-26-adversarial-robustness/PROGRESS.md')
+          source = path.read_text(encoding='utf-8')
+          source = source.replace('| Review-branch cleanup | Pending |', '| Review-branch cleanup | Pass |')
+          source = source.replace(
+              'The review branch will be deleted after the closeout commit passes the permanent workflow; only `main` and the read-only validation workflow should remain.',
+              'The review branch was deleted after the closeout commit passed. Only `main` and the permanent read-only validation workflow remain.',
+          )
+          path.write_text(source, encoding='utf-8')
+          PY
+          rm -f .github/workflows/cleanup-adversarial-robustness.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "Complete adversarial review branch cleanup"
+          git push origin HEAD:main

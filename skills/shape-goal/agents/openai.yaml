@@ -1,6 +1,6 @@
 interface:
   display_name: "Shape Goal"
-  short_description: "Discover missing inputs and approve a safe Goal Contract."
-  default_prompt: "Inspect this repository, resolve the next goal's missing inputs from evidence, ask only material owner decisions, and produce an approved Goal Contract."
+  short_description: "Main interactive command for defining an executable goal."
+  default_prompt: "Inspect this repository, resolve facts before asking, ask one material owner decision at a time, save the question and answer, end the turn after each question, and produce an explicitly approved Goal Contract plus the exact execution /goal command. Do not start autonomous execution."
 policy:
   allow_implicit_invocation: true

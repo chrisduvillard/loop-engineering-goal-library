@@ -69,10 +69,6 @@ def transform(text: str) -> str:
         "exclude secrets, private data, raw production dumps",
         "exclude secrets or private data, including personal, customer, or confidential business information, raw production dumps",
     )
-    updated = updated.replace(
-        "private data, including personal, customer, or confidential business information",
-        "private data, including personal, customer, or confidential business information",
-    )
     return updated
 
 

@@ -23,7 +23,7 @@ text = text.replace(
 )
 goal.write_text(text, encoding="utf-8")
 
-# Make the migration update the current-implementation expectations regardless of formatting.
+# Make the migration update validator expectations regardless of formatting.
 migration = root / "scripts/apply_final_specialist_review.py"
 text = migration.read_text(encoding="utf-8")
 needle = 'validator = read(validator_path)\n'
@@ -31,6 +31,8 @@ addition = (
     'validator = read(validator_path)\n'
     'validator = validator.replace(\'"Version `0.4.0`", "22 zero-friction goal profiles"\', '
     '\'"Version `0.5.0`", "24 zero-friction goal profiles"\')\n'
+    'validator = validator.replace(\'if "secrets" not in lower or "private data" not in lower:\', '
+    '\'if "secrets" not in lower or not any(term in lower for term in ("private data", "private personal", "confidential business")):\')\n'
 )
 if addition not in text:
     if needle not in text:

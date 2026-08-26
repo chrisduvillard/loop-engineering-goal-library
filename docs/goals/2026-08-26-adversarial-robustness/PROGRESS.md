@@ -2,8 +2,8 @@
 
 **Goal ID:** `2026-08-26-adversarial-robustness`
 **Contract revision:** 1
-**State:** Active
-**Branch:** `codex/adversarial-robustness-review`
+**State:** Closed — Achieved
+**Merged:** PR #10 at `1dfea3f0374b600673edb9b9adb2c86693c3de0b`
 
 ## Verified attack surfaces
 
@@ -40,15 +40,14 @@
 | Locked local Skills CLI discovery and deterministic packages | Pass |
 | Branch-only refinement and full branch validation | Pass |
 | Pull-request workflow on final human-authored head | Pass |
-| Merge, final-main validation, closeout, and branch cleanup | Pending |
-
-## Final review additions
-
-The last inversion pass tightened semantic-version parsing, compared every ZIP member with its source bytes, rejected decomposed Unicode archive paths, ignored generated dependency directories during shaping-history discovery, rejected zero-based question IDs and duplicate approval sections, blocked `write-all`, rejected duplicate frontmatter and noncanonical invocation booleans, and verified every transitive npm lock entry.
+| Squash merge to `main` | Pass |
+| Merged-main workflow | Pass |
+| Durable result and goal-history closeout | Pass |
+| Review-branch cleanup | Pending |
 
 ## Verification evidence
 
-The final pull-request workflow passed all six platform/runtime test jobs and the full validation job:
+Both the final pull-request head and merge commit passed all six platform/runtime jobs and the full validation job:
 
 ```text
 Linux, macOS, Windows × Python 3.9, 3.13
@@ -62,6 +61,6 @@ npx --no-install skills add . --list
 python scripts/package_skills.py
 ```
 
-## Next action
+## Closeout
 
-Perform the final diff review, merge PR #10, rerun the permanent workflow on `main`, archive the achieved result, update goal history, and remove every non-main branch.
+The achieved result is preserved in [`RESULT.md`](RESULT.md). The review branch will be deleted after the closeout commit passes the permanent workflow; only `main` and the read-only validation workflow should remain.

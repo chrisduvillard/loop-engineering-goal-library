@@ -1,6 +1,6 @@
 # Sources
 
-Research and implementation references checked on **August 25, 2026**. Primary vendor documentation is prioritized.
+Research and implementation references checked on **August 26, 2026**. Primary vendor documentation is prioritized.
 
 ## OpenAI Codex and Agent Skills
 
@@ -10,7 +10,7 @@ Research and implementation references checked on **August 25, 2026**. Primary v
 - [Code migrations](https://developers.openai.com/codex/use-cases/code-migrations)
 - [Iterate on difficult problems](https://developers.openai.com/codex/use-cases/iterate-on-difficult-problems)
 
-OpenAI documents `/goal` as one durable objective with a verifiable stopping condition, protected scope, named evidence, checkpoints, and progress state. Codex can activate skills explicitly or implicitly from their descriptions; this library's launchers name both skills and also ship OpenAI host metadata.
+OpenAI describes `/goal` as a durable objective for work with a known completion contract, validation loop, and room for autonomous progress. Goal runs can be paused, resumed, or cleared, but their purpose is to continue without requiring the user to steer every turn. This supports shaping the contract first and starting `/goal` only after approval.
 
 ## Anthropic Claude Code
 
@@ -19,7 +19,7 @@ OpenAI documents `/goal` as one durable objective with a verifiable stopping con
 - [Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - [Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)
 
-Claude Code's `/goal` evaluator judges evidence surfaced in the conversation and does not independently run tools. Claude can invoke skills automatically unless invocation is restricted. This informs the explicit shaping-to-execution handoff and evidence-surfacing rules.
+Claude Code documents `/goal` as condition-driven: when the condition is not met, another turn begins automatically instead of returning control. Its evaluator judges evidence surfaced in the conversation and does not independently run tools. This makes native `/goal` a strong execution primitive but a poor default container for a human interview that must pause for each answer.
 
 ## Open Agent Skills ecosystem
 
@@ -35,7 +35,7 @@ The repository uses portable `SKILL.md` directories with references, templates, 
 - [Matt Pocock: `wayfinder`](https://github.com/mattpocock/skills/tree/main/skills/engineering/wayfinder)
 - [Matt Pocock: `to-prd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/to-prd)
 
-These informed repository-first fact finding, one-decision-at-a-time interviews, and durable planning artifacts. `shape-goal` is narrower: it resolves the exact executable contract and evidence required before autonomous implementation.
+These informed repository-first fact finding, one-decision-at-a-time interviews, durable planning artifacts, and deeper non-duplicate questioning. `shape-goal` is narrower: it resolves one executable contract and its acceptance evidence before autonomous implementation.
 
 ## Loop engineering
 
@@ -47,12 +47,12 @@ These informed the core model: objective + check + bounded iteration + durable s
 
 ## Current implementation interpretation
 
-The zero-friction launcher is a deliberate two-phase meta-goal:
+The recommended workflow is deliberately two-stage:
 
-1. Shape and approve the exact repository-specific contract.
-2. Execute that contract to passing evidence.
+1. Run `shape-goal` in an ordinary interactive conversation. It asks one question and returns control.
+2. After explicit approval, start a new native `/goal` using `goal-engine` and the approved contract.
 
-This is offered for convenience because the user requested commands that run unchanged. The stricter two-step path remains available and aligns directly with vendor guidance to define “done” before activating the long-running goal.
+Advanced combined preflights remain available when no owner interaction is expected. At the first unresolved owner decision they stop as **Approval required** instead of asking and continuing autonomously.
 
 ## Citation note
 

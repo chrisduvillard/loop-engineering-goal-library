@@ -1,6 +1,6 @@
 interface:
   display_name: "Goal Engine"
-  short_description: "Execute an approved goal with evidence and brownfield safety."
-  default_prompt: "Execute the approved Goal Contract using repository-native verification, regression protection, durable state, and reusable closeout."
+  short_description: "Autonomously execute an approved goal with evidence."
+  default_prompt: "Execute the explicitly approved Goal Contract using repository-native verification, regression protection, durable state, and reusable closeout. Do not interview the user while the autonomous goal is active; stop as Approval required and return to shape-goal when a material owner decision is needed."
 policy:
   allow_implicit_invocation: true

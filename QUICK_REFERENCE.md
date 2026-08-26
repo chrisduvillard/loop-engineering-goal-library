@@ -1,127 +1,110 @@
 # Quick Reference
 
-## Install globally
+## Install
 
 ```bash
 npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
   --skill '*' --global --agent codex --agent claude-code --yes
 ```
 
-## Fastest path
+## Main command
 
-1. Open the repository root in Codex or Claude Code.
-2. Choose a profile in [`goals/README.md`](goals/README.md).
-3. Copy its first `/goal` command unchanged.
-4. Answer only the owner decisions `shape-goal` cannot derive.
-5. Review the saved shaping history; request another round when needed.
-6. Approve the Goal Contract.
-7. Let `goal-engine` execute until the evidence passes.
-8. Reuse the archived result and shape the next goal.
-
-No placeholder replacement is required in the recommended commands.
-
-## Let the system choose
+Run `shape-goal` outside an active `/goal`:
 
 | Need | Claude Code | Codex CLI / IDE |
 |---|---|---|
 | Shape or continue | `/shape-goal Continue this project` | `$shape-goal Continue this project` |
-| Add a goal | `/shape-goal New goal: describe the intent` | `$shape-goal New goal: describe the intent` |
+| Use a profile | `/shape-goal Use the profile-name profile` | `$shape-goal Use the profile-name profile` |
+| Add another goal | `/shape-goal New goal: describe the intent` | `$shape-goal New goal: describe the intent` |
 | Go deeper | `/shape-goal Deepen the current goal` | `$shape-goal Deepen the current goal` |
-| Deepen a saved goal | `/shape-goal Run another shaping round for goal-id` | `$shape-goal Run another shaping round for goal-id` |
-| Review priorities | `/shape-goal Review the goal portfolio` | `$shape-goal Review the goal portfolio` |
 | Resume | `/shape-goal Resume goal-id` | `$shape-goal Resume goal-id` |
+| Review priorities | `/shape-goal Review the goal portfolio` | `$shape-goal Review the goal portfolio` |
 
-## Zero-friction launch rule
-
-Every recommended goal command performs two phases inside one native `/goal`:
+## Normal workflow
 
 ```text
-Phase 1: shape-goal discovers inputs, saves questions/answers, and obtains approval
-Phase 2: goal-engine implements, verifies, reviews, records, and closes
+1. shape-goal investigates the repository
+2. it asks one material question and ends the turn
+3. you reply normally; no Steer message is required
+4. it saves the answer and continues
+5. you approve or request a deeper round
+6. it returns the exact /goal command
+7. goal-engine executes autonomously
+8. evidence, closeout, and reusable learning are archived
 ```
 
-Production edits are forbidden before approval. Shaping alone is never successful completion.
+## Question rule
+
+After asking a shaping question, the agent must:
+
+- Save the exact proposed question
+- End the turn immediately
+- Call no more tools
+- Start no background work
+- Ask no second question
+- Save your next reply before continuing
+
+## If shaping is trapped inside `/goal`
+
+When the UI shows **Pursuing goal** while a question is waiting:
+
+- Codex: `/goal pause` or `/goal clear`, then `$shape-goal Resume goal-id`
+- Claude Code: `/goal clear`, then `/shape-goal Resume goal-id`
+
+## Approval and execution
+
+After the contract is approved, `shape-goal` returns a command like:
+
+```text
+/goal Follow goal-engine to complete the approved Goal Contract in GOAL.md. Stop only when every acceptance item passes with surfaced evidence, or when a contract-defined blocker, approval boundary, budget, material goal drift, or two-cycle stall applies; preserve reusable state and leave a restartable handoff.
+```
 
 ## Saved shaping rounds
-
-Default path:
 
 ```text
 docs/goals/<goal-id>/SHAPING.md
 ```
 
-The file preserves:
+It preserves:
 
-- Every question actually asked
-- The user's answer, verbatim when safe
+- Exact questions and safe answers
 - Evidence and recommendation
-- Normalized contract decision
-- Corrections and superseded answers
-- Round summaries and readiness
-- The round that approved execution
+- Normalized contract decisions
+- Corrections and supersessions
+- Round summaries
+- Explicit approval record
 
-The history is append-only. A correction creates a new entry; it does not erase the earlier answer. Sensitive material is redacted and linked to an approved secure source.
+A deepening round reads all earlier decisions and asks only materially new questions.
 
-A deepening round reads all previous rounds, selects an unexplored or weak lens, and asks only non-duplicate material questions one at a time. Repeat until the user approves, pauses, or a genuine blocker exists.
+## Common profiles
 
-## Common goal choices
-
-| Need | Goal |
+| Need | Profile |
 |---|---|
-| Finish existing approved work | Brownfield Continue / Finish |
+| Finish existing work | Brownfield Continue / Finish |
 | Close requirements | PRD / Spec Compliance |
-| Deliver the next roadmap increment | Next Milestone |
+| Deliver the next increment | Next Milestone |
 | Find and fix important problems | Deep Audit + Remediation |
 | Prove real product workflows | QA / Regression / UAT |
 | Modernize without behavior drift | Safe Refactor / Modernization |
 | Prepare a release | Release Readiness |
 | Recover from a severe failure | Incident Recovery / Stabilization |
-| Upgrade an ecosystem dependency | Dependency / Framework Upgrade |
-| Migrate stored data or schema | Data Migration / Integrity |
-| Recover work from a divergent branch | Branch Rescue / Integration |
-| Improve a stable metric | Measured Optimization / Benchmark |
-| Answer a technical unknown | Technical Spike / Feasibility |
+| Upgrade a dependency or framework | Dependency / Framework Upgrade |
+| Migrate data or schema | Data Migration / Integrity |
+| Recover a divergent branch | Branch Rescue / Integration |
+| Improve a measurable property | Measured Optimization / Benchmark |
+| Resolve a technical unknown | Technical Spike / Feasibility |
 | Improve frontend quality | Frontend UI / UX / Accessibility |
-| Correct and verify documentation | Documentation Synchronization / Knowledge Transfer |
-| Harden security and privacy | Security / Privacy Hardening |
-| Prove failure and recovery behavior | Reliability / Resilience Hardening |
-| Evolve APIs or integrations safely | API / Integration Contract Compatibility |
-| Improve logs, metrics, alerts, and runbooks | Observability / Operability |
-| Improve setup, build, test, or debug workflows | Developer Experience / Tooling |
-| Assure pipeline and dataset quality | Data Quality / Pipeline Assurance |
-| Make tests and CI trustworthy | Test Suite / CI Health |
-| Prove infrastructure and deployment readiness | Infrastructure / Deployment Readiness |
-| Prepare technical evidence for an audit | Compliance / Audit Readiness |
+| Correct documentation | Documentation Synchronization / Knowledge Transfer |
+| Harden security | Security / Privacy Hardening |
+| Improve failure recovery | Reliability / Resilience Hardening |
+| Evolve APIs safely | API / Integration Contract Compatibility |
+| Improve operations | Observability / Operability |
+| Improve developer workflows | Developer Experience / Tooling |
+| Assure data pipelines | Data Quality / Pipeline Assurance |
+| Repair tests and CI | Test Suite / CI Health |
+| Prove deployment readiness | Infrastructure / Deployment Readiness |
+| Prepare audit evidence | Compliance / Audit Readiness |
 | None fits | Custom Contract-Driven |
-
-## How missing inputs are resolved
-
-`shape-goal` searches repository instructions, Git, current/prior goals and shaping histories, PRDs, architecture, scripts, CI, tests, runtime evidence, project harness, connected authoritative systems, and current official documentation before asking.
-
-Questions are:
-
-- Limited to material owner decisions
-- Asked one at a time
-- Accompanied by evidence and a recommendation
-- Saved immediately in the shaping history
-- Linked to the input ledger and contract
-- Never repeated without materially new evidence
-
-## Multiple goals over time
-
-| Change | Lifecycle action |
-|---|---|
-| Wording or source reference only | Clarify; append shaping note and keep Goal ID |
-| Same outcome, material contract change | Amend; pause, run another shaping round, and approve a new revision |
-| Different priority | Reprioritize portfolio |
-| Temporary interruption | Pause and preserve shaping/progress resume state |
-| Same goal later | Resume |
-| Different outcome replaces current | Supersede and create a new Goal ID |
-| Goal too broad | Split into dependency-safe children |
-| Goal no longer valuable | Cancel with a closeout |
-| Terminal result | Close and archive |
-
-One native goal session/worktree executes one dependency-safe leaf contract.
 
 ## State and archive
 
@@ -139,7 +122,7 @@ docs/goals/<goal-id>/
 
 ## Assurance overlays
 
-Add only the proof that matters:
+Use only when secondary to the primary profile:
 
 - Security & Privacy
 - Reliability & Recovery
@@ -150,16 +133,6 @@ Add only the proof that matters:
 - Operability & Observability
 - Documentation & Knowledge Transfer
 - Compliance & Auditability
-
-Use a dedicated profile when the concern is the primary outcome; use an overlay when it is secondary.
-
-## Ultra-short strict-mode command
-
-When `GOAL.md` is already approved:
-
-```text
-/goal Follow goal-engine to complete GOAL.md using its profile, overlays, project harness, and shaping decision record. Stop only when every acceptance item passes with surfaced evidence, or when a contract-defined blocker, approval boundary, budget, goal-drift review, or two-cycle stall applies; preserve reusable state and leave a restartable handoff.
-```
 
 ## Update
 

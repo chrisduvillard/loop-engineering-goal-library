@@ -1,34 +1,23 @@
-# Skills + Goals + Zero-Friction Execution
+# Skills, Contracts, and Native Goals
 
-The library separates reusable method, repository-specific truth, durable decision history, native persistence, and completion evidence.
+The library separates **interactive decisions** from **autonomous execution**.
 
 ```text
-Copied profile launcher
-        │
-        ▼
-shape-goal
+shape-goal outside /goal
   - searches evidence
-  - resolves profile inputs
-  - asks owner decisions
-  - saves every question and answer
-  - supports deeper shaping rounds
+  - asks one owner decision
+  - saves the answer
+  - ends each question turn
+  - supports deeper rounds
         │
         ▼
-Shaping history
-  - append-only rounds
-  - evidence + recommendations
-  - answers + corrections
-  - approval round
+Shaping history + Goal Contract
+  - decision trail
+  - one approved outcome
+  - proof, protection, authority, exits
         │
         ▼
-Goal Contract
-  - one outcome
-  - proof and protection
-  - profile + overlays
-  - authority and exits
-        │
-        ▼
-goal-engine inside native /goal
+new native /goal + goal-engine
   - implements
   - verifies
   - reviews
@@ -39,36 +28,34 @@ goal-engine inside native /goal
 Closeout + reusable knowledge
 ```
 
-## Why a launcher may begin before the exact target is known
+## Why the split matters
 
-The strictest native-goal pattern shapes the contract first and activates `/goal` second. The zero-friction launchers support a deliberate two-phase meta-goal:
+A native `/goal` automatically keeps taking turns until its condition is met. That is excellent for implementation, migrations, audits, testing, and remediation. It is not a smooth place to conduct an interview that must wait for a human reply.
 
-1. Discover, deepen when needed, and approve the exact contract.
-2. Execute that contract to passing evidence.
+The default architecture is therefore:
 
-The approval boundary preserves safety. The launcher explicitly forbids production edits during shaping and forbids the evaluator from treating contract creation as completion.
-
-Users who prefer maximum control can always use the strict two-step flow.
+```text
+Conversation decides what done means.
+Native /goal works until done is proven.
+```
 
 ## Responsibilities
 
 | Layer | Responsibility | Must not do |
 |---|---|---|
-| Goal catalog | Offer reusable control-loop choices | Pretend to encode repository-specific targets |
-| `shape-goal` | Search evidence, resolve inputs, ask decisions, manage shaping rounds and lifecycle, approve the contract | Implement production changes or invent owner decisions |
-| Shaping history | Preserve every asked question, answer, recommendation, correction, and round summary | Become an editable summary that erases prior decisions or a store for secrets |
+| Goal catalog | Offer reusable control-loop profiles | Pretend to encode a repository-specific target |
+| `shape-goal` | Search evidence, ask one decision per turn, manage shaping rounds and lifecycle, approve the contract | Implement production changes, require Steer, or continue after asking a question |
+| Shaping history | Preserve questions, answers, recommendations, corrections, and approval | Erase prior decisions or become a secret store |
 | Input specifications | Define what each profile needs | Turn defaults into hidden product decisions |
-| Goal Contract | Store one approved outcome, proof, protection, authority, relationships, approval round, and exits | Become an unbounded backlog or duplicate the full interview |
-| Native `/goal` | Continue the current session toward the condition | Grant extra authority or redefine success |
-| `goal-engine` | Execute, verify, review, checkpoint, close, and preserve reusable outputs | Absorb unrelated work, weaken evidence, or reopen settled decisions without new evidence |
+| Goal Contract | Store one approved outcome, proof, protection, authority, relationships, and exits | Become an unbounded backlog or duplicate the full interview |
+| Native `/goal` | Persist autonomous execution toward a known condition | Interview the user or redefine success |
+| `goal-engine` | Execute, verify, review, checkpoint, close, and preserve reusable outputs | Absorb unrelated work, weaken evidence, or ask owner questions while looping |
 | Assurance overlays | Add cross-cutting proof | Replace the primary profile |
 | Project Harness | Preserve verified setup/run/reset/check mechanics | Duplicate stale instructions |
 | Portfolio | Coordinate several goals over time | Merge different outcomes into one active goal |
-| Closeout archive | Preserve immutable shaping, contract, progress, result, and durable-output links | Become a secret store or raw log dump |
+| Closeout archive | Preserve immutable shaping, contract, progress, result, and output links | Become a secret store or raw log dump |
 
-## Zero-friction input resolution
-
-The recommended command in every goal file names a profile but no repository-specific placeholder.
+## Interactive input resolution
 
 `shape-goal` loads:
 
@@ -76,31 +63,49 @@ The recommended command in every goal file names a profile but no repository-spe
 - [`profile-inputs.md`](skills/shape-goal/references/profile-inputs.md)
 - [`shaping-history.md`](skills/shape-goal/references/shaping-history.md)
 
-It creates an input ledger, searches all available authoritative sources, applies only safe reversible defaults, checks repository visibility and information classification, and asks one unresolved material decision at a time with a recommendation.
+It creates an input ledger, searches authoritative evidence, applies only safe reversible defaults, classifies repository visibility, and asks one unresolved material decision at a time with a recommendation.
+
+The question barrier is strict:
+
+```text
+prepare → save question → ask → end turn
+user replies → save answer → continue
+```
+
+No tool calls or background activity occur after a shaping question is asked.
 
 ## Durable shaping rounds
 
-Once a Goal ID exists, questions and answers are saved by default in:
+Once a Goal ID exists:
 
 ```text
 docs/goals/<goal-id>/SHAPING.md
 ```
 
-The history uses stable IDs such as `R1-Q1`. It is append-only:
+The history uses stable IDs such as `R1-Q1` and is append-only:
 
 - Prior answers are never silently rewritten.
 - Corrections append and supersede earlier decisions.
 - Sensitive material is redacted and linked securely.
-- Each round ends with decisions, contract changes, remaining uncertainty, and readiness.
-- The contract records which round approved execution.
+- Each round records decisions, contract changes, uncertainty, and readiness.
+- Approval is saved as an explicit question and answer.
 
-The first round resolves the minimum material decisions required for readiness. When the user is not satisfied, `shape-goal` reads all previous rounds and runs another non-duplicate deepening round. The user may repeat this until they approve, pause, or reach a genuine blocker.
+When the user is not satisfied, `shape-goal` reads earlier rounds and runs another non-duplicate deepening round.
+
+## Execution handoff
+
+After approval, `shape-goal` returns an exact command using the real contract reference. The user starts a new native `/goal`; `goal-engine` does not run automatically from the shaping turn.
+
+If a material decision appears during execution, `goal-engine`:
+
+1. Saves progress and the proposed decision.
+2. Stops as **Approval required**.
+3. Returns the project to interactive `shape-goal`.
+4. Resumes only after a revised contract is approved and a new `/goal` is started.
 
 ## Profiles and overlays
 
-A profile defines **how the work progresses**.
-
-An overlay defines **extra proof required**.
+A profile defines **how work progresses**. An overlay defines **extra proof required**.
 
 Example:
 
@@ -111,11 +116,9 @@ Overlays:
 - Compatibility & Portability
 ```
 
-When a quality concern is itself the main outcome, use its dedicated profile—including Test Suite / CI Health and Infrastructure / Deployment Readiness. When it is secondary to another outcome, add the overlay.
+Use a dedicated profile when a quality concern is the main outcome. Use its overlay when secondary.
 
 ## Multiple goals
-
-A project may have sequential, paused, blocked, competing, or safely parallel goals.
 
 ```text
 Candidate → Ready → Active → Paused / Blocked → Closed
@@ -123,7 +126,7 @@ Candidate → Ready → Active → Paused / Blocked → Closed
 
 One native `/goal` session or worktree executes one dependency-safe leaf contract. Parallel goals require isolated sessions/worktrees and explicit shared-resource coordination.
 
-Lifecycle changes are handled through clarify, amend, reprioritize, pause, resume, supersede, split, merge, cancel, and close. Clarification and amendment append new shaping entries; they do not erase prior answers.
+Lifecycle actions include clarify, amend, reprioritize, pause, resume, supersede, split, merge, cancel, and close. Changes append shaping entries rather than erasing history.
 
 ## Durable state
 
@@ -139,31 +142,14 @@ docs/goals/<goal-id>/
 └── RESULT.md
 ```
 
-Closed evidence is immutable. Later work links to prior results rather than rewriting them.
+Closed evidence is immutable. Later work links back rather than rewriting it.
 
 ## Reusable project knowledge
 
-Verified recurring knowledge is promoted to:
-
-- Regression tests
-- ADRs and approved product/architecture documentation
-- Runbooks
-- Project Harness
-- Fixtures and design references
-- Scripts and task-runner commands
-- Benchmarks and evals
-- Residual-risk documentation
-
-The shaping history remains the detailed decision trail. Stable decisions may be promoted to maintained docs or ADRs, but the full interview is not duplicated.
+Verified recurring knowledge is promoted to regression tests, ADRs, approved product/architecture documentation, runbooks, the Project Harness, fixtures, scripts, benchmarks, evaluations, and residual-risk documentation.
 
 ## Extension rule
 
-Add a global profile only when repeated field use demonstrates a distinct:
-
-- Iteration unit
-- Primary verifier
-- Failure mode
-- Keep-or-revert decision
-- Stop condition
+Add a global profile only when repeated field use demonstrates a distinct iteration unit, primary verifier, failure mode, keep-or-revert decision, and stop condition.
 
 Use Custom Contract-Driven for unusual one-off loops. Use project-specific overlays or skills for local recurring needs.

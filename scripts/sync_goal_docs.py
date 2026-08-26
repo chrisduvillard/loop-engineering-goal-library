@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate goal collections and the README catalog from canonical goal files."""
+"""Generate goal collections and compact README catalogs from canonical goal files."""
 
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ def parse_goal(filename: str) -> dict[str, str]:
 
     commands = re.findall(r"```text\n(/goal .*?)\n```", text, flags=re.DOTALL)
     if len(commands) < 2:
-        raise ValueError(f"goals/{filename} must contain recommended and fallback /goal commands")
+        raise ValueError(f"goals/{filename} must contain two advanced /goal preflights")
 
     return {
         "title": lines[0][2:].strip(),
@@ -71,13 +71,12 @@ def validate_catalog(catalog: dict) -> list[tuple[dict, dict[str, str]]]:
         actual = parse_goal(filename)
         for field in ("title", "use_when", "simple"):
             if actual[field] != item[field]:
-                raise ValueError(
-                    f"goals/{filename} {field} differs from goals/catalog.json"
-                )
+                raise ValueError(f"goals/{filename} {field} differs from goals/catalog.json")
         parsed.append((item, actual))
 
     disk_files = {
-        path.name for path in (ROOT / "goals").glob("*.md")
+        path.name
+        for path in (ROOT / "goals").glob("*.md")
         if path.name != "README.md"
     }
     if disk_files != seen_files:
@@ -87,18 +86,28 @@ def validate_catalog(catalog: dict) -> list[tuple[dict, dict[str, str]]]:
     return parsed
 
 
+def interactive_commands(title: str) -> tuple[str, str]:
+    return (
+        f"/shape-goal Use the {title} profile",
+        f"$shape-goal Use the {title} profile",
+    )
+
+
 def render_collection(category: dict, parsed: list[tuple[dict, dict[str, str]]]) -> str:
     entries = [(item, actual) for item, actual in parsed if item["category"] == category["key"]]
     blocks = [
-        f"# {category['title'].replace('goals', '`/goal` Library')}",
+        f"# {category['title'].replace('goals', 'Goal Profiles')}",
         "",
         "> [!NOTE]",
         "> Generated from canonical files under [`goals/`](goals/) and [`goals/catalog.json`](goals/catalog.json). "
         "Edit those sources, then run `python3 scripts/sync_goal_docs.py --write`.",
         "",
+        "Start with `shape-goal` outside an active `/goal`. It asks one question at a time and returns the exact execution `/goal` after approval.",
+        "",
         category["intro"],
     ]
     for item, actual in entries:
+        claude, codex = interactive_commands(actual["title"])
         blocks.extend([
             "",
             "---",
@@ -109,13 +118,13 @@ def render_collection(category: dict, parsed: list[tuple[dict, dict[str, str]]])
             "",
             f"**Use when:** {actual['use_when']}",
             "",
-            "```text",
-            actual["command"],
-            "```",
+            "| Claude Code | Codex CLI / IDE |",
+            "|---|---|",
+            f"| `{claude}` | `{codex}` |",
             "",
             f"**Why it works:** {actual['why']}",
             "",
-            f"**Full profile and self-contained fallback:** [Open `goals/{item['file']}`](goals/{item['file']}).",
+            f"**Advanced autonomous preflight and self-contained fallback:** [Open `goals/{item['file']}`](goals/{item['file']}).",
         ])
     return "\n".join(blocks).rstrip() + "\n"
 
@@ -128,25 +137,29 @@ def render_readme_catalog(catalog: dict, parsed: list[tuple[dict, dict[str, str]
     lines = [
         README_START,
         "",
-        "## All zero-friction standalone goals",
+        "## Goal profiles",
         "",
-        "Copy the first `/goal` command from any linked file **without changing it**. "
-        "The command activates `shape-goal` to discover and approve missing repository-specific inputs, "
-        "then hands the approved contract to `goal-engine` for execution.",
+        "You usually do not need to choose one: `shape-goal` can select the best profile from repository evidence. "
+        "Choose directly only when the type of work is already clear.",
     ]
     for category in catalog["categories"]:
-        lines.extend(["", f"### {category['title']}", "", "| Goal | In simple terms | Use when |", "|---|---|---|"])
+        lines.extend([
+            "",
+            "<details>",
+            f"<summary><strong>{category['title']} ({len(by_category.get(category['key'], []))})</strong></summary>",
+            "",
+            "| Profile | Best for |",
+            "|---|---|",
+        ])
         for item, actual in by_category.get(category["key"], []):
             lines.append(
-                f"| [**{actual['title']}**](goals/{item['file']}) | "
-                f"{actual['simple']} | {actual['use_when']} |"
+                f"| [**{actual['title']}**](goals/{item['file']}) | {actual['simple']} |"
             )
+        lines.extend(["", "</details>"])
+
     lines.extend([
         "",
-        "### When no preset fits",
-        "",
-        "Use the [**Custom Contract-Driven fallback**](skills/shape-goal/templates/custom-contract-driven-goal.md). "
-        "It still requires a bounded iteration, primary verifier, keep-or-revert rule, review strategy, and objective stop condition.",
+        "When no preset fits, use the [**Custom Contract-Driven fallback**](skills/shape-goal/templates/custom-contract-driven-goal.md).",
         "",
         README_END,
     ])
@@ -156,10 +169,7 @@ def render_readme_catalog(catalog: dict, parsed: list[tuple[dict, dict[str, str]
 def replace_readme_catalog(readme: str, section: str) -> str:
     if README_START not in readme or README_END not in readme:
         raise ValueError("README.md is missing goal catalog markers")
-    pattern = re.compile(
-        re.escape(README_START) + r".*?" + re.escape(README_END),
-        flags=re.DOTALL,
-    )
+    pattern = re.compile(re.escape(README_START) + r".*?" + re.escape(README_END), flags=re.DOTALL)
     return pattern.sub(section, readme)
 
 
@@ -172,14 +182,12 @@ def render_documents() -> dict[Path, str]:
 
     readme_path = ROOT / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
-    documents[readme_path] = replace_readme_catalog(
-        readme, render_readme_catalog(catalog, parsed)
-    )
+    documents[readme_path] = replace_readme_catalog(readme, render_readme_catalog(catalog, parsed))
 
     goal_index_lines = [
         "# Goal Catalog",
         "",
-        "Canonical zero-friction launchers. The first command in every file runs unchanged.",
+        "Interactive-first profiles. Start with `shape-goal`; each linked file also contains advanced autonomous preflight commands.",
         "",
         "| ID | Goal | Category | In simple terms |",
         "|---:|---|---|---|",
@@ -190,10 +198,7 @@ def render_documents() -> dict[Path, str]:
             f"| {item['id']} | [{actual['title']}]({item['file']}) | "
             f"{category_title[item['category']]} | {actual['simple']} |"
         )
-    goal_index_lines.extend([
-        "",
-        "The machine-readable source is [`catalog.json`](catalog.json).",
-    ])
+    goal_index_lines.extend(["", "The machine-readable source is [`catalog.json`](catalog.json)."])
     documents[ROOT / "goals" / "README.md"] = "\n".join(goal_index_lines) + "\n"
     return documents
 

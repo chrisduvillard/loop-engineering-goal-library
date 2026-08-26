@@ -1,37 +1,43 @@
 # Current Implementation
 
-The original [`FULL_REPORT.md`](FULL_REPORT.md) is the research foundation. The live implementation has evolved through field-oriented design reviews.
+[`FULL_REPORT.md`](FULL_REPORT.md) is the historical research foundation. The live implementation is an interactive-first workflow for shaping and then autonomously executing software goals.
 
-## Version `0.5.0`
-
-```text
-24 zero-friction goal profiles
-+ shape-goal
-+ goal-engine
-+ profile-specific input specifications
-+ append-only shaping questions and answers
-+ repeatable deeper shaping rounds
-+ assurance overlays
-+ reusable Project Harness
-+ multi-goal portfolio and immutable closeout history
-```
-
-## Zero-friction contract
-
-The first command in every canonical goal file runs unchanged.
+## Version `0.6.0`
 
 ```text
-Copied /goal
-→ shape-goal searches and resolves inputs
-→ every asked question and answer is saved
-→ user may request deeper non-duplicate shaping rounds
-→ user approves the Goal Contract and approval round
-→ goal-engine executes
-→ acceptance evidence passes
-→ shaping, closeout, and reusable knowledge are preserved
+shape-goal                    main interactive entry point
+24 execution profiles        reusable loop shapes
+goal-engine                   autonomous brownfield execution
+SHAPING.md                    durable questions and answers
+Goal Contract                 approved definition of done
+Project Harness               reusable project mechanics
+Goal Portfolio                multiple goals over time
 ```
 
-The launcher forbids production changes before approval and forbids successful completion after shaping alone.
+## Primary workflow
+
+```text
+shape-goal outside /goal
+→ inspect repository evidence
+→ ask one material question
+→ save the answer and stop the turn
+→ repeat or deepen
+→ approve the Goal Contract
+→ return an exact /goal command
+→ goal-engine executes autonomously
+→ verify, close out, archive, and reuse
+```
+
+This separation is intentional. Shaping is interactive; native `/goal` loops automatically continue between turns and are therefore reserved for execution after the target and proof are approved.
+
+## Advanced preflight
+
+Each canonical profile still contains two `/goal` preflights for exceptional environments:
+
+- Skill-backed autonomous preflight
+- Self-contained autonomous preflight
+
+They continue only when an already-approved artifact resolves every owner decision. At the first unresolved decision they save one recommended question and stop as **Approval required** rather than asking and continuing inside the active goal.
 
 ## Coverage
 
@@ -57,9 +63,17 @@ As soon as a Goal ID exists, the default decision record is:
 docs/goals/<goal-id>/SHAPING.md
 ```
 
-It preserves every asked question, the user's answer, evidence, recommendation, normalized decision, corrections, deferred items, and round summaries. The record is append-only. Sensitive answers are redacted and referenced securely.
+It preserves every asked question, safe user answer, evidence, recommendation, normalized decision, correction, deferred item, approval, and round summary. The record is append-only. Sensitive answers are redacted and referenced securely.
 
-The initial round resolves the minimum material decisions required for readiness. A user who is not satisfied can request repeated deeper rounds; each round reads all earlier decisions, selects an unexplored or weak lens, avoids duplicate questions, and updates the contract without erasing history.
+The question barrier is explicit:
+
+1. Search before asking.
+2. Save one exact question.
+3. Ask it.
+4. End the turn immediately.
+5. Save the user's next reply before continuing.
+
+A user can request repeated deeper rounds without losing earlier decisions.
 
 ## State
 
@@ -77,18 +91,17 @@ docs/goals/<goal-id>/
 
 ## Safety
 
-- Repository facts are searched before users are questioned.
+- Facts are discovered before users are questioned.
 - Only material owner decisions are asked.
 - Questions are one at a time with evidence and a recommendation.
-- Public repositories never receive confidential strategy or restricted answers verbatim; safe summaries link approved secure evidence.
-- Every asked question and answer is saved, unless sensitive content requires a redacted summary and secure reference.
-- Corrections append and supersede prior answers rather than rewriting them.
+- No question is asked inside an active autonomous goal unless that goal will stop immediately.
+- Public repositories never receive confidential strategy or restricted answers verbatim.
+- Corrections append and supersede rather than rewriting history.
 - Production execution begins only from an explicitly approved shaping round.
-- One native goal session/worktree executes one dependency-safe leaf contract.
+- One native goal session or worktree executes one dependency-safe leaf contract.
 - Profiles and overlays cannot weaken the contract or expand authority.
-- Shaping cannot satisfy the enclosing goal.
 - Production, destructive, credential, release, security-testing, and legal/compliance boundaries remain explicit.
 
 ## Verification
 
-CI validates the catalog, every launcher and fallback, profile input coverage, shaping-history protocol and template, contract/progress/result/history linkage, worked multi-round example, generated docs, skill metadata, OpenAI host metadata, state schemas, links, package discovery, and deterministic ZIP builds.
+CI validates the 24-profile catalog, interactive start commands, advanced preflight stop behavior, the 4,000-character native-goal limit, profile input coverage, shaping-history append-only rules, contract/progress/result linkage, generated docs, skill metadata, links, package discovery, and deterministic ZIP builds.

@@ -104,6 +104,11 @@ A deepening round reads all earlier decisions and asks only materially new quest
 | Repair tests and CI | Test Suite / CI Health |
 | Prove deployment readiness | Infrastructure / Deployment Readiness |
 | Prepare audit evidence | Compliance / Audit Readiness |
+| Improve an AI or LLM feature with evals | AI / LLM Evaluation & Improvement |
+| Retire a legacy path safely | Deprecation / Legacy Sunset |
+| Prepare multiple languages and regions | Internationalization / Localization Readiness |
+| Prove backups and disaster recovery | Backup / Restore / Disaster Recovery |
+| Make analytics and experiments trustworthy | Product Analytics / Experimentation Integrity |
 | None fits | Custom Contract-Driven |
 
 ## State and archive

@@ -118,6 +118,8 @@ Overlays:
 
 Use a dedicated profile when a quality concern is the main outcome. Use its overlay when secondary.
 
+The catalog also has dedicated verifier-driven loops for AI/LLM evaluation, legacy sunset, internationalization/localization, backup and disaster recovery, and product analytics/experimentation. Use them only when that concern controls the main iteration and finish condition.
+
 ## Multiple goals
 
 ```text

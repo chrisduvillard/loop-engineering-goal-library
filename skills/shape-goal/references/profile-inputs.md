@@ -1,6 +1,6 @@
 # Shape Goal: Profile Input Specifications
 
-Use this reference when a zero-friction launcher names a primary execution profile. These are the profile-specific questions that must be resolved in addition to the common Goal Contract fields.
+Use this reference when `shape-goal` selects or is given a primary execution profile. These are the profile-specific questions that must be resolved in addition to the common Goal Contract fields.
 
 ## Common inputs for every goal
 
@@ -495,6 +495,114 @@ Do not ask the user for facts that repository evidence or connected authoritativ
 - Reconcile infrastructure and application assumptions as one deployment surface.
 - Validate through approved non-production, ephemeral, dry-run, or simulated environments.
 - Prove artifacts, configuration, migrations, health signals, failure handling, and rollback without silently exercising production authority.
+
+## 25. AI / LLM Evaluation & Improvement
+
+**Use for:** An AI, agent, retrieval, ranking, or LLM-powered feature must improve under representative evaluations while controlling quality, safety, latency, and cost.
+
+**Required profile inputs**
+
+- Target users, tasks, failure modes, and supported model/provider/tooling surfaces
+- Versioned evaluation set, provenance, privacy, representative splits, and leakage or contamination controls
+- Graders, rubrics, human-review boundaries, stochastic repetition, and calibration rules
+- Baseline and target metrics plus grounding, safety, latency, cost, and reliability floors
+
+**Suggested overlays:** Security & Privacy, Performance & Cost, Data Integrity & Governance
+
+**Execution emphasis**
+
+- Freeze and version the eval protocol before optimizing.
+- Build an error taxonomy from representative failures, then change one hypothesis at a time.
+- Repeat stochastic trials and compare quality, grounding, safety, latency, cost, and reliability together.
+- Keep only reproducible improvements and promote newly found failures into regression evals.
+
+## 26. Deprecation / Legacy Sunset
+
+**Use for:** A legacy API, feature, format, service, flag, dependency, or code path must be retired without abandoning active consumers or removing rollback too early.
+
+**Required profile inputs**
+
+- Legacy surface, supported replacement, owners, and authoritative retirement reason
+- Known and unknown consumers, usage evidence, compatibility window, and support commitments
+- Migration tooling, warnings, documentation, telemetry, and adoption thresholds
+- Removal authority, retention or archival needs, rollback path, and final cleanup evidence
+
+**Suggested overlays:** Compatibility & Portability, Documentation & Knowledge Transfer, Operability & Observability
+
+**Execution emphasis**
+
+- Discover consumers and actual usage before announcing or removing anything.
+- Make the replacement complete, provide migration tooling and warnings, and observe adoption.
+- Retire in stages; do not remove compatibility or recovery paths before approved evidence.
+- Finish with consumer accounting, cleanup, current documentation, and a tested recovery route where required.
+
+## 27. Internationalization / Localization Readiness
+
+**Use for:** A product must work correctly across approved languages, regions, scripts, reading directions, time zones, and local formats.
+
+**Required profile inputs**
+
+- Supported locales, regions, scripts, fallback policy, and rollout order
+- Translation source of truth, ownership, review workflow, and content or legal boundaries
+- Dates, numbers, currency, units, time zones, pluralization, collation, names, and address rules
+- RTL, text expansion, fonts, routing or SEO, accessibility, pseudo-localization, and per-locale UAT evidence
+
+**Suggested overlays:** UX & Accessibility, Compatibility & Portability, Documentation & Knowledge Transfer
+
+**Execution emphasis**
+
+- Inventory hard-coded language, region, direction, and formatting assumptions.
+- Centralize messages and locale-aware formatting, then define explicit fallback behavior.
+- Use pseudo-localization, text expansion, and RTL checks before relying on translation review.
+- Verify each supported locale through functional, visual, accessibility, routing, and qualified linguistic evidence.
+
+## 28. Backup / Restore / Disaster Recovery
+
+**Use for:** Critical application state must be recoverable within approved recovery objectives, with backups and restore procedures proven by realistic drills.
+
+**Required profile inputs**
+
+- Critical systems, data, configuration, secrets or keys, dependencies, owners, and recovery tiers
+- Recovery point and recovery time objectives, retention rules, and acceptable data loss or downtime
+- Backup frequency, immutability, encryption, off-site or cross-region design, access, and key recovery
+- Clean-room restore environment, integrity reconciliation, failover or failback, drill scope, and production authority
+
+**Suggested overlays:** Reliability & Recovery, Security & Privacy, Operability & Observability, Compliance & Auditability
+
+**Execution emphasis**
+
+- Inventory critical state and recovery dependencies before judging backup coverage.
+- Verify backup freshness, retention, encryption, immutability, access, and alerting.
+- Restore into an isolated clean environment and reconcile data plus application behavior.
+- Measure recovery objectives through approved drills; never use destructive production failure as an implicit test.
+
+## 29. Product Analytics / Experimentation Integrity
+
+**Use for:** Product events, funnels, metrics, dashboards, or controlled experiments must become trustworthy enough to support decisions without misleading attribution.
+
+**Required profile inputs**
+
+- Decision questions, metric definitions, primary outcomes, guardrails, owners, and acceptable interpretation boundaries
+- Event taxonomy, schemas, identity and session rules, consent, privacy, retention, and source-to-report lineage
+- Missing, late, duplicate, reordered, or joined-event behavior plus reconciliation and monitoring thresholds
+- Experiment unit, randomization, exposure, assignment persistence, sample-ratio checks, analysis window, power or stopping policy, and qualified decision owner
+
+**Suggested overlays:** Data Integrity & Governance, Security & Privacy, Compliance & Auditability, Documentation & Knowledge Transfer
+
+**Execution emphasis**
+
+- Start from the decision and define versioned metrics and event contracts before changing instrumentation.
+- Trace representative events from producer to report and reconcile missing, duplicate, late, reordered, or misjoined data.
+- Validate experiment assignment, exposure, persistence, sample ratios, guardrails, and analysis windows.
+- Separate reproducible measurement evidence from product or causal judgment that still belongs to qualified owners.
+
+## Routing distinctions for profiles 25–29
+
+- Use **AI / LLM Evaluation & Improvement** instead of Measured Optimization when outputs are stochastic and the loop must manage eval sets, graders, leakage, safety, grounding, latency, and cost together.
+- Use **Deprecation / Legacy Sunset** instead of Safe Refactor or API Compatibility when the primary outcome is staged retirement and consumer migration, not continued compatibility.
+- Use **Internationalization / Localization Readiness** instead of Frontend UI / UX / Accessibility when locale semantics, translation ownership, local formats, directionality, and per-locale evidence drive completion.
+- Use **Backup / Restore / Disaster Recovery** instead of Reliability or Infrastructure Readiness when clean-room restoration and measured recovery objectives are the primary verifier.
+- Use **Product Analytics / Experimentation Integrity** instead of Data Quality or Observability when trusted product decisions, event semantics, experiment assignment, exposure, and causal-interpretation boundaries are the main outcome.
 
 ## Custom Contract-Driven
 

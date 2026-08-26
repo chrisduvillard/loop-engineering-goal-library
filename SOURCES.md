@@ -45,6 +45,18 @@ These informed repository-first fact finding, one-decision-at-a-time interviews,
 
 These informed the core model: objective + check + bounded iteration + durable state + objective exits.
 
+## Profile-specific primary references
+
+- [Anthropic: Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
+- [W3C Internationalization resources](https://www.w3.org/International/)
+- [RFC 9745: Deprecation HTTP Response Header Field](https://www.rfc-editor.org/info/rfc9745/)
+- [RFC 8594: Sunset HTTP Header Field](https://www.rfc-editor.org/info/rfc8594/)
+- [NIST SP 1339: OT Backup Quick Start Guide](https://csrc.nist.gov/pubs/sp/1339/final)
+- [OpenTelemetry Semantic Conventions](https://opentelemetry.io/docs/concepts/semantic-conventions/)
+- [Microsoft Research: Diagnosing Sample Ratio Mismatch in Online Controlled Experiments](https://www.microsoft.com/en-us/research/publication/diagnosing-sample-ratio-mismatch-in-online-controlled-experiments-a-taxonomy-and-rules-of-thumb-for-practitioners/)
+
+These sources informed the distinctive verification mechanics of the new profiles: repeated stochastic evals, locale-aware checks, staged deprecation and sunset, tested restoration, and trustworthy event and experiment evidence.
+
 ## Current implementation interpretation
 
 The recommended workflow is deliberately two-stage:

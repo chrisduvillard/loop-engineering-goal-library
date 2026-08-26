@@ -9,8 +9,8 @@ A reusable workflow for long-running AI coding work in mature repositories.
 [![Codex](https://img.shields.io/badge/OpenAI%20Codex-compatible-111827?style=flat-square&logo=openai&logoColor=white)](https://learn.chatgpt.com/use-cases/follow-goals)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757?style=flat-square)](https://code.claude.com/docs/en/goal)
 [![Validation](https://img.shields.io/github/actions/workflow/status/chrisduvillard/loop-engineering-goal-library/validate.yml?branch=main&style=flat-square&label=validation)](https://github.com/chrisduvillard/loop-engineering-goal-library/actions/workflows/validate.yml)
-![Version](https://img.shields.io/badge/version-0.6.0-7C3AED?style=flat-square)
-![Profiles](https://img.shields.io/badge/profiles-24-16A34A?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.7.0-7C3AED?style=flat-square)
+![Profiles](https://img.shields.io/badge/profiles-29-16A34A?style=flat-square)
 
 ```text
 shape-goal → answer → approve → /goal + goal-engine → verify → archive → reuse
@@ -112,7 +112,7 @@ You usually do not need to choose one: `shape-goal` can select the best profile 
 </details>
 
 <details>
-<summary><strong>Specialist goals (6)</strong></summary>
+<summary><strong>Specialist goals (8)</strong></summary>
 
 | Profile | Best for |
 |---|---|
@@ -122,11 +122,13 @@ You usually do not need to choose one: `shape-goal` can select the best profile 
 | [**Branch Rescue / Integration**](goals/11-branch-rescue-integration.md) | Recover useful behavioral slices without overwriting newer target work. |
 | [**Measured Optimization / Benchmark**](goals/12-measured-optimization-benchmark.md) | Freeze a baseline, test one challenger at a time, and keep only reproducible wins. |
 | [**Technical Spike / Feasibility**](goals/13-technical-spike-feasibility.md) | Run an isolated experiment and return a Go, Conditional Go, or No-Go decision. |
+| [**AI / LLM Evaluation & Improvement**](goals/25-ai-llm-evaluation-improvement.md) | Build a trustworthy eval set, classify failures, test one change at a time, and keep only improvements that survive repeated runs. |
+| [**Deprecation / Legacy Sunset**](goals/26-deprecation-legacy-sunset.md) | Find who still depends on the old path, provide a safe migration, prove adoption, then remove it in controlled stages. |
 
 </details>
 
 <details>
-<summary><strong>Product and quality goals (11)</strong></summary>
+<summary><strong>Product and quality goals (14)</strong></summary>
 
 | Profile | Best for |
 |---|---|
@@ -141,6 +143,9 @@ You usually do not need to choose one: `shape-goal` can select the best profile 
 | [**Compliance / Audit Readiness**](goals/22-compliance-audit-readiness.md) | Map controls to implementation and evidence, close technical gaps, and leave an auditable package for qualified human review. |
 | [**Test Suite / CI Health**](goals/23-test-suite-ci-health.md) | Find flaky, misleading, slow, skipped, or environment-dependent checks and turn the test pipeline into reliable evidence. |
 | [**Infrastructure / Deployment Readiness**](goals/24-infrastructure-deployment-readiness.md) | Verify that the system can be provisioned and deployed consistently, diagnosed after rollout, and safely rolled back before a human authorizes production change. |
+| [**Internationalization / Localization Readiness**](goals/27-internationalization-localization-readiness.md) | Find hard-coded locale assumptions, build a locale matrix, test translated and right-to-left experiences, and prove every supported locale works. |
+| [**Backup / Restore / Disaster Recovery**](goals/28-backup-restore-disaster-recovery.md) | Define what must survive, create trustworthy backups, restore them in a clean environment, and prove recovery meets the agreed targets. |
+| [**Product Analytics / Experimentation Integrity**](goals/29-product-analytics-experimentation-integrity.md) | Define the events and metrics, verify collection end to end, test experiment assignment, and prove the numbers mean what the team thinks they mean. |
 
 </details>
 

@@ -11,13 +11,13 @@
       "key": "specialist",
       "title": "Specialist goals",
       "collection": "SPECIALIST_LOOPS.md",
-      "intro": "Six distinct loops for incidents, upgrades, migrations, branch recovery, optimization, and feasibility."
+      "intro": "Eight distinct loops for incidents, upgrades, migrations, branch recovery, optimization, feasibility, AI/LLM evaluation, and legacy retirement."
     },
     {
       "key": "quality",
       "title": "Product and quality goals",
       "collection": "QUALITY_GOALS.md",
-      "intro": "Eleven focused loops for frontend, documentation, security, reliability, APIs, operations, developer experience, data quality, test/CI health, infrastructure/deployment, and audit readiness."
+      "intro": "Fourteen focused loops for frontend, documentation, security, reliability, APIs, operations, developer experience, data quality, test/CI health, infrastructure/deployment, audit readiness, internationalization, disaster recovery, and product analytics."
     }
   ],
   "goals": [
@@ -212,6 +212,46 @@
       "category": "quality",
       "simple": "Verify that the system can be provisioned and deployed consistently, diagnosed after rollout, and safely rolled back before a human authorizes production change.",
       "use_when": "Infrastructure, environment configuration, deployment automation, smoke checks, and rollback must be proven ready without silently changing production."
+    },
+    {
+      "id": "25",
+      "file": "25-ai-llm-evaluation-improvement.md",
+      "title": "AI / LLM Evaluation & Improvement",
+      "category": "specialist",
+      "simple": "Build a trustworthy eval set, classify failures, test one change at a time, and keep only improvements that survive repeated runs.",
+      "use_when": "An AI, agent, retrieval, ranking, or LLM-powered feature must improve under representative evaluations while controlling quality, safety, latency, and cost."
+    },
+    {
+      "id": "26",
+      "file": "26-deprecation-legacy-sunset.md",
+      "title": "Deprecation / Legacy Sunset",
+      "category": "specialist",
+      "simple": "Find who still depends on the old path, provide a safe migration, prove adoption, then remove it in controlled stages.",
+      "use_when": "A legacy API, feature, format, service, flag, dependency, or code path must be retired without abandoning active consumers or removing rollback too early."
+    },
+    {
+      "id": "27",
+      "file": "27-internationalization-localization-readiness.md",
+      "title": "Internationalization / Localization Readiness",
+      "category": "quality",
+      "simple": "Find hard-coded locale assumptions, build a locale matrix, test translated and right-to-left experiences, and prove every supported locale works.",
+      "use_when": "A product must work correctly across approved languages, regions, scripts, reading directions, time zones, and local formats."
+    },
+    {
+      "id": "28",
+      "file": "28-backup-restore-disaster-recovery.md",
+      "title": "Backup / Restore / Disaster Recovery",
+      "category": "quality",
+      "simple": "Define what must survive, create trustworthy backups, restore them in a clean environment, and prove recovery meets the agreed targets.",
+      "use_when": "Critical application state must be recoverable within approved recovery objectives, with backups and restore procedures proven by realistic drills."
+    },
+    {
+      "id": "29",
+      "file": "29-product-analytics-experimentation-integrity.md",
+      "title": "Product Analytics / Experimentation Integrity",
+      "category": "quality",
+      "simple": "Define the events and metrics, verify collection end to end, test experiment assignment, and prove the numbers mean what the team thinks they mean.",
+      "use_when": "Product events, funnels, metrics, dashboards, or controlled experiments must become trustworthy enough to support decisions without misleading attribution."
     }
   ]
 }

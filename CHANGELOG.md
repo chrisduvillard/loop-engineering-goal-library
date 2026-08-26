@@ -8,6 +8,23 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.7.0] - 2026-08-26
+
+### Added
+
+- **AI / LLM Evaluation & Improvement** for versioned representative evals, stochastic repetition, error taxonomies, graders, leakage controls, and quality/safety/latency/cost trade-offs.
+- **Deprecation / Legacy Sunset** for consumer discovery, migration tooling, adoption evidence, compatibility windows, staged removal, and rollback.
+- **Internationalization / Localization Readiness** for locale matrices, local formats, pseudo-localization, RTL, text expansion, accessibility, and qualified linguistic review.
+- **Backup / Restore / Disaster Recovery** for backup integrity, clean-room restoration, reconciliation, recovery-objective measurement, and realistic drills.
+- **Product Analytics / Experimentation Integrity** for event contracts, identity and consent, lineage, experiment assignment, exposure, sample-ratio checks, and reproducible interpretation.
+- Routing distinctions that prevent the new profiles from replacing existing profiles or overlays when their verifier is only secondary.
+- A durable profile-gap review record under `docs/goals/2026-08-26-additional-profile-coverage/`.
+
+### Changed
+
+- The catalog now contains 29 profiles: 7 core, 8 specialist, and 14 product/quality profiles.
+- README catalogs, generated collections, quick reference, current implementation, roadmap, validator, and packaged skill metadata now reflect version `0.7.0`.
+
 ## [0.6.0] - 2026-08-26
 
 ### Changed

@@ -4,6 +4,8 @@
 **Outcome:** Achieved / Cancelled / Superseded / Blocked / Approval required / Budget exhausted / Stalled  
 **Closed:** [DATE]  
 **Contract:** [ORIGINAL PATH OR ISSUE]  
+**Shaping history:** [PATH OR DECISION LOG]  
+**Completed / approval shaping rounds:** [IDS] / [APPROVAL ROUND]  
 **Profile:** [EXECUTION PROFILE OR CUSTOM]  
 **Assurance overlays:** [LIST OR NONE]  
 **Project harness:** [PATH OR SOURCES]  
@@ -14,6 +16,15 @@
 ## Target
 
 [ONE-SENTENCE OBSERVABLE OUTCOME]
+
+## Shaping decision trace
+
+- Approval round: [ROUND ID]
+- Material decision IDs: [QUESTION / DECISION IDS]
+- Deferred decisions carried forward: [IDS OR NONE]
+- Corrections or superseded answers relevant to this result: [IDS OR NONE]
+
+Link to the shaping history rather than duplicating the full interview.
 
 ## Acceptance and overlay evidence
 
@@ -39,6 +50,7 @@
 
 ## Decisions and durable knowledge
 
+- Shaping history: [PATH]
 - Regression tests: [PATHS OR NONE]
 - Documentation, ADRs, or runbooks: [PATHS OR NONE]
 - Project harness updates: [PATHS OR NONE]
@@ -59,5 +71,5 @@
 Complete when the outcome is not Achieved:
 
 - Stop reason: [DETAIL]
-- Exact preserved state: [PATH / COMMAND / CHECKPOINT]
+- Exact preserved shaping and execution state: [PATH / ROUND / COMMAND / CHECKPOINT]
 - Resume or replacement goal: [ID / ACTION]

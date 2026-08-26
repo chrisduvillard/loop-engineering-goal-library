@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the zero-friction goal library, skills, generated docs, and lifecycle."""
+"""Validate the zero-friction goal library, shaping history, skills, and lifecycle."""
 
 from __future__ import annotations
 
@@ -28,6 +28,11 @@ def require(path: str) -> Path:
     if not candidate.exists():
         fail(f"Missing required path: {path}")
     return candidate
+
+
+def require_absent(path: str) -> None:
+    if (ROOT / path).exists():
+        fail(f"Temporary or forbidden path must not be committed: {path}")
 
 
 def load_catalog() -> dict:
@@ -155,12 +160,8 @@ def validate_goal_files(catalog_goals: list[dict]) -> None:
         lower = text.lower()
         if not text.startswith(f"# {item['title']}\n"):
             fail(f"goals/{item['file']}: title differs from catalog")
-        for field, marker in (
-            ("use_when", "**Use when:**"),
-            ("simple", "**In simple terms:**"),
-        ):
-            expected_line = f"{marker} {item[field]}"
-            if expected_line not in text:
+        for field, marker in (("use_when", "**Use when:**"), ("simple", "**In simple terms:**")):
+            if f"{marker} {item[field]}" not in text:
                 fail(f"goals/{item['file']}: {field} differs from catalog")
         for heading in (
             "## Run unchanged — recommended",
@@ -189,7 +190,7 @@ def validate_goal_files(catalog_goals: list[dict]) -> None:
                 fail(f"goals/{item['file']}: recommended launcher missing {fragment!r}")
 
         if PLACEHOLDER.search(fallback):
-            fail(f"goals/{item['file']}: self-contained fallback contains placeholder {PLACEHOLDER.search(fallback).group(0)!r}")
+            fail(f"goals/{item['file']}: fallback contains placeholder {PLACEHOLDER.search(fallback).group(0)!r}")
         for fragment in (
             "without requiring the user to prefill placeholders",
             "Search before asking",
@@ -254,30 +255,36 @@ def validate_skills(version: str) -> None:
 
     shape = require("skills/shape-goal/SKILL.md")
     if shape.exists():
-        text = shape.read_text(encoding="utf-8")
+        text = shape.read_text(encoding="utf-8").lower()
         for fragment in (
-            "Zero-friction bootstrap",
+            "zero-friction bootstrap",
             "input ledger",
-            "search all lawful, authoritative sources before asking",
-            "ask one decision at a time",
-            "shaping is complete; the enclosing goal is not complete",
+            "save every asked question and answer",
+            "deepening round",
+            "approval shaping round",
             "references/profile-inputs.md",
             "references/input-resolution.md",
+            "references/shaping-history.md",
+            "templates/shaping-history-template.md",
+            "shaping is complete; the enclosing goal is not complete",
         ):
-            if fragment.lower() not in text.lower():
+            if fragment.lower() not in text:
                 fail(f"{shape.relative_to(ROOT)}: missing {fragment!r}")
 
     engine = require("skills/goal-engine/SKILL.md")
     if engine.exists():
-        text = engine.read_text(encoding="utf-8")
+        text = engine.read_text(encoding="utf-8").lower()
         for fragment in (
-            "Zero-friction handoff",
+            "zero-friction handoff",
+            "shaping history",
+            "approval shaping round",
+            "deeper reshaping",
             "do not treat shaping as completion",
-            "Goal-fit gate",
-            "Evidence for the evaluator",
-            "Preserve lifecycle state and closeout",
+            "goal-fit gate",
+            "evidence for the evaluator",
+            "preserve `shaping.md`",
         ):
-            if fragment.lower() not in text.lower():
+            if fragment.lower() not in text:
                 fail(f"{engine.relative_to(ROOT)}: missing {fragment!r}")
 
 
@@ -300,6 +307,8 @@ def validate_state_and_docs() -> None:
         "skills/shape-goal/goal-contract-template.md",
         "skills/shape-goal/references/input-resolution.md",
         "skills/shape-goal/references/profile-inputs.md",
+        "skills/shape-goal/references/shaping-history.md",
+        "skills/shape-goal/templates/shaping-history-template.md",
         "skills/shape-goal/templates/goal-portfolio-template.md",
         "skills/shape-goal/templates/custom-contract-driven-goal.md",
         "skills/goal-engine/SKILL.md",
@@ -313,11 +322,13 @@ def validate_state_and_docs() -> None:
         "scripts/package_skills.py", "scripts/sync_goal_docs.py",
         "scripts/validate_repository.py", ".github/workflows/validate.yml",
         "examples/complete-brownfield-cycle/README.md",
+        "examples/complete-brownfield-cycle/SHAPING.md",
         "examples/complete-brownfield-cycle/PORTFOLIO.md",
         "examples/complete-brownfield-cycle/CONTRACT.md",
         "examples/complete-brownfield-cycle/PROGRESS.md",
         "examples/complete-brownfield-cycle/RESULT.md",
         "docs/goals/INDEX.md",
+        "docs/goals/2026-08-25-zero-friction-profile-coverage/SHAPING.md",
         "docs/goals/2026-08-25-zero-friction-profile-coverage/CONTRACT.md",
         "docs/goals/2026-08-25-zero-friction-profile-coverage/PROGRESS.md",
         "docs/goals/2026-08-25-zero-friction-profile-coverage/RESULT.md",
@@ -325,24 +336,70 @@ def validate_state_and_docs() -> None:
     for path in required_paths:
         require(path)
 
-    require_fragments(require("CURRENT_IMPLEMENTATION.md"), ("Version `0.4.0`", "22 zero-friction goal profiles", "## Verification"))
+    require_absent(".github/workflows/apply-zero-friction-update.yml")
+
+    require_fragments(require("CURRENT_IMPLEMENTATION.md"), (
+        "Version `0.4.0`", "22 zero-friction goal profiles", "## Shaping history", "## Verification",
+    ))
     require_fragments(require("README.md"), (
-        "## Quick start", "No placeholder replacement is required",
+        "## Quick start", "Every question and answer is saved immediately",
+        "## One-command example", "## Strict two-step mode", "## Deep-review guarantees",
+        "/shape-goal Deepen the current goal", "SHAPING.md",
         "<!-- goal-catalog:start -->", "<!-- goal-catalog:end -->",
-        "## One-command example", "## Strict two-step mode",
-        "## Deep-review guarantees",
     ))
     require_fragments(require("skills/shape-goal/goal-contract-template.md"), (
-        "**Launcher:**", "**Input ledger:**", "## Input resolution record",
-        "## Profile-specific inputs", "## Goal-drift review triggers",
+        "**Launcher:**", "**Input ledger:**", "**Shaping history:**",
+        "**Approval shaping round:**", "## Shaping history and decision trace",
+        "## Input resolution record", "## Profile-specific inputs",
+        "## Goal-drift review triggers", "├── SHAPING.md",
     ))
     require_fragments(require("skills/shape-goal/references/input-resolution.md"), (
-        "## The input ledger", "## Search before asking", "## Ask one material decision at a time",
-        "## Approval gate", "## Handoff inside a zero-friction `/goal`",
+        "## The input ledger", "## Create or resume shaping history", "## Search before asking",
+        "## Ask one material decision at a time", "## Standard and deeper rounds",
+        "## Round close and approval gate", "## Handoff inside a zero-friction `/goal`",
+    ))
+    require_fragments(require("skills/shape-goal/references/shaping-history.md"), (
+        "## Append-only rule", "## What to record for every question",
+        "## Standard and deepening rounds", "## Repeatable deepening",
+        "R1-Q1", "├── SHAPING.md",
+    ))
+    require_fragments(require("skills/shape-goal/templates/shaping-history-template.md"), (
+        "## Current decision index", "## Round R1", "### Questions and answers",
+        "**Exact question:**", "**User answer:**", "## Corrections and supersessions",
+    ))
+    require_fragments(require("skills/goal-engine/references/state-and-evidence.md"), (
+        "Shaping history", "## Shaping-history rules", "approval round", "├── SHAPING.md",
+    ))
+    require_fragments(require("skills/goal-engine/templates/goal-progress-template.md"), (
+        "**Shaping history:**", "**Completed / approval shaping rounds:**",
+        "## Dependencies, shaping, and goal fit",
+    ))
+    require_fragments(require("skills/goal-engine/templates/goal-result-template.md"), (
+        "**Shaping history:**", "## Shaping decision trace", "Completed / approval shaping rounds",
+    ))
+    require_fragments(require("skills/goal-engine/templates/goal-history-index-template.md"), (
+        "| Goal ID | Rev |", "Shaping", "├── SHAPING.md",
+    ))
+    require_fragments(require("examples/complete-brownfield-cycle/SHAPING.md"), (
+        "R1-Q1", "R1-Q2", "R2-Q1", "R2-Q2", "Approval round:** R2",
+        "## Corrections and supersessions",
+    ))
+    require_fragments(require("examples/complete-brownfield-cycle/CONTRACT.md"), (
+        "**Shaping history:** `SHAPING.md`", "**Approval shaping round:** R2",
+        "## Shaping history and decision trace",
+    ))
+    require_fragments(require("examples/complete-brownfield-cycle/PROGRESS.md"), (
+        "**Completed / approval shaping rounds:** R1, R2 / R2", "Latest shaping round: R2",
+    ))
+    require_fragments(require("examples/complete-brownfield-cycle/RESULT.md"), (
+        "**Shaping history:** `SHAPING.md`", "## Shaping decision trace", "Approval round: R2",
     ))
     require_fragments(require("skills/goal-engine/references/assurance-overlays.md"), (
         "## Dedicated profile or overlay?", "Frontend UI / UX / Accessibility",
         "Documentation Synchronization / Knowledge Transfer", "Compliance / Audit Readiness",
+    ))
+    require_fragments(require("docs/goals/2026-08-25-zero-friction-profile-coverage/SHAPING.md"), (
+        "Round R1", "Round R2", "Question preservation", "Deeper shaping",
     ))
     require_fragments(require("docs/goals/2026-08-25-zero-friction-profile-coverage/RESULT.md"), (
         "**Outcome:** Achieved", "22 zero-friction launchers", "Frontend UI / UX / Accessibility",
@@ -436,9 +493,11 @@ def main() -> int:
     print("- 22 zero-friction recommended launchers")
     print("- 22 self-contained no-placeholder fallbacks")
     print("- 7 core, 6 specialist, and 9 quality profiles")
-    print("- profile-specific input resolution and question protocol")
+    print("- profile-specific input resolution and append-only shaping rounds")
+    print("- durable question/answer history with corrections and approval linkage")
     print("- multi-goal portfolio, project harness, and reusable closeout")
     print("- generated catalogs synchronized")
+    print("- temporary update workflow absent")
     print("- GitHub Actions pinned to immutable commits")
     print("- local Markdown links resolve")
     return 0

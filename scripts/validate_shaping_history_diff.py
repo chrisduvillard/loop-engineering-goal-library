@@ -13,14 +13,36 @@ ROOT = Path(__file__).resolve().parents[1]
 QUESTION = re.compile(r"^#### (R\d+-Q\d+)\b.*$", flags=re.MULTILINE)
 NEXT_HEADING = re.compile(r"^#{1,4}\s", flags=re.MULTILINE)
 MUTABLE_LINES = re.compile(r"^- \*\*(?:Status|Supersedes):\*\*.*$", flags=re.MULTILINE)
-APPROVAL_SECTION = re.compile(r"^## Approval record\s*$\n(?P<body>.*?)(?=^##\s|\Z)", flags=re.MULTILINE | re.DOTALL)
+APPROVAL_SECTION = re.compile(
+    r"^## Approval record\s*$\n(?P<body>.*?)(?=^##\s|\Z)",
+    flags=re.MULTILINE | re.DOTALL,
+)
 APPROVAL_ROW = re.compile(r"^\|\s*(R\d+)\s*\|(?P<rest>.*)\|\s*$", flags=re.MULTILINE)
+IGNORED_PARTS = {
+    ".git",
+    "dist",
+    "build",
+    "node_modules",
+    "__pycache__",
+    ".venv",
+    "venv",
+    ".tox",
+    ".nox",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+}
+MAX_HISTORY_BYTES = 2 * 1024 * 1024
 
 
 def git(*args: str) -> str:
     completed = subprocess.run(
-        ("git", *args), cwd=ROOT, check=True, text=True,
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        ("git", *args),
+        cwd=ROOT,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
     return completed.stdout
 
@@ -40,7 +62,7 @@ def mask_fenced_code(text: str) -> str:
             if re.match(re.escape(char) + "{" + str(minimum) + r",}\s*$", stripped):
                 active = None
         if active is not None or fence:
-            masked.append("".join("\n" if c == "\n" else "\r" if c == "\r" else " " for c in line))
+            masked.append("".join("\n" if char == "\n" else "\r" if char == "\r" else " " for char in line))
         else:
             masked.append(line)
     return "".join(masked)
@@ -48,14 +70,19 @@ def mask_fenced_code(text: str) -> str:
 
 def shaping_paths(ref: str) -> list[str]:
     output = git("ls-tree", "-r", "--name-only", ref)
-    return sorted(path for path in output.splitlines() if path.endswith("/SHAPING.md") or path == "SHAPING.md")
+    return sorted(
+        path
+        for path in output.splitlines()
+        if (path.endswith("/SHAPING.md") or path == "SHAPING.md")
+        and not any(part in IGNORED_PARTS for part in Path(path).parts)
+    )
 
 
 def current_shaping_paths() -> list[str]:
     return sorted(
         path.relative_to(ROOT).as_posix()
         for path in ROOT.rglob("SHAPING.md")
-        if ".git" not in path.parts
+        if not any(part in IGNORED_PARTS for part in path.relative_to(ROOT).parts)
     )
 
 
@@ -67,10 +94,13 @@ def id_tuple(question_id: str) -> tuple[int, int]:
     match = re.fullmatch(r"R(\d+)-Q(\d+)", question_id)
     if not match:
         raise ValueError(f"invalid shaping question ID: {question_id}")
-    return int(match.group(1)), int(match.group(2))
+    round_number, question_number = int(match.group(1)), int(match.group(2))
+    if round_number < 1 or question_number < 1:
+        raise ValueError(f"shaping question IDs must start at R1-Q1 or later: {question_id}")
+    return round_number, question_number
 
 
-def question_entries(text: str) -> list[tuple[str, str]]:
+def raw_question_entries(text: str) -> list[tuple[str, str]]:
     masked = mask_fenced_code(text)
     entries: list[tuple[str, str]] = []
     seen: set[str] = set()
@@ -86,9 +116,12 @@ def question_entries(text: str) -> list[tuple[str, str]]:
         seen.add(question_id)
         next_heading = NEXT_HEADING.search(masked, match.end())
         end = next_heading.start() if next_heading else len(text)
-        block = text[match.start():end]
-        entries.append((question_id, MUTABLE_LINES.sub("", block).strip()))
+        entries.append((question_id, text[match.start():end].strip()))
     return entries
+
+
+def question_entries(text: str) -> list[tuple[str, str]]:
+    return [(question_id, MUTABLE_LINES.sub("", block).strip()) for question_id, block in raw_question_entries(text)]
 
 
 def question_blocks(text: str) -> dict[str, str]:
@@ -97,9 +130,12 @@ def question_blocks(text: str) -> dict[str, str]:
 
 def approval_entries(text: str) -> list[tuple[str, str]]:
     masked = mask_fenced_code(text)
-    section = APPROVAL_SECTION.search(masked)
-    if not section:
+    sections = list(APPROVAL_SECTION.finditer(masked))
+    if len(sections) > 1:
+        raise ValueError("duplicate Approval record sections")
+    if not sections:
         return []
+    section = sections[0]
     start, end = section.span("body")
     masked_body = masked[start:end]
     original_body = text[start:end]
@@ -109,6 +145,8 @@ def approval_entries(text: str) -> list[tuple[str, str]]:
     for match in APPROVAL_ROW.finditer(masked_body):
         round_id = match.group(1)
         number = int(round_id[1:])
+        if number < 1:
+            raise ValueError(f"approval rounds must start at R1 or later: {round_id}")
         if round_id in seen:
             raise ValueError(f"duplicate approval row for round: {round_id}")
         if number <= previous:
@@ -121,12 +159,26 @@ def approval_entries(text: str) -> list[tuple[str, str]]:
 
 
 def validate_current_document(text: str, path: str) -> list[str]:
+    errors: list[str] = []
+    if len(text.encode("utf-8")) > MAX_HISTORY_BYTES:
+        errors.append(f"{path}: shaping history exceeds {MAX_HISTORY_BYTES} bytes")
+        return errors
     try:
-        question_entries(text)
+        raw_questions = raw_question_entries(text)
         approval_entries(text)
     except ValueError as error:
         return [f"{path}: {error}"]
-    return []
+
+    for question_id, block in raw_questions:
+        if "**Exact question:**" not in block:
+            errors.append(f"{path}: {question_id} is missing an Exact question field")
+        status = re.search(r"^- \*\*Status:\*\*\s*(.+)$", block, flags=re.MULTILINE)
+        if status and status.group(1).strip().lower().startswith("answered"):
+            if "**User answer:**" not in block:
+                errors.append(f"{path}: answered question {question_id} is missing a User answer field")
+            if "**Normalized decision:**" not in block:
+                errors.append(f"{path}: answered question {question_id} is missing a Normalized decision field")
+    return errors
 
 
 def validate_document(before_text: str, after_text: str, path: str) -> list[str]:
@@ -148,7 +200,9 @@ def validate_document(before_text: str, after_text: str, path: str) -> list[str]
         if question_id not in after_map:
             errors.append(f"{path}: removed committed question {question_id}")
         elif after_map[question_id] != immutable_block:
-            errors.append(f"{path}: rewrote committed question/answer {question_id}; append a correction instead")
+            errors.append(
+                f"{path}: rewrote committed question/answer {question_id}; append a correction instead"
+            )
 
     before_rounds = [item[0] for item in before_approvals]
     after_rounds = [item[0] for item in after_approvals]
@@ -159,7 +213,9 @@ def validate_document(before_text: str, after_text: str, path: str) -> list[str]
         if round_id not in after_approval_map:
             errors.append(f"{path}: removed committed approval record for {round_id}")
         elif after_approval_map[round_id] != immutable_row:
-            errors.append(f"{path}: rewrote committed approval record for {round_id}; append a new round instead")
+            errors.append(
+                f"{path}: rewrote committed approval record for {round_id}; append a new round instead"
+            )
     return errors
 
 
@@ -167,7 +223,11 @@ def validate(base_ref: str) -> list[str]:
     errors: list[str] = []
     current_paths = set(current_shaping_paths())
     for path in sorted(current_paths):
-        errors.extend(validate_current_document((ROOT / path).read_text(encoding="utf-8"), path))
+        current = ROOT / path
+        if current.is_symlink():
+            errors.append(f"{path}: shaping history may not be a symlink")
+            continue
+        errors.extend(validate_current_document(current.read_text(encoding="utf-8"), path))
 
     if not base_ref or set(base_ref) == {"0"}:
         return errors
@@ -176,6 +236,9 @@ def validate(base_ref: str) -> list[str]:
         current = ROOT / path
         if not current.exists():
             errors.append(f"Deleted committed shaping history: {path}")
+            continue
+        if current.is_symlink():
+            errors.append(f"{path}: committed shaping history was replaced by a symlink")
             continue
         errors.extend(validate_document(read_at(base_ref, path), current.read_text(encoding="utf-8"), path))
     return errors
@@ -217,11 +280,25 @@ Ready.
 - **Supersedes:** none
 """
     assert not validate_document(original, appended, "self-test")
-    assert validate_document(original, original.replace("- **User answer:** Yes.", "- **User answer:** No.", 1), "self-test")
-    assert validate_document(original, original.replace("| R1 | Approve? | Yes | 1 | today |", "| R1 | Approve? | No | 1 | today |"), "self-test")
+    assert validate_document(
+        original,
+        original.replace("- **User answer:** Yes.", "- **User answer:** No.", 1),
+        "self-test",
+    )
+    assert validate_document(
+        original,
+        original.replace(
+            "| R1 | Approve? | Yes | 1 | today |",
+            "| R1 | Approve? | No | 1 | today |",
+        ),
+        "self-test",
+    )
     status_change = original.replace("- **Status:** Answered", "- **Status:** Superseded")
     assert not validate_document(original, status_change, "self-test")
-    inserted = original.replace("#### R1-Q1", "#### R1-Q0 — Inserted\n\n- **Status:** Proposed\n\n#### R1-Q1")
+    inserted = original.replace(
+        "#### R1-Q1",
+        "#### R1-Q0 — Inserted\n\n- **Status:** Proposed\n- **Exact question:** Hidden?\n\n#### R1-Q1",
+    )
     assert validate_document(original, inserted, "self-test")
     fenced = """# History
 
@@ -234,6 +311,9 @@ Ready.
 #### R1-Q1 — Real
 
 - **Status:** Answered
+- **Exact question:** Real?
+- **User answer:** Yes.
+- **Normalized decision:** Real.
 """
     assert list(question_blocks(fenced)) == ["R1-Q1"]
     try:
@@ -242,6 +322,14 @@ Ready.
         pass
     else:
         raise AssertionError("duplicate question IDs must fail")
+    try:
+        question_blocks("#### R0-Q1 — Invalid\n\n- **Exact question:** Invalid?\n")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("zero-based question IDs must fail")
+    duplicate_approval = original + "\n## Approval record\n\n| R2 | Again? | Yes | 2 | later |\n"
+    assert validate_current_document(duplicate_approval, "self-test")
 
 
 def main() -> int:

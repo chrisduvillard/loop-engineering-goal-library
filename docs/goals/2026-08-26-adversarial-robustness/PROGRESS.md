@@ -43,7 +43,7 @@
 | Squash merge to `main` | Pass |
 | Merged-main workflow | Pass |
 | Durable result and goal-history closeout | Pass |
-| Review-branch cleanup | Pending |
+| Review-branch cleanup | Pass |
 
 ## Verification evidence
 
@@ -63,4 +63,4 @@ python scripts/package_skills.py
 
 ## Closeout
 
-The achieved result is preserved in [`RESULT.md`](RESULT.md). The review branch will be deleted after the closeout commit passes the permanent workflow; only `main` and the read-only validation workflow should remain.
+The achieved result is preserved in [`RESULT.md`](RESULT.md). The review branch was deleted after the closeout commit passed. Only `main` and the permanent read-only validation workflow remain.

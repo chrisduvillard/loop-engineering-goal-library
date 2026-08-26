@@ -1,0 +1,40 @@
+name: Cleanup adaptive question review branch
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Delete merged branch and remove this workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch=codex/adaptive-question-clarity
+          if git ls-remote --exit-code --heads origin "refs/heads/${branch}" >/dev/null 2>&1; then
+            git push origin --delete "${branch}"
+          else
+            printf 'Already absent: %s\n' "${branch}"
+          fi
+
+          rm -f .github/workflows/cleanup-adaptive-question-clarity.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Remove temporary adaptive-question cleanup workflow"
+          git push origin HEAD:main

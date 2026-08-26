@@ -36,7 +36,7 @@ jobs:
       - name: Protect append-only shaping history
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: python scripts/validate_shaping_history_diff.py --base-ref "$BASE_SHA"
+        run: python scripts/validate_shaping_history_diff.py --self-test --base-ref "$BASE_SHA"
 
       - name: Verify Agent Skills CLI discovery
         shell: bash

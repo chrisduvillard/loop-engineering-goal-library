@@ -32,9 +32,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python scripts/fix_additional_profile_apply.py
           python scripts/apply_additional_profiles.py
           python scripts/sync_goal_launchers.py --write
           python scripts/sync_goal_docs.py --write
+          rm -f scripts/fix_additional_profile_apply.py
           rm -f scripts/apply_additional_profiles.py
           rm -f .github/workflows/apply-additional-profiles.yml
           python scripts/sync_goal_launchers.py --check

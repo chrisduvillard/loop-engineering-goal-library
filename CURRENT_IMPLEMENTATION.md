@@ -8,6 +8,8 @@
 shape-goal                    main interactive entry point
 adaptive question depth       two questions or twenty, based on material ambiguity
 answer quality gate           ambiguous or partial replies are clarified, never guessed
+requirement strength          must, should, preference, optional, or explicit non-goal
+bounded delegation            “you decide” records criteria and limits instead of blank authority
 clarity stress test           fresh-reader, counterexample, scenario, and verifier review
 assumption register           evidence, owner approval, safe defaults, or unresolved
 31 execution profiles         reusable loop shapes
@@ -77,6 +79,7 @@ Custom Contract-Driven remains the fallback for unusual loops.
 - The question count adapts to risk rather than a fixed quota.
 - Safe questions, answers, corrections, assumptions, and approvals are append-only.
 - Ambiguous, partial, or conflicting answers trigger clarification rather than inference.
+- Requirement strength is preserved, and delegated judgment is explicit, bounded, and reviewable.
 - Production execution begins only from an explicitly approved, clarity-tested contract.
 - Autonomous execution never interviews the user, chooses among ambiguous interpretations, or expands authority.
 - Profiles and overlays cannot weaken the contract.

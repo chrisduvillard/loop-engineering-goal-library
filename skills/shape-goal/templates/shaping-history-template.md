@@ -43,7 +43,9 @@
 
 > [VERBATIM ANSWER WHEN SAFE, OTHERWISE REDACTED SUMMARY + SECURE REFERENCE]
 
-- **Answer quality:** Clear / Clear with conditions / Partial / Ambiguous / Conflicting / Deferred / Blocked
+- **Answer quality:** Clear / Clear with conditions / Partial / Ambiguous / Conflicting / Delegated judgment / Deferred / Blocked
+- **Requirement strength:** Must / Should / Preference / Optional / Explicit non-goal
+- **Delegation:** None / Bounded delegation with [CRITERIA AND LIMITS]
 - **Interpretation confirmed:** [YES / NO / FOLLOW-UP QUESTION ID]
 - **Normalized decision:** [DECISION USED BY THE CONTRACT]
 - **Confidence / assumption class:** [CONFIDENCE + EVIDENCE / OWNER / SAFE DEFAULT / UNRESOLVED]

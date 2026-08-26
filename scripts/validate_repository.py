@@ -464,6 +464,8 @@ def validate_state_and_docs() -> None:
             "Fresh-reader test",
             "Counterexample test",
             "Plain-English teach-back",
+            "Delegated judgment",
+            "Must / hard gate",
             "If this takes two questions",
         ),
     )

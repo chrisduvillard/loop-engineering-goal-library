@@ -73,6 +73,7 @@ A strong question:
 5. Recommends one option and explains the trade-off.
 6. States what will change based on the answer.
 7. Can be answered without the user researching repository facts.
+8. Makes clear that listed options are not exhaustive and the user may answer in their own words.
 
 Split compound questions. Do not hide two independent choices behind “and.”
 
@@ -87,9 +88,16 @@ Classify each answer:
 - **Partial:** some of the decision is answered; keep the remainder open.
 - **Ambiguous:** more than one material interpretation remains; ask a targeted follow-up.
 - **Conflicting:** contradicts repository evidence or a prior decision; surface the conflict and ask which authority wins.
+- **Delegated judgment:** the user explicitly asks the agent to decide within stated constraints; record the delegation, selected option, criteria, and rationale.
 - **Deferred / Blocked:** record the owner or trigger and decide whether the goal excludes the item or cannot become ready.
 
 When clarification is needed, quote the shortest faithful interpretation and ask the user to confirm or correct it. Do not silently pick the interpretation that is easiest to implement.
+
+Preserve requirement strength exactly: **Must / hard gate**, **Should**, **Preference**, **Optional**, or **Explicit non-goal**. Do not turn “ideally” into a mandatory acceptance gate or weaken “must” into best effort.
+
+“You decide” is a real answer only when the delegation boundary is clear. It does not authorize a different product outcome, hidden risk acceptance, destructive action, compatibility removal, legal/compliance judgment, or expanded external-system authority. Ask one boundary question when the delegated decision is still materially unconstrained.
+
+If a reply voluntarily answers several ledger rows, save each explicit decision and its strength. Do not infer unstated links between them; continue with one unresolved decision at a time.
 
 ## Ambiguous-language lint
 
@@ -135,7 +143,8 @@ Before the approval question, summarize in plain English:
 - What is included and excluded
 - How completion will be proved
 - What must not regress
-- Which assumptions or safe defaults remain
+- Which requirements are hard gates, preferences, optional, or explicit non-goals
+- Which assumptions, safe defaults, or delegated judgments remain
 - What the agent is not authorized to do
 
 Then ask the user to approve, deepen, stress-test, or pause. Approval is valid only after the summary has one material interpretation.
@@ -145,7 +154,7 @@ Then ask the user to approve, deepen, stress-test, or pause. Approval is valid o
 The Goal Contract is ready for approval only when:
 
 - No High- or Medium-impact row is unresolved.
-- Every material answer passes the answer quality gate.
+- Every material answer passes the answer quality gate, including preserved requirement strength and bounded delegation.
 - Every applicable clarity-matrix row is resolved or marked `Not applicable` with a reason.
 - Subjective terms have a rubric, reference, example, or qualified reviewer.
 - Acceptance evidence is observable under stated conditions.

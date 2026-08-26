@@ -16,6 +16,8 @@ The project follows semantic versioning while it is field-tested. Versions below
 - A universal clarity matrix covering outcome, users and journey, scope, evidence, protected behavior, failure cases, data/compatibility, quality obligations, authority, ownership, and profile-specific inputs.
 - An answer-quality gate that classifies replies as Clear, Clear with conditions, Partial, Ambiguous, Conflicting, or Deferred / Blocked.
 - A risk-weighted assumption register and explicit prohibition on hidden High-/Medium-impact assumptions at approval.
+- Requirement-strength preservation for Must, Should, Preference, Optional, and Explicit non-goal statements.
+- Bounded delegated judgment: “you decide” records criteria, limits, selection, and rationale instead of becoming blank authority.
 - A clarity stress test with fresh-reader, counterexample, scenario, verifier, contradiction, traceability, and plain-English teach-back checks.
 - A `Stress-test the current goal` command for users who want another challenge pass without losing prior questions or answers.
 - Durable dogfood records under `docs/goals/2026-08-26-adaptive-question-clarity/`.

@@ -92,11 +92,13 @@ When the user replies:
 
 1. Treat the normal reply as the answer; never require a Steer message.
 2. Append the exact safe answer to `SHAPING.md` immediately.
-3. Classify answer quality as Clear, Clear with conditions, Partial, Ambiguous, Conflicting, or Deferred / Blocked.
-4. Record only the faithful normalized decision, contract impact, confidence, assumption class, and any superseded answer.
-5. When more than one material interpretation remains, save and ask one targeted clarification; never choose silently.
-6. Update the input ledger and contract draft.
-7. Continue only after the answer is safely persisted.
+3. Classify answer quality as Clear, Clear with conditions, Partial, Ambiguous, Conflicting, Delegated judgment, or Deferred / Blocked.
+4. Preserve whether each statement is a Must, Should, Preference, Optional item, or Explicit non-goal.
+5. Treat “you decide” as bounded delegation and record the chosen option, criteria, and rationale; clarify the boundary when outcome, risk, compatibility, or authority remains open.
+6. Record only the faithful normalized decision, contract impact, confidence, assumption class, delegation, and any superseded answer.
+7. When more than one material interpretation remains, save and ask one targeted clarification; never choose silently.
+8. Update the input ledger and contract draft.
+9. Continue only after the answer is safely persisted.
 
 Questions should be concrete and easy to answer. Do not ask users to discover file paths, commands, implementation details, or repository facts that the agent can inspect.
 

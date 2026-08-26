@@ -58,7 +58,7 @@ docs/goals/<goal-id>/SHAPING.md
 After each question, it ends the turn. Your next normal message is the answer—**no Steer message required**.
 
 > [!TIP]
-> **There is no target question count.** It may ask two questions or twenty. It stops only when the draft has one material interpretation, no hidden high-impact assumption, and verifiable completion evidence.
+> **There is no target question count.** It may ask two questions or twenty. It stops only when the draft has one material interpretation, no hidden high- or medium-impact assumption, and verifiable completion evidence. “You decide” is recorded as bounded delegation—not blank authority.
 
 Need more depth or a stronger challenge?
 

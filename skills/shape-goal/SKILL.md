@@ -63,7 +63,7 @@ Run `shape-goal` directly, with no active native `/goal` around it.
 1. Investigate the repository and resolve every discoverable fact.
 2. When one owner decision remains, save and ask that single question.
 3. End the turn immediately.
-4. On the user's next message, first save the answer, normalize the decision, update the contract impact, and then continue.
+4. On the user's next message, first save the answer, quality-check its interpretation and requirement strength, update the contract impact, and then continue.
 5. Repeat until the user approves the contract or pauses shaping.
 6. Return the exact copy-ready `/goal` command for `goal-engine`.
 
@@ -164,10 +164,12 @@ When the answer arrives:
 
 1. Save it verbatim when safe and useful.
 2. Redact secrets, credentials, private personal data, confidential business/customer information, third-party restricted material, raw production data, and exploit-enabling details; store a safe decision summary plus an approved secure reference instead.
-3. Run the answer quality gate: Clear, Clear with conditions, Partial, Ambiguous, Conflicting, or Deferred / Blocked.
-4. Normalize only the meaning the user actually supplied; ask a targeted follow-up when multiple material interpretations remain.
-5. Record the contract sections affected, confidence, assumptions, and any superseded decision.
-6. Continue resolving the ledger.
+3. Run the answer quality gate: Clear, Clear with conditions, Partial, Ambiguous, Conflicting, Delegated judgment, or Deferred / Blocked.
+4. Preserve requirement strength—Must, Should, Preference, Optional, or Explicit non-goal—and normalize only the meaning the user actually supplied.
+5. Treat “you decide” as bounded delegation, not permission to change the outcome, risk, compatibility, or authority; ask one boundary question when needed.
+6. Ask a targeted follow-up when multiple material interpretations remain.
+7. Record the contract sections affected, confidence, assumptions, delegation, and any superseded decision.
+8. Continue resolving the ledger.
 
 Do not ask users to discover repository facts, commands, paths, or implementation details that tools can find.
 

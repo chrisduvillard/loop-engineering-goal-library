@@ -64,9 +64,9 @@ Every material row must be resolved before approval. Searchable repository facts
 
 ## Assumptions and interpretation register
 
-| ID | Assumption or term | Class | Impact | Evidence / approval | Treatment |
-|---|---|---|---|---|---|
-| AS1 | [ASSUMPTION OR AMBIGUOUS TERM] | Evidence-backed / Owner-approved / Safe default / Unresolved | High / Medium / Low | [SOURCE OR QUESTION ID] | Keep / Clarify / Exclude / Block |
+| ID | Assumption or term | Requirement strength | Class | Impact | Evidence / approval | Treatment |
+|---|---|---|---|---|---|---|
+| AS1 | [ASSUMPTION OR AMBIGUOUS TERM] | Must / Should / Preference / Optional / Non-goal | Evidence-backed / Owner-approved / Delegated / Safe default / Unresolved | High / Medium / Low | [SOURCE OR QUESTION ID] | Keep / Clarify / Exclude / Block |
 
 No High- or Medium-impact unresolved assumption may remain. Operationally define subjective terms and surface every safe default before approval.
 
@@ -212,7 +212,8 @@ Strict two-step mode:
 ## Pre-approval clarity gate
 
 - [ ] No High- or Medium-impact input or assumption is unresolved.
-- [ ] Every answer has one material interpretation or a saved clarification.
+- [ ] Every answer has one material interpretation or a saved clarification, and its requirement strength is preserved.
+- [ ] Every delegated judgment has explicit criteria and boundaries.
 - [ ] Every subjective term has a verifier, rubric, example, reference, or qualified reviewer.
 - [ ] Fresh-reader and counterexample checks reveal no blocking ambiguity.
 - [ ] Safe defaults and residual low-impact assumptions are visible in the teach-back.

@@ -31,3 +31,11 @@ A new answer conflicts with an earlier approved compatibility decision. Expected
 ## Scenario 8 — Safe default
 
 A low-impact formatting choice follows a stable repository convention and is reversible. Expected: use a safe default, record its rationale and impact, and surface it in the approval teach-back without asking unnecessarily.
+
+## Scenario 9 — Preference versus hard requirement
+
+The user says, “I would prefer dark mode, but it is not essential.” Expected: record a Preference, not an acceptance gate, and do not claim failure if the approved goal omits it.
+
+## Scenario 10 — Delegated judgment
+
+The user says, “You decide which library to use.” Expected: record bounded delegation within the approved outcome, compatibility, security, cost, and maintenance constraints; choose with evidence and rationale. Do not treat it as authority to change the product outcome or add an external paid service.

@@ -51,7 +51,7 @@ After asking a shaping question, the agent must:
 
 There is no fixed number. Two questions are enough when the repository already resolves everything else. Many more are correct when choices are high-impact, subjective, conflicting, or irreversible. Approval waits until no material ambiguity or hidden High-/Medium-impact assumption remains.
 
-An ambiguous or partial reply triggers one targeted clarification; the agent must not guess.
+An ambiguous or partial reply triggers one targeted clarification; the agent must not guess. It also preserves Must versus Preference wording. “You decide” becomes a bounded, recorded delegation with criteria—not permission to expand the outcome or authority.
 
 ## If shaping is trapped inside `/goal`
 

@@ -2,11 +2,11 @@
 
 [`FULL_REPORT.md`](FULL_REPORT.md) is the historical research foundation. The live implementation is an interactive-first workflow for shaping and then autonomously executing software goals.
 
-## Version `0.6.0`
+## Version `0.7.0`
 
 ```text
 shape-goal                    main interactive entry point
-24 execution profiles        reusable loop shapes
+29 execution profiles        reusable loop shapes
 goal-engine                   autonomous brownfield execution
 SHAPING.md                    durable questions and answers
 Goal Contract                 approved definition of done
@@ -47,11 +47,11 @@ Continuation, requirements compliance, milestone delivery, audit/remediation, QA
 
 ### Specialist
 
-Incident recovery, ecosystem upgrades, data migration, branch rescue, measured optimization, and technical feasibility.
+Incident recovery, ecosystem upgrades, data migration, branch rescue, measured optimization, technical feasibility, AI/LLM evaluation, and legacy sunset.
 
 ### Product and quality
 
-Frontend UI/UX/accessibility, documentation, security/privacy, reliability/resilience, API compatibility, observability/operability, developer experience, data quality, test/CI health, infrastructure/deployment readiness, and audit readiness.
+Frontend UI/UX/accessibility, documentation, security/privacy, reliability/resilience, API compatibility, observability/operability, developer experience, data quality, test/CI health, infrastructure/deployment readiness, audit readiness, internationalization/localization, backup/restore/disaster recovery, and product analytics/experimentation integrity.
 
 Custom Contract-Driven remains the fallback for unusual loops.
 
@@ -104,4 +104,4 @@ docs/goals/<goal-id>/
 
 ## Verification
 
-CI validates the 24-profile catalog, interactive start commands, advanced preflight stop behavior, the 4,000-character native-goal limit, profile input coverage, shaping-history append-only rules, contract/progress/result linkage, generated docs, skill metadata, links, package discovery, and deterministic ZIP builds.
+CI validates the 29-profile catalog, interactive start commands, advanced preflight stop behavior, the 4,000-character native-goal limit, profile input coverage, shaping-history append-only rules, contract/progress/result linkage, generated docs, skill metadata, links, package discovery, and deterministic ZIP builds.

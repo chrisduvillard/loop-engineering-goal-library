@@ -5,7 +5,7 @@
 
 Start with `shape-goal` outside an active `/goal`. It asks one question at a time and returns the exact execution `/goal` after approval.
 
-Eleven focused loops for frontend, documentation, security, reliability, APIs, operations, developer experience, data quality, test/CI health, infrastructure/deployment, and audit readiness.
+Fourteen focused loops for frontend, documentation, security, reliability, APIs, operations, developer experience, data quality, test/CI health, infrastructure/deployment, audit readiness, internationalization, disaster recovery, and product analytics.
 
 ---
 
@@ -182,3 +182,51 @@ Eleven focused loops for frontend, documentation, security, reliability, APIs, o
 **Why it works:** It separates proving deployment readiness from exercising production authority, and it evaluates infrastructure, application artifacts, operations, and rollback as one coherent delivery surface.
 
 **Advanced autonomous preflight and self-contained fallback:** [Open `goals/24-infrastructure-deployment-readiness.md`](goals/24-infrastructure-deployment-readiness.md).
+
+---
+
+## [Internationalization / Localization Readiness](goals/27-internationalization-localization-readiness.md)
+
+**In simple terms:** Find hard-coded locale assumptions, build a locale matrix, test translated and right-to-left experiences, and prove every supported locale works.
+
+**Use when:** A product must work correctly across approved languages, regions, scripts, reading directions, time zones, and local formats.
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Internationalization / Localization Readiness profile` | `$shape-goal Use the Internationalization / Localization Readiness profile` |
+
+**Why it works:** Localization quality depends on more than translated strings: the loop verifies data formats, directionality, layout expansion, fallbacks, routing, accessibility, and human language review as one supported-locale contract.
+
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/27-internationalization-localization-readiness.md`](goals/27-internationalization-localization-readiness.md).
+
+---
+
+## [Backup / Restore / Disaster Recovery](goals/28-backup-restore-disaster-recovery.md)
+
+**In simple terms:** Define what must survive, create trustworthy backups, restore them in a clean environment, and prove recovery meets the agreed targets.
+
+**Use when:** Critical application state must be recoverable within approved recovery objectives, with backups and restore procedures proven by realistic drills.
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Backup / Restore / Disaster Recovery profile` | `$shape-goal Use the Backup / Restore / Disaster Recovery profile` |
+
+**Why it works:** A backup is only useful when it can be restored. This loop makes clean-room recovery, integrity checks, measured RPO/RTO, and operational drills the completion evidence instead of trusting job-success messages.
+
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/28-backup-restore-disaster-recovery.md`](goals/28-backup-restore-disaster-recovery.md).
+
+---
+
+## [Product Analytics / Experimentation Integrity](goals/29-product-analytics-experimentation-integrity.md)
+
+**In simple terms:** Define the events and metrics, verify collection end to end, test experiment assignment, and prove the numbers mean what the team thinks they mean.
+
+**Use when:** Product events, funnels, metrics, dashboards, or controlled experiments must become trustworthy enough to support decisions without misleading attribution.
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Product Analytics / Experimentation Integrity profile` | `$shape-goal Use the Product Analytics / Experimentation Integrity profile` |
+
+**Why it works:** Analytics can be technically present yet decision-dangerous. This loop ties every metric to a decision, verifies the full event and experiment path, and blocks conclusions when assignment, telemetry, identity, or interpretation evidence is not trustworthy.
+
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/29-product-analytics-experimentation-integrity.md`](goals/29-product-analytics-experimentation-integrity.md).

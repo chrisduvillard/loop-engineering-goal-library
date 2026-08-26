@@ -220,6 +220,55 @@ Choose one primary profile when it matches the dominant execution shape. Use a d
 - Exercise smoke checks, health signals, failure handling, observability, and rollback together.
 - Finish at evidence-backed readiness; never provision or mutate production without explicit contract authority.
 
+## 25. AI / LLM Evaluation & Improvement
+
+**Use for:** An AI, agent, retrieval, ranking, or LLM-powered feature must improve under representative evaluations while controlling quality, safety, latency, and cost.
+
+- Freeze a versioned evaluation set, grader/rubric, sampling protocol, and operational floors before changing the system.
+- Capture a baseline and failure taxonomy, then test one prompt, model, retrieval, tool, or orchestration hypothesis at a time.
+- Repeat nondeterministic runs and compare capability, grounding, safety, latency, cost, and reliability together.
+- Keep only reproducible improvements, add discovered failures to regression evals, and version the winning configuration.
+
+## 26. Deprecation / Legacy Sunset
+
+**Use for:** A legacy API, feature, format, service, flag, dependency, or code path must be retired without abandoning active consumers or removing rollback too early.
+
+- Inventory consumers and real usage, including undocumented integrations and long-tail versions.
+- Make the replacement production-ready, ship migration tooling and warnings, and measure adoption and error rates.
+- Migrate dependency-safe slices and preserve compatibility or rollback through the approved window.
+- Remove the legacy surface only after the contract's consumer, telemetry, support, and authority gates pass; then clean up and verify.
+
+## 27. Internationalization / Localization Readiness
+
+**Use for:** A product must work correctly across approved languages, regions, scripts, reading directions, time zones, and local formats.
+
+- Build a supported locale matrix and inventory strings, content, routing, formatting, directionality, fonts, and layout assumptions.
+- Centralize messages and locale-aware behavior, define fallbacks, and prevent untranslated or ambiguous states.
+- Run pseudo-localization, expansion, RTL, locale-format, browser, visual, and accessibility checks.
+- Require qualified human review for linguistic or legal meaning and finish only when every supported locale's evidence passes.
+
+## 28. Backup / Restore / Disaster Recovery
+
+**Use for:** Critical application state must be recoverable within approved recovery objectives, with backups and restore procedures proven by realistic drills.
+
+- Map recovery tiers, critical state, dependencies, owners, RPO/RTO, retention, encryption, and key-recovery assumptions.
+- Verify backup freshness and integrity, then restore approved artifacts into an isolated clean environment.
+- Reconcile recovered data and application behavior, exercise representative disaster scenarios, and measure recovery objectives.
+- Improve automation, monitoring, and runbooks; never claim readiness from backup-job success alone or run destructive production drills without authority.
+
+## 29. Product Analytics / Experimentation Integrity
+
+**Use for:** Product events, funnels, metrics, dashboards, or controlled experiments must become trustworthy enough to support decisions without misleading attribution.
+
+- Map each product decision to versioned metric definitions, event contracts, identity rules, consent, and source-to-report lineage.
+- Trace representative events end to end and reconcile loss, duplication, lateness, ordering, joins, and dashboard calculations.
+- Validate experiment randomization, assignment persistence, exposure, sample ratios, guardrails, and analysis windows.
+- Finish only when the measurement path is reproducible and qualified owners can interpret results without unsupported causal claims.
+
+## Boundary checks for profiles 25–29
+
+Choose these profiles only when their distinctive verifier controls the loop: repeated AI evals, staged legacy retirement, per-locale evidence, clean-room restore drills, or trustworthy product/experiment measurement. When the concern is secondary, keep the existing primary profile and add the appropriate assurance overlay.
+
 ## Custom Contract-Driven
 
 **Use for:** A measurable engineering outcome whose dominant loop does not fit a preset.

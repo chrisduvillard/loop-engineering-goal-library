@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[approved Goal Contract path or issue]"
 metadata:
   author: chrisduvillard
-  version: "0.6.0"
+  version: "0.7.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 

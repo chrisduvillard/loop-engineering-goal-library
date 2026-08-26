@@ -28,5 +28,10 @@ Interactive-first profiles. Start with `shape-goal`; each linked file also conta
 | 22 | [Compliance / Audit Readiness](22-compliance-audit-readiness.md) | Product and quality goals | Map controls to implementation and evidence, close technical gaps, and leave an auditable package for qualified human review. |
 | 23 | [Test Suite / CI Health](23-test-suite-ci-health.md) | Product and quality goals | Find flaky, misleading, slow, skipped, or environment-dependent checks and turn the test pipeline into reliable evidence. |
 | 24 | [Infrastructure / Deployment Readiness](24-infrastructure-deployment-readiness.md) | Product and quality goals | Verify that the system can be provisioned and deployed consistently, diagnosed after rollout, and safely rolled back before a human authorizes production change. |
+| 25 | [AI / LLM Evaluation & Improvement](25-ai-llm-evaluation-improvement.md) | Specialist goals | Build a trustworthy eval set, classify failures, test one change at a time, and keep only improvements that survive repeated runs. |
+| 26 | [Deprecation / Legacy Sunset](26-deprecation-legacy-sunset.md) | Specialist goals | Find who still depends on the old path, provide a safe migration, prove adoption, then remove it in controlled stages. |
+| 27 | [Internationalization / Localization Readiness](27-internationalization-localization-readiness.md) | Product and quality goals | Find hard-coded locale assumptions, build a locale matrix, test translated and right-to-left experiences, and prove every supported locale works. |
+| 28 | [Backup / Restore / Disaster Recovery](28-backup-restore-disaster-recovery.md) | Product and quality goals | Define what must survive, create trustworthy backups, restore them in a clean environment, and prove recovery meets the agreed targets. |
+| 29 | [Product Analytics / Experimentation Integrity](29-product-analytics-experimentation-integrity.md) | Product and quality goals | Define the events and metrics, verify collection end to end, test experiment assignment, and prove the numbers mean what the team thinks they mean. |
 
 The machine-readable source is [`catalog.json`](catalog.json).

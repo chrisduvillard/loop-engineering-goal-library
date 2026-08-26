@@ -5,7 +5,7 @@
 
 Start with `shape-goal` outside an active `/goal`. It asks one question at a time and returns the exact execution `/goal` after approval.
 
-Six distinct loops for incidents, upgrades, migrations, branch recovery, optimization, and feasibility.
+Eight distinct loops for incidents, upgrades, migrations, branch recovery, optimization, feasibility, AI/LLM evaluation, and legacy retirement.
 
 ---
 
@@ -102,3 +102,35 @@ Six distinct loops for incidents, upgrades, migrations, branch recovery, optimiz
 **Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.
 
 **Advanced autonomous preflight and self-contained fallback:** [Open `goals/13-technical-spike-feasibility.md`](goals/13-technical-spike-feasibility.md).
+
+---
+
+## [AI / LLM Evaluation & Improvement](goals/25-ai-llm-evaluation-improvement.md)
+
+**In simple terms:** Build a trustworthy eval set, classify failures, test one change at a time, and keep only improvements that survive repeated runs.
+
+**Use when:** An AI, agent, retrieval, ranking, or LLM-powered feature must improve under representative evaluations while controlling quality, safety, latency, and cost.
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the AI / LLM Evaluation & Improvement profile` | `$shape-goal Use the AI / LLM Evaluation & Improvement profile` |
+
+**Why it works:** It treats nondeterministic AI behavior as an evaluation problem rather than a demo, so prompt, model, retrieval, and workflow changes are kept only when representative repeated evidence improves without breaking safety or operating constraints.
+
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/25-ai-llm-evaluation-improvement.md`](goals/25-ai-llm-evaluation-improvement.md).
+
+---
+
+## [Deprecation / Legacy Sunset](goals/26-deprecation-legacy-sunset.md)
+
+**In simple terms:** Find who still depends on the old path, provide a safe migration, prove adoption, then remove it in controlled stages.
+
+**Use when:** A legacy API, feature, format, service, flag, dependency, or code path must be retired without abandoning active consumers or removing rollback too early.
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Deprecation / Legacy Sunset profile` | `$shape-goal Use the Deprecation / Legacy Sunset profile` |
+
+**Why it works:** Retiring a legacy path is not a normal refactor: success depends on consumer discovery, migration adoption, staged warnings, compatibility windows, and evidence-backed removal rather than merely deleting old code.
+
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/26-deprecation-legacy-sunset.md`](goals/26-deprecation-legacy-sunset.md).

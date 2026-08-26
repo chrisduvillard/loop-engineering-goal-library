@@ -1,30 +1,32 @@
 # Goal Contract: [NAME]
 
-**Status:** Proposed / Ready / Active / Paused / Blocked / Closed  
-**Outcome:** — / Achieved / Cancelled / Superseded / Approval required / Budget exhausted / Stalled  
-**Goal ID:** [ID]  
-**Revision:** [INTEGER]  
-**Priority:** P0 / P1 / P2 / P3  
-**Owner:** [OWNER]  
-**Created / updated:** [DATES]  
-**Library:** chrisduvillard/loop-engineering-goal-library @ [VERSION OR COMMIT]  
-**Launcher:** [GOAL FILE / DIRECT SHAPING / AUTHORITATIVE ISSUE]  
-**Input ledger:** [THIS DOCUMENT SECTION / PATH]  
-**Shaping history:** [EXISTING DECISION LOG OR `docs/goals/[GOAL ID]/SHAPING.md`]  
-**Completed shaping rounds:** [COUNT / IDS]  
-**Last shaping round:** [ROUND ID]  
-**Approval shaping round:** [ROUND ID OR NONE]  
+**Status:** Proposed / Ready / Active / Paused / Blocked / Closed
+**Outcome:** — / Achieved / Cancelled / Superseded / Approval required / Budget exhausted / Stalled
+**Goal ID:** [ID]
+**Revision:** [INTEGER]
+**Priority:** P0 / P1 / P2 / P3
+**Owner:** [OWNER]
+**Created / updated:** [DATES]
+**Library:** chrisduvillard/loop-engineering-goal-library @ [VERSION OR COMMIT]
+**Launcher:** [GOAL FILE / DIRECT SHAPING / AUTHORITATIVE ISSUE]
+**Input ledger:** [THIS DOCUMENT SECTION / PATH]
+**Shaping history:** [EXISTING DECISION LOG OR `docs/goals/[GOAL ID]/SHAPING.md`]
+**Completed shaping rounds:** [COUNT / IDS]
+**Last shaping round:** [ROUND ID]
+**Approval shaping round:** [ROUND ID OR NONE]
+**Approval fingerprint:** [GOAL ID + REVISION + APPROVAL ROUND + APPROVED SOURCE SHA/HASH]
+**Execution lease:** Not acquired / [SESSION OR WORKTREE + OWNER + ACQUIRED + EXPIRY OR RENEWAL]
 **Shaping depth:** Adaptive / Thorough / Exhaustive
 **Clarity gate:** Not run / Needs clarification / Pass
-**Branch / worktree / SHA:** [OPTIONAL]  
-**Primary profile:** [ONE OF THE CATALOG PROFILES OR CUSTOM CONTRACT-DRIVEN]  
-**Assurance overlays:** [LIST OR NONE]  
-**Project harness:** [EXISTING SOURCES OR `docs/agent/PROJECT_HARNESS.md`]  
-**Parent goal:** [ID OR NONE]  
-**Depends on:** [IDS OR NONE]  
-**Supersedes:** [ID OR NONE]  
-**Portfolio:** [EXISTING TRACKER / `docs/goals/PORTFOLIO.md` / NOT NEEDED]  
-**Progress state:** [EXISTING ARTIFACT OR `GOAL_PROGRESS.md`]  
+**Branch / worktree / SHA:** [OPTIONAL]
+**Primary profile:** [ONE OF THE CATALOG PROFILES OR CUSTOM CONTRACT-DRIVEN]
+**Assurance overlays:** [LIST OR NONE]
+**Project harness:** [EXISTING SOURCES OR `docs/agent/PROJECT_HARNESS.md`]
+**Parent goal:** [ID OR NONE]
+**Depends on:** [IDS OR NONE]
+**Supersedes:** [ID OR NONE]
+**Portfolio:** [EXISTING TRACKER / `docs/goals/PORTFOLIO.md` / NOT NEEDED]
+**Progress state:** [EXISTING ARTIFACT OR `GOAL_PROGRESS.md`]
 **Archive path:** [EXISTING CONVENTION OR `docs/goals/[GOAL ID]/`]
 
 ## Target

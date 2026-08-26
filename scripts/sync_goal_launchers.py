@@ -27,9 +27,7 @@ RECOMMENDED_REPLACEMENT = (
     "Then hand off"
 )
 
-FALLBACK_ANCHOR = (
-    "record the decision, and continue until a concise Goal Contract is approved."
-)
+FALLBACK_ANCHOR = "record the decision, and continue until a concise Goal Contract is approved."
 FALLBACK_REPLACEMENT = (
     "create or resume an append-only `SHAPING.md` under the resolved goal archive, save the exact "
     "question, safe user answer, evidence, recommendation, normalized decision, and contract impact "
@@ -65,11 +63,15 @@ def transform(text: str) -> str:
     )
     updated = updated.replace(
         "never archive secrets, private data, production dumps",
-        "never archive secrets, private personal or confidential business data, production dumps",
+        "never archive secrets or private data, including personal, customer, or confidential business information, production dumps",
     )
     updated = updated.replace(
         "exclude secrets, private data, raw production dumps",
-        "exclude secrets, private personal or confidential business data, raw production dumps",
+        "exclude secrets or private data, including personal, customer, or confidential business information, raw production dumps",
+    )
+    updated = updated.replace(
+        "private personal or confidential business data",
+        "private data, including personal, customer, or confidential business information",
     )
     return updated
 

@@ -1,58 +1,62 @@
 # Roadmap
 
-The repository should add abstractions only when they remove more field friction than they create.
+Add abstractions only when they remove more field friction than they create.
 
-## Implemented through `0.5.0`
+## Implemented through `0.6.0`
 
-- Twenty-two zero-friction profile launchers with no required placeholder replacement.
-- Two-phase bootstrap: exhaustive goal shaping and approval followed by execution inside the same native `/goal`.
-- Profile-specific input definitions and a search-before-asking decision protocol.
-- Dedicated frontend, documentation, security, reliability, API, observability, developer-experience, data-quality, test/CI-health, infrastructure/deployment-readiness, and audit-readiness profiles.
-- Machine-readable goal catalog and generated README/catalog collections.
-- OpenAI skill host metadata.
-- Immutable GitHub Action pins, native-goal length checks, append-only shaping-history diff validation, and stronger launcher validation.
-- Repository-visibility and information-classification rules for shaping answers.
-- Current CLI prerequisites and symlink/copy troubleshooting.
-- A real repository closeout packet documenting the deep review.
+- `shape-goal` as the main interactive entry point.
+- A strict question barrier: save one question, ask it, and return control immediately.
+- Separate interactive shaping and autonomous `/goal` execution.
+- Twenty-four profiles with host-specific `shape-goal` start commands.
+- Advanced autonomous preflights that stop as Approval required instead of interviewing inside `/goal`.
+- Append-only shaping history, repeatable deeper rounds, explicit approval records, and information-classification rules.
+- `goal-engine` brownfield execution with native verification, regression protection, drift detection, reusable closeout, and authority boundaries.
+- Multi-goal portfolio, Project Harness, assurance overlays, generated catalogs, validation, and deterministic packaging.
 
 ## Before `1.0.0`
 
-- Run the same zero-friction launcher through a complete live Codex `/goal` session.
-- Run a comparable launcher through Claude Code `/goal`, including at least one owner question during shaping.
-- Verify that neither evaluator treats Goal Contract creation as completion.
+- Run the interactive-first flow through a complete live Codex session:
+  1. invoke `$shape-goal`
+  2. answer at least two questions without Steer
+  3. approve the contract
+  4. start the generated `/goal`
+  5. complete and archive the result
+- Run the comparable flow through Claude Code.
+- Verify active-goal rescue from a deliberately misused autonomous preflight.
 - Compare skill retention, compaction, evidence visibility, pause/resume, and handoff quality.
-- Field-test Frontend UI / UX / Accessibility and Documentation Synchronization profiles on real mature projects.
+- Field-test Frontend UI / UX / Accessibility and Documentation Synchronization on mature projects.
 - Test a priority change and supersession in a multi-goal portfolio.
 - Test two isolated parallel goals in separate worktrees.
-- Test global install, update, reinstall, ZIP upload, and OpenAI host metadata on macOS.
-- Choose an explicit repository and skill license. **Recommended:** MIT for maximum reuse with attribution.
+- Test global install, update, reinstall, ZIP upload, and host metadata on macOS.
+- Choose an explicit repository and skill license. **Recommended:** MIT.
 - Create a tagged release with permanent packaged skill ZIPs and checksums.
 
 ## Evidence-gated candidates
 
 ### Deterministic `goalctl` helper
 
-A small CLI could initialize contracts, validate input ledgers, update portfolios, switch active pointers, and archive closeouts. Add only after field use identifies repetitive deterministic steps that are safer to automate than leave to agents.
+A small CLI could initialize contracts, validate input ledgers, update portfolios, switch active pointers, and archive closeouts. Add it only when field use identifies repetitive deterministic steps that are safer to automate than leave to agents.
 
-### Goal history search and portfolio summarization
+### Goal history search and portfolio summary
 
 Add when several real archived goals make manual navigation inconvenient.
 
 ### Project-specific profile packs
 
-A repository or organization may need its own profiles or overlays. Prefer project skills that reference this library rather than expanding the global catalog from one local use case.
+Prefer project or organization skills that reference this library rather than expanding the global catalog from one local use case.
 
 ### New global profile
 
 Add only when the same Custom Contract-Driven pattern recurs across multiple real projects and has a distinct iteration unit, verifier, failure mode, keep-or-revert decision, and stopping logic.
 
-### Claude Code plugin and OpenAI plugin packaging
+### Plugin packaging
 
-Consider namespaced plugin releases after field testing, versioning, and licensing are settled.
+Consider namespaced Claude Code and OpenAI plugin releases after field testing, versioning, and licensing are settled.
 
 ## Not planned
 
 - A custom replacement for native `/goal`.
+- Interactive interviews inside an autonomous `/goal` loop.
 - A monolithic project goal that absorbs unrelated work.
 - Hidden auto-approval of product direction, destructive actions, legal conclusions, or risk acceptance.
 - A proprietary state database when repository artifacts or existing trackers are sufficient.

@@ -1,6 +1,6 @@
 # Goal Catalog
 
-Canonical zero-friction launchers. The first command in every file runs unchanged.
+Interactive-first profiles. Start with `shape-goal`; each linked file also contains advanced autonomous preflight commands.
 
 | ID | Goal | Category | In simple terms |
 |---:|---|---|---|

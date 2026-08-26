@@ -423,6 +423,10 @@ def validate_state_and_docs() -> None:
         "examples/complete-brownfield-cycle/PROGRESS.md",
         "examples/complete-brownfield-cycle/RESULT.md",
         "docs/goals/INDEX.md",
+        "docs/goals/2026-08-26-interactive-shaping-first/SHAPING.md",
+        "docs/goals/2026-08-26-interactive-shaping-first/CONTRACT.md",
+        "docs/goals/2026-08-26-interactive-shaping-first/PROGRESS.md",
+        "docs/goals/2026-08-26-interactive-shaping-first/UAT.md",
     )
     for path in required_paths:
         require(path)
@@ -453,7 +457,7 @@ def validate_state_and_docs() -> None:
             "## Quick start",
             "## Why shaping and execution are separate",
             "no Steer message required",
-            "**Pursuing goal**",
+            "Pursuing goal",
             "## Advanced modes",
             "<!-- goal-catalog:start -->",
             "<!-- goal-catalog:end -->",
@@ -533,6 +537,36 @@ def validate_state_and_docs() -> None:
             "stop as **Approval required**",
         ),
     )
+    require_fragments(
+        require("docs/goals/2026-08-26-interactive-shaping-first/SHAPING.md"),
+        (
+            "Main entry point",
+            "Question behavior",
+            "no additional owner question was necessary",
+            "Approval round:** R1",
+        ),
+    )
+    require_fragments(
+        require("docs/goals/2026-08-26-interactive-shaping-first/CONTRACT.md"),
+        (
+            "The library uses `shape-goal` as the clear interactive entry point",
+            "All 24 profile files expose interactive `shape-goal` commands first",
+            "only `main` remains",
+        ),
+    )
+    require_fragments(
+        require("docs/goals/2026-08-26-interactive-shaping-first/UAT.md"),
+        (
+            "Scenario A — Normal interactive shaping",
+            "Steer is not required",
+            "Scenario C — Owner decision discovered during autonomous execution",
+            "Honest boundary",
+        ),
+    )
+
+    readme = require("README.md")
+    if readme.exists() and len(readme.read_text(encoding="utf-8").splitlines()) > 230:
+        fail("README.md is too long; keep the generated landing page at 230 lines or fewer")
 
 
 def validate_generated_docs() -> None:

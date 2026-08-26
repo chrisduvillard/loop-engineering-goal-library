@@ -94,7 +94,57 @@ Let `shape-goal` choose, or name the type of work:
 
 ## Goal profiles
 
-Catalog generated from `goals/catalog.json`.
+You usually do not need to choose one: `shape-goal` can select the best profile from repository evidence. Choose directly only when the type of work is already clear.
+
+<details>
+<summary><strong>Core goals (7)</strong></summary>
+
+| Profile | Best for |
+|---|---|
+| [**Brownfield Continue / Finish**](goals/01-brownfield-continue-finish.md) | Understand the real current state and keep completing the most important unblocked work. |
+| [**PRD / Spec Compliance**](goals/02-prd-spec-compliance.md) | Compare the real product with its requirements and close every proven gap. |
+| [**Next Milestone**](goals/03-next-milestone.md) | Deliver one useful next milestone without wandering into the whole backlog. |
+| [**Deep Audit + Remediation**](goals/04-deep-audit-remediation.md) | Find important problems, prove they are real, fix root causes, and prevent recurrence. |
+| [**QA / Regression / UAT**](goals/05-qa-regression-uat.md) | Exercise the real product until required workflows and regression gates pass. |
+| [**Safe Refactor / Modernization**](goals/06-safe-refactor-modernization.md) | Improve internals while proving users and integrations still see the intended behavior. |
+| [**Release Readiness**](goals/07-release-readiness.md) | Remove verified release blockers and stop at release-ready. |
+
+</details>
+
+<details>
+<summary><strong>Specialist goals (6)</strong></summary>
+
+| Profile | Best for |
+|---|---|
+| [**Incident Recovery / Stabilization**](goals/08-incident-recovery.md) | Contain damage, restore health, prove the cause, and add prevention. |
+| [**Dependency / Framework Upgrade**](goals/09-dependency-framework-upgrade.md) | Upgrade through safe version steps while checking the full compatibility surface. |
+| [**Data Migration / Integrity**](goals/10-data-migration-integrity.md) | Migrate data through reversible phases and prove no unexplained loss, duplication, or corruption. |
+| [**Branch Rescue / Integration**](goals/11-branch-rescue-integration.md) | Recover useful behavioral slices without overwriting newer target work. |
+| [**Measured Optimization / Benchmark**](goals/12-measured-optimization-benchmark.md) | Freeze a baseline, test one challenger at a time, and keep only reproducible wins. |
+| [**Technical Spike / Feasibility**](goals/13-technical-spike-feasibility.md) | Run an isolated experiment and return a Go, Conditional Go, or No-Go decision. |
+
+</details>
+
+<details>
+<summary><strong>Product and quality goals (11)</strong></summary>
+
+| Profile | Best for |
+|---|---|
+| [**Frontend UI / UX / Accessibility**](goals/14-frontend-ui-ux-accessibility.md) | Improve the real interface through browser-based user journeys, visual evidence, and accessibility checks. |
+| [**Documentation Synchronization / Knowledge Transfer**](goals/15-documentation-synchronization.md) | Find documentation drift, verify examples and commands, and make the maintained knowledge trustworthy. |
+| [**Security / Privacy Hardening**](goals/16-security-privacy-hardening.md) | Threat-model the scoped system, prove actionable findings, remediate safely, and add lasting protection. |
+| [**Reliability / Resilience Hardening**](goals/17-reliability-resilience-hardening.md) | Model failure modes, inject safe faults, improve recovery, and prove reliability objectives. |
+| [**API / Integration Contract Compatibility**](goals/18-api-integration-contract-compatibility.md) | Map contracts and consumers, prove compatibility, and evolve interfaces without hidden breakage. |
+| [**Observability / Operability**](goals/19-observability-operability.md) | Make system health visible and actionable, then prove it with drills. |
+| [**Developer Experience / Tooling**](goals/20-developer-experience-tooling.md) | Make the common developer path work from clean state with clear commands and actionable failures. |
+| [**Data Quality / Pipeline Assurance**](goals/21-data-quality-pipeline-assurance.md) | Define data invariants, test the real pipeline, correct root causes, and make quality continuously observable. |
+| [**Compliance / Audit Readiness**](goals/22-compliance-audit-readiness.md) | Map controls to implementation and evidence, close technical gaps, and leave an auditable package for qualified human review. |
+| [**Test Suite / CI Health**](goals/23-test-suite-ci-health.md) | Find flaky, misleading, slow, skipped, or environment-dependent checks and turn the test pipeline into reliable evidence. |
+| [**Infrastructure / Deployment Readiness**](goals/24-infrastructure-deployment-readiness.md) | Verify that the system can be provisioned and deployed consistently, diagnosed after rollout, and safely rolled back before a human authorizes production change. |
+
+</details>
+
+When no preset fits, use the [**Custom Contract-Driven fallback**](skills/shape-goal/templates/custom-contract-driven-goal.md).
 
 <!-- goal-catalog:end -->
 

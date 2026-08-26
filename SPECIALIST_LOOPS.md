@@ -1,7 +1,9 @@
-# Specialist `/goal` Library
+# Specialist Goal Profiles
 
 > [!NOTE]
 > Generated from canonical files under [`goals/`](goals/) and [`goals/catalog.json`](goals/catalog.json). Edit those sources, then run `python3 scripts/sync_goal_docs.py --write`.
+
+Start with `shape-goal` outside an active `/goal`. It asks one question at a time and returns the exact execution `/goal` after approval.
 
 Six distinct loops for incidents, upgrades, migrations, branch recovery, optimization, and feasibility.
 
@@ -13,13 +15,13 @@ Six distinct loops for incidents, upgrades, migrations, branch recovery, optimiz
 
 **Use when:** A severe regression or production-like incident must be contained, diagnosed, and recovered without compounding damage.
 
-```text
-/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Incident Recovery / Stabilization objective. During shaping, load shape-goal's required-input specification for Incident Recovery / Stabilization; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Create or resume an append-only `SHAPING.md` under the resolved goal archive; after every answer, save the exact question, safe user answer, evidence, recommendation, normalized decision, and contract impact, and append corrections or supersessions instead of rewriting history. At each shaping-round close, let the user approve, request another deeper non-duplicate round, or pause; deeper rounds must read all prior rounds first. Then hand off within this same goal to goal-engine to separate containment, restoration, root-cause proof, and prevention while preserving incident evidence; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
-```
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Incident Recovery / Stabilization profile` | `$shape-goal Use the Incident Recovery / Stabilization profile` |
 
 **Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.
 
-**Full profile and self-contained fallback:** [Open `goals/08-incident-recovery.md`](goals/08-incident-recovery.md).
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/08-incident-recovery.md`](goals/08-incident-recovery.md).
 
 ---
 
@@ -29,13 +31,13 @@ Six distinct loops for incidents, upgrades, migrations, branch recovery, optimiz
 
 **Use when:** A dependency, framework, language runtime, or toolchain must move to a target version without breaking supported behavior.
 
-```text
-/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Dependency / Framework Upgrade objective. During shaping, load shape-goal's required-input specification for Dependency / Framework Upgrade; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Create or resume an append-only `SHAPING.md` under the resolved goal archive; after every answer, save the exact question, safe user answer, evidence, recommendation, normalized decision, and contract impact, and append corrections or supersessions instead of rewriting history. At each shaping-round close, let the user approve, request another deeper non-duplicate round, or pause; deeper rounds must read all prior rounds first. Then hand off within this same goal to goal-engine to map the dependency graph, follow official version-path guidance, stage changes, inspect transitive effects, and prove compatibility; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
-```
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Dependency / Framework Upgrade profile` | `$shape-goal Use the Dependency / Framework Upgrade profile` |
 
 **Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.
 
-**Full profile and self-contained fallback:** [Open `goals/09-dependency-framework-upgrade.md`](goals/09-dependency-framework-upgrade.md).
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/09-dependency-framework-upgrade.md`](goals/09-dependency-framework-upgrade.md).
 
 ---
 
@@ -45,13 +47,13 @@ Six distinct loops for incidents, upgrades, migrations, branch recovery, optimiz
 
 **Use when:** Stored data, schemas, formats, or backfills must change while preserving correctness, compatibility, and recoverability.
 
-```text
-/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Data Migration / Integrity objective. During shaping, load shape-goal's required-input specification for Data Migration / Integrity; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Create or resume an append-only `SHAPING.md` under the resolved goal archive; after every answer, save the exact question, safe user answer, evidence, recommendation, normalized decision, and contract impact, and append corrections or supersessions instead of rewriting history. At each shaping-round close, let the user approve, request another deeper non-duplicate round, or pause; deeper rounds must read all prior rounds first. Then hand off within this same goal to goal-engine to define invariants and reconciliation first, use expand/backfill/verify/switch/contract phases, and test retry and rollback; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
-```
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Data Migration / Integrity profile` | `$shape-goal Use the Data Migration / Integrity profile` |
 
 **Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.
 
-**Full profile and self-contained fallback:** [Open `goals/10-data-migration-integrity.md`](goals/10-data-migration-integrity.md).
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/10-data-migration-integrity.md`](goals/10-data-migration-integrity.md).
 
 ---
 
@@ -61,13 +63,13 @@ Six distinct loops for incidents, upgrades, migrations, branch recovery, optimiz
 
 **Use when:** Valuable work is stranded in a stale, divergent, oversized, or conflicting branch and must be recovered safely.
 
-```text
-/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Branch Rescue / Integration objective. During shaping, load shape-goal's required-input specification for Branch Rescue / Integration; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Create or resume an append-only `SHAPING.md` under the resolved goal archive; after every answer, save the exact question, safe user answer, evidence, recommendation, normalized decision, and contract impact, and append corrections or supersessions instead of rewriting history. At each shaping-round close, let the user approve, request another deeper non-duplicate round, or pause; deeper rounds must read all prior rounds first. Then hand off within this same goal to goal-engine to pin source and target state, classify source slices, port only dependency-complete valid behavior, and account for every decision; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
-```
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Branch Rescue / Integration profile` | `$shape-goal Use the Branch Rescue / Integration profile` |
 
 **Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.
 
-**Full profile and self-contained fallback:** [Open `goals/11-branch-rescue-integration.md`](goals/11-branch-rescue-integration.md).
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/11-branch-rescue-integration.md`](goals/11-branch-rescue-integration.md).
 
 ---
 
@@ -77,13 +79,13 @@ Six distinct loops for incidents, upgrades, migrations, branch recovery, optimiz
 
 **Use when:** A stable metric must improve under a fixed protocol without regressing required behavior.
 
-```text
-/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Measured Optimization / Benchmark objective. During shaping, load shape-goal's required-input specification for Measured Optimization / Benchmark; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Create or resume an append-only `SHAPING.md` under the resolved goal archive; after every answer, save the exact question, safe user answer, evidence, recommendation, normalized decision, and contract impact, and append corrections or supersessions instead of rewriting history. At each shaping-round close, let the user approve, request another deeper non-duplicate round, or pause; deeper rounds must read all prior rounds first. Then hand off within this same goal to goal-engine to freeze the benchmark protocol, compare champion and challengers under identical conditions, and retain only meaningful improvements; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
-```
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Measured Optimization / Benchmark profile` | `$shape-goal Use the Measured Optimization / Benchmark profile` |
 
 **Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.
 
-**Full profile and self-contained fallback:** [Open `goals/12-measured-optimization-benchmark.md`](goals/12-measured-optimization-benchmark.md).
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/12-measured-optimization-benchmark.md`](goals/12-measured-optimization-benchmark.md).
 
 ---
 
@@ -93,10 +95,10 @@ Six distinct loops for incidents, upgrades, migrations, branch recovery, optimiz
 
 **Use when:** A bounded technical unknown must be resolved before production commitment.
 
-```text
-/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Technical Spike / Feasibility objective. During shaping, load shape-goal's required-input specification for Technical Spike / Feasibility; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Create or resume an append-only `SHAPING.md` under the resolved goal archive; after every answer, save the exact question, safe user answer, evidence, recommendation, normalized decision, and contract impact, and append corrections or supersessions instead of rewriting history. At each shaping-round close, let the user approve, request another deeper non-duplicate round, or pause; deeper rounds must read all prior rounds first. Then hand off within this same goal to goal-engine to frame one decision question, test the smallest isolated prototypes, compare options, and deliver evidence rather than production code; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
-```
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Technical Spike / Feasibility profile` | `$shape-goal Use the Technical Spike / Feasibility profile` |
 
 **Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.
 
-**Full profile and self-contained fallback:** [Open `goals/13-technical-spike-feasibility.md`](goals/13-technical-spike-feasibility.md).
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/13-technical-spike-feasibility.md`](goals/13-technical-spike-feasibility.md).

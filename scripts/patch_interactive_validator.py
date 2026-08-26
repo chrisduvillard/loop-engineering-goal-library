@@ -36,7 +36,7 @@ dogfood = docs_anchor + '''    require_fragments(
         (
             "Main entry point",
             "Question behavior",
-            "No additional owner question was necessary",
+            "no additional owner question was necessary",
             "Approval round:** R1",
         ),
     )

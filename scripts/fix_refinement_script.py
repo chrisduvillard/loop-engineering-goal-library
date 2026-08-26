@@ -13,7 +13,7 @@ insertion = '''replace_once(
 '''
 if marker not in source:
     raise SystemExit("attack-test marker not found")
-if "node_modules\", \"__pycache__" not in source:
+if insertion not in source:
     source = source.replace(marker, marker + insertion, 1)
 path.write_text(source, encoding="utf-8")
 print("Fixed copied-repository dependency isolation")

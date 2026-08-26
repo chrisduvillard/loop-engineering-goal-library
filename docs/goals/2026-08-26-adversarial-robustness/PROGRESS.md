@@ -39,13 +39,29 @@
 | Linux, macOS, and Windows; Python 3.9 and 3.13 | Pass |
 | Locked local Skills CLI discovery and deterministic packages | Pass |
 | Branch-only refinement and full branch validation | Pass |
-| Pull-request workflow on final human-authored head | In progress |
+| Pull-request workflow on final human-authored head | Pass |
 | Merge, final-main validation, closeout, and branch cleanup | Pending |
 
 ## Final review additions
 
 The last inversion pass tightened semantic-version parsing, compared every ZIP member with its source bytes, rejected decomposed Unicode archive paths, ignored generated dependency directories during shaping-history discovery, rejected zero-based question IDs and duplicate approval sections, blocked `write-all`, rejected duplicate frontmatter and noncanonical invocation booleans, and verified every transitive npm lock entry.
 
+## Verification evidence
+
+The final pull-request workflow passed all six platform/runtime test jobs and the full validation job:
+
+```text
+Linux, macOS, Windows × Python 3.9, 3.13
+python -m unittest discover -s tests -v
+python scripts/validate_repository.py
+python scripts/sync_goal_launchers.py --check
+python scripts/sync_goal_docs.py --check
+python scripts/validate_shaping_history_diff.py --self-test --base-ref <base>
+npm ci --ignore-scripts
+npx --no-install skills add . --list
+python scripts/package_skills.py
+```
+
 ## Next action
 
-Wait for the permanent pull-request workflow on this final head, review the resulting diff and evidence, merge only if every gate passes, then archive the result and remove every non-main branch.
+Perform the final diff review, merge PR #10, rerun the permanent workflow on `main`, archive the achieved result, update goal history, and remove every non-main branch.

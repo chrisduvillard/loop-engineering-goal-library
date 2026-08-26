@@ -1,0 +1,6 @@
+interface:
+  display_name: "Goal Engine"
+  short_description: "Execute an approved goal with evidence and brownfield safety."
+  default_prompt: "Execute the approved Goal Contract using repository-native verification, regression protection, durable state, and reusable closeout."
+policy:
+  allow_implicit_invocation: true

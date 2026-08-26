@@ -1,125 +1,206 @@
 # Goal Engine: Execution Profiles
 
-Execution profiles are **control-loop presets**, not project types and not an exhaustive taxonomy. The Goal Contract always wins on outcome, scope, acceptance evidence, protected behavior, authority, and stop conditions.
+Execution profiles are control-loop presets, not project types and not an exhaustive taxonomy. The approved Goal Contract always wins on outcome, scope, acceptance evidence, protected behavior, authority, and stop conditions.
 
-Choose one primary preset when it matches the dominant execution shape. Add cross-cutting proof through [assurance-overlays.md](assurance-overlays.md), not by creating a profile for every quality concern.
+Choose one primary profile when it matches the dominant execution shape. Use a dedicated quality profile when that quality is the primary outcome; use the matching assurance overlay when it is secondary to another goal.
 
 ## 1. Brownfield Continue / Finish
 
-**Use for:** An approved outcome, partial implementation, or unfinished milestone.
+**Use for:** An existing repository has an approved direction, partial implementation, or unfinished milestone and should advance autonomously.
 
-- Reconstruct the real current state before selecting work.
-- Choose the highest-priority unblocked gap in dependency order.
-- Do not stop at planning or tests while required production behavior remains.
-- Finish when every in-scope gap is closed and the contract's acceptance evidence passes.
+- Reconcile current state, select the highest-priority dependency-safe gap, and finish the approved outcome rather than merely planning it.
+- Select the highest-priority unblocked gap.
+- Verify the gap before editing.
+- Do not stop at planning, tests, or documentation while required production work remains.
 
 ## 2. PRD / Spec Compliance
 
-**Use for:** Closing every verified gap against an authoritative requirement set.
+**Use for:** A product, feature, or repository must be brought into full alignment with documented requirements.
 
-- Maintain a requirement-to-evidence map with Pass, Fail, Blocked, and Not applicable states.
-- Distinguish implementation gaps from contradictory requirements that need an owner decision.
-- Never weaken a requirement or verifier to make it pass.
-- Finish when every in-scope requirement is evidenced and the final gates pass.
+- Build a requirement-to-evidence map, reconcile contradictory requirements, and close every verified in-scope gap.
+- Maintain requirement-to-evidence status.
+- Never weaken a requirement or verifier.
+- Escalate only genuine product contradictions.
 
 ## 3. Next Milestone
 
-**Use for:** Delivering one coherent, dependency-safe increment from a larger roadmap.
+**Use for:** A roadmap is larger than one run and the next coherent, dependency-safe increment should be completed end to end.
 
-- Select the highest-priority milestone that can be completed end to end.
-- Define its acceptance evidence before editing.
-- Avoid unrelated backlog work and opportunistic modernization.
-- Finish the selected milestone, not the entire roadmap.
+- Choose one coherent next milestone, define its evidence, and complete it without unrelated scope expansion.
+- Finish one milestone, not the roadmap.
+- Avoid opportunistic modernization.
+- Deliver production behavior end to end.
 
 ## 4. Deep Audit + Remediation
 
-**Use for:** Evidence-based discovery and repair of important defects or risks.
+**Use for:** The codebase needs evidence-based discovery and repair of important defects or risks.
 
-- Treat scanner, reviewer, and subagent findings as hypotheses until verified.
-- Rank verified findings by severity, confidence, and blast radius.
-- Fix root causes, add regression protection, and rerun affected broader gates.
-- Finish after no verified finding at or above the severity bar remains and a final pass finds no new actionable evidence.
+- Audit against an explicit rubric and severity bar, verify findings, remediate root causes, and repeat to evidence saturation.
+- Treat scanner/reviewer output as hypotheses.
+- Rank by severity, confidence, and blast radius.
+- Fix verified root causes and add regression coverage.
 
 ## 5. QA / Regression / UAT
 
-**Use for:** Making actual product surfaces and realistic workflows pass.
+**Use for:** The actual product surface and realistic user workflows must pass defined acceptance gates.
 
-- Build a risk-based matrix of required flows, negative cases, data paths, configurations, and environments.
-- Exercise the real product from clean, realistic state.
-- Rerun the exact failed scenario after each fix, then affected broader gates.
-- Finish only after a clean end-to-end pass of every required acceptance flow.
+- Discover the real product surface, build a risk-based flow matrix, reproduce failures, fix root causes, and rerun clean end-to-end evidence.
+- Test realistic workflows, not only units.
+- Verify failures before fixing.
+- Rerun exact failures and affected broader gates.
 
 ## 6. Safe Refactor / Modernization
 
-**Use for:** Changing internals while preserving external behavior and contracts.
+**Use for:** Architecture, dependencies, or internals should change while external behavior and contracts remain stable.
 
-- Map consumers, APIs, formats, configuration, deployment assumptions, and hidden compatibility constraints.
-- Capture baseline behavior and add characterization coverage where protection is weak.
-- Change one structural seam at a time and preserve a fallback or rollback path.
-- Finish when the target structure is reached and before/after evidence proves equivalence except for approved changes.
+- Capture behavioral baselines, create safe seams, change incrementally, and prove equivalence with rollback.
+- Map consumers and contracts.
+- Change one coherent seam at a time.
+- Keep rollback until equivalence is proven.
 
 ## 7. Release Readiness
 
-**Use for:** Removing release blockers without performing the release.
+**Use for:** A version or milestone must satisfy all release gates without actually being published or deployed.
 
-- Turn repository-defined release criteria into a checklist and capture their baseline.
-- Work highest-risk blockers first and rerun production-like full gates at checkpoints.
-- Verify artifacts, configuration, migrations, operational docs, and rollback instructions together.
-- Finish at release-ready; never tag, publish, deploy, or alter production without contract authority.
+- Turn repository-defined release criteria into evidence, resolve blockers by risk, and verify artifacts, migrations, operations, and rollback together.
+- Prepare but do not release.
+- Work highest-risk blockers first.
+- Verify artifacts, configuration, migrations, docs, and rollback together.
 
 ## 8. Incident Recovery / Stabilization
 
-**Use for:** Restoring a degraded system, preserving evidence, and preventing recurrence.
+**Use for:** A severe regression or production-like incident must be contained, diagnosed, and recovered without compounding damage.
 
-- Separate containment, recovery, root-cause proof, and prevention.
-- Prefer reversible mitigations until the failure mechanism is understood.
-- Preserve logs, timelines, metrics, and reproductions needed for diagnosis.
-- Finish only when health is verified, root cause is evidenced, regression protection exists, and follow-up state is recorded.
+- Separate containment, restoration, root-cause proof, and prevention while preserving incident evidence.
+- Preserve evidence.
+- Prefer reversible containment.
+- Prove recovery and root cause separately.
 
 ## 9. Dependency / Framework Upgrade
 
-**Use for:** Staged upgrades with compatibility and rollback evidence.
+**Use for:** A dependency, framework, language runtime, or toolchain must move to a target version without breaking supported behavior.
 
-- Inventory direct and transitive dependencies, supported versions, official migration guidance, and ecosystem constraints.
-- Establish compatibility gates before changing versions.
-- Upgrade in coherent stages; inspect lockfiles and generated changes.
-- Finish when supported configurations pass, scoped deprecations are handled, and recovery is documented.
+- Map the dependency graph, follow official version-path guidance, stage changes, inspect transitive effects, and prove compatibility.
+- Upgrade coherent boundaries.
+- Inspect lockfiles and generated changes.
+- Avoid unrelated modernization.
 
 ## 10. Data Migration / Integrity
 
-**Use for:** Schema, format, backfill, or data movement where correctness and recovery matter.
+**Use for:** Stored data, schemas, formats, or backfills must change while preserving correctness, compatibility, and recoverability.
 
-- Define invariants, reconciliation, idempotency, mixed-version behavior, and rollback before mutation.
-- Test representative data, interruption, retry, and partial-failure scenarios.
-- Separate preparation, migration, verification, cutover, and destructive cleanup.
-- Finish when reconciliation proves integrity and required rollback/cutover evidence passes.
+- Define invariants and reconciliation first, use expand/backfill/verify/switch/contract phases, and test retry and rollback.
+- Define reconciliation before mutation.
+- Test interruption/retry/rollback.
+- Require approval before destructive cleanup.
 
 ## 11. Branch Rescue / Integration
 
-**Use for:** Recovering valuable work from stale, divergent, or oversized branches.
+**Use for:** Valuable work is stranded in a stale, divergent, oversized, or conflicting branch and must be recovered safely.
 
-- Pin source and target SHAs and protect recovery refs.
-- Decompose the branch into coherent behavioral slices.
-- Compare each slice with newer target behavior and choose the least risky transfer method.
-- Finish when selected value is integrated and verified, rejected work is explained, and recovery remains possible.
+- Pin source and target state, classify source slices, port only dependency-complete valid behavior, and account for every decision.
+- Protect recovery refs.
+- Classify slices as present/obsolete/conflicting/worth porting.
+- Never merge wholesale without evidence.
 
 ## 12. Measured Optimization / Benchmark
 
-**Use for:** Improving a stable metric such as latency, throughput, cost, memory, build time, model quality, or ranking accuracy without regressing required behavior.
+**Use for:** A stable metric must improve under a fixed protocol without regressing required behavior.
 
-- Freeze the benchmark protocol, representative workload, environment, sampling rule, tolerance, and must-pass floors before optimizing.
-- Capture a reproducible baseline and treat the current best result as the champion.
-- Change one coherent factor per challenger, rerun the same benchmark and regression gates, and keep only meaningful improvements.
-- Finish when the target is reproduced under the fixed protocol or the contract's experiment budget or stagnation exit applies.
+- Freeze the benchmark protocol, compare champion and challengers under identical conditions, and retain only meaningful improvements.
+- Freeze the protocol before changes.
+- Change one hypothesis at a time.
+- Keep only reproducible wins without floor regressions.
 
 ## 13. Technical Spike / Feasibility
 
-**Use for:** Resolving a bounded technical unknown before committing to a production implementation, architecture, vendor, migration, or other costly direction.
+**Use for:** A bounded technical unknown must be resolved before production commitment.
 
-- Define the decision questions, alternatives, representative constraints, Go / Conditional Go / No-Go thresholds, budget, and cleanup rule before prototyping.
-- Keep experiments isolated and build only the smallest prototype, simulation, or adapter needed to answer one material assumption.
-- Treat knowledge and an evidence-backed recommendation as the deliverable; do not silently convert exploratory code into production.
-- Finish when every question is answered, limitations and risks are recorded, and any approved follow-on work has its own Goal Contract or issue.
+- Frame one decision question, test the smallest isolated prototypes, compare options, and deliver evidence rather than production code.
+- Keep spike code isolated and disposable.
+- Do not let prototype become production silently.
+- Finish with a decision and explicit conditions.
+
+## 14. Frontend UI / UX / Accessibility
+
+**Use for:** A frontend surface must become coherent, usable, responsive, accessible, and visually polished without regressing behavior.
+
+- Inventory screens and states, reconcile design references and system patterns, test real interactions across supported viewports, and iterate on verified usability and visual gaps.
+- Exercise real browser flows and all important states.
+- Use screenshots/visual comparison plus functional checks.
+- Verify keyboard, focus, semantics, contrast, responsive behavior, loading/error/empty states.
+
+## 15. Documentation Synchronization / Knowledge Transfer
+
+**Use for:** Documentation, examples, runbooks, diagrams, or onboarding material must accurately match current behavior and be usable by its audience.
+
+- Map authoritative behavior to every affected document, execute examples and commands where possible, remove contradictions, and add drift prevention.
+- Verify documentation claims against behavior.
+- Run commands and examples rather than copying stale text.
+- Link decisions to authoritative sources and prevent future drift.
+
+## 16. Security / Privacy Hardening
+
+**Use for:** Security and privacy are the primary outcome: attack surface, authorization, secrets, dependencies, or data handling must be hardened and verified.
+
+- Establish assets and trust boundaries, verify attack paths and findings, prioritize by severity and exploitability, remediate root causes, and retest.
+- Never exploit or mutate external systems without approval.
+- Treat scanner findings as hypotheses.
+- Test authorization and data-boundary regressions.
+
+## 17. Reliability / Resilience Hardening
+
+**Use for:** A system must continue or recover correctly under defined failures, load, retries, restarts, and dependency degradation.
+
+- Define service objectives and failure scenarios, reproduce weaknesses, harden idempotency and recovery, and verify under controlled faults.
+- Test failures and recovery, not only happy paths.
+- Protect data during retries/restarts.
+- Prefer graceful degradation and bounded retries.
+
+## 18. API / Integration Contract Compatibility
+
+**Use for:** APIs, events, schemas, SDKs, or external integrations must remain compatible across producers, consumers, and versions.
+
+- Inventory providers and consumers, establish contract baselines, test version combinations, and stage changes with deprecation and rollback.
+- Treat undocumented consumers as a risk to investigate.
+- Verify positive and negative contract behavior.
+- Stage additive changes before removals.
+
+## 19. Observability / Operability
+
+**Use for:** Operators and maintainers must be able to detect, understand, and recover from important failures using useful signals and runbooks.
+
+- Map critical journeys to signals, improve logs/metrics/traces/health checks, tune alerts, create runbooks, and validate diagnosis and recovery.
+- Instrument outcomes rather than noise.
+- Avoid secrets/high-cardinality leaks.
+- Test alerts and runbooks with controlled scenarios.
+
+## 20. Developer Experience / Tooling
+
+**Use for:** Local setup, build, test, debug, CI, or contribution workflows must become faster, clearer, and reproducible.
+
+- Measure developer workflows, remove verified friction, align local and CI behavior, and preserve a reusable project harness.
+- Test from clean state.
+- Prefer canonical scripts/task runners.
+- Make failures actionable and keep local/CI parity.
+
+## 21. Data Quality / Pipeline Assurance
+
+**Use for:** A data pipeline or dataset must satisfy defined freshness, completeness, validity, consistency, lineage, and reconciliation expectations.
+
+- Map sources and transformations, establish measurable data contracts, reproduce quality failures, fix root causes, and add monitoring and reconciliation.
+- Verify quality at boundaries and end-to-end.
+- Distinguish source defects from transformation defects.
+- Add durable checks and lineage evidence.
+
+## 22. Compliance / Audit Readiness
+
+**Use for:** A repository or system must produce implementation evidence for an approved control set without falsely self-certifying legal or regulatory compliance.
+
+- Identify the authoritative control framework, map each control to code/config/process/evidence, verify gaps, remediate technical findings, and prepare reviewer-ready evidence.
+- Do not invent policy or self-certify.
+- Separate technical evidence from legal interpretation.
+- Preserve chain of evidence and approval boundaries.
 
 ## Custom Contract-Driven
 
@@ -131,14 +212,12 @@ The contract must define:
 - One primary verifier or stable evaluation rubric
 - A keep-or-revert decision
 - Review and regression obligations
-- Objective success, blocker, budget, and stall exits
+- Objective success, blocker, approval, budget, goal-drift, and stall exits
 
-A custom profile is a safe fallback, not permission for vague work. If the same custom pattern recurs across several goals or projects, propose a new preset with field evidence.
+A custom profile is a safe fallback, not permission for vague work. If the same custom pattern recurs across several goals or projects, propose a new profile with field evidence.
 
 ## Combining profiles and overlays
 
-Use one primary profile. A secondary profile may contribute a narrow technique—for example QA matrices during an upgrade, data reconciliation during release readiness, or a fixed benchmark during a refactor.
+Use one primary profile. A secondary profile may contribute one narrow technique when that improves evidence without changing the outcome.
 
-Use assurance overlays for security, reliability, performance, UX/accessibility, data governance, compatibility, operability, documentation, or compliance concerns.
-
-Do not combine profiles merely to appear comprehensive. If two profiles imply materially different outcomes, return to `shape-goal` and split or clarify the contract.
+Use assurance overlays for additional proof obligations. Do not combine profiles merely to appear comprehensive. If two profiles imply materially different outcomes, return to `shape-goal` and split or clarify the contract.

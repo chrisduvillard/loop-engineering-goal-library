@@ -1,13 +1,11 @@
 # Install, Verify, Update, and Package
 
-The library contains two Agent Skills:
+The library contains two portable Agent Skills:
 
-- `shape-goal` — turns rough intent into an approved Goal Contract.
-- `goal-engine` — executes that contract inside the host's native `/goal` loop.
+- `shape-goal` — discovers missing goal inputs, asks only material decisions, and approves a Goal Contract.
+- `goal-engine` — executes the approved contract inside native `/goal`.
 
-## Recommended: install globally for Codex and Claude Code
-
-Use a global install when you want the skills available in every repository:
+## Recommended: global Codex + Claude Code install
 
 ```bash
 npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
@@ -18,31 +16,33 @@ npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
   --yes
 ```
 
-The Agent Skills CLI uses a canonical copy and links it to supported agents by default, which keeps one source of truth across hosts.
+The CLI normally keeps a canonical copy and links supported agents to it.
 
-## Verify the installation
+## Verify
 
 ```bash
 npx -y skills@latest list --global --agent codex --agent claude-code
 ```
 
-You should see both:
+You should see:
 
 ```text
 shape-goal
 goal-engine
 ```
 
-Then verify invocation inside each host:
+Then open a repository and verify one direct invocation:
 
-| Host | Shape an unclear project target |
+| Host | Command |
 |---|---|
 | Claude Code | `/shape-goal Continue this project` |
 | Codex CLI / IDE | `$shape-goal Continue this project` |
 
-## Project-local installation
+To test zero-friction routing, open any file under [`goals/`](goals/) and paste its first `/goal` command unchanged. It should enter shaping before production execution.
 
-Use a project install when the exact skill version should be committed or shared only with one repository:
+## Project-local install
+
+Use this when the exact skills should be scoped to one repository:
 
 ```bash
 npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
@@ -52,31 +52,21 @@ npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
   --yes
 ```
 
-Project-local is the CLI default. Global and project installs can coexist, but avoid keeping divergent copies unless that is intentional.
+Project-local is the CLI default. Global and local installs can coexist, but avoid unintentionally divergent copies.
 
 ## Update
-
-Update the globally installed skills:
 
 ```bash
 npx -y skills@latest update shape-goal goal-engine --global --yes
 ```
 
-Verify again after updating:
+Verify again afterward. Goal Contracts record the library version or source commit for reproducibility.
 
-```bash
-npx -y skills@latest list --global --agent codex --agent claude-code
-```
+## Clean reinstall
 
-When reproducibility matters, record the skill metadata version and source commit in the Goal Contract before execution.
-
-## Clean reinstall fallback
-
-If links or copies appear stale, rerun the recommended global `add` command. Review the paths printed by `skills list` before deleting anything manually.
+Rerun the recommended `add` command. Inspect paths with `skills list` before deleting anything manually.
 
 ## Use without installing
-
-The Agent Skills CLI can render or launch one skill temporarily:
 
 ```bash
 npx -y skills@latest use \
@@ -85,35 +75,33 @@ npx -y skills@latest use \
   --agent claude-code
 ```
 
-Use this for evaluation. Install globally for everyday work and durable reuse.
+Temporary use is useful for evaluation. Global install is the smoothest everyday path.
 
-## Manual installation fallback
+## Manual installation
 
-Clone or download the repository, then copy each complete skill directory:
+Copy each complete skill directory:
 
 ```text
 skills/shape-goal/
 skills/goal-engine/
 ```
 
-Typical global locations are:
+Typical user locations include:
 
 ```text
-~/.codex/skills/
+~/.agents/skills/
 ~/.claude/skills/
 ```
 
-Keep each skill directory intact so its references, templates, and metadata travel with `SKILL.md`.
+Keep the directory intact so references, templates, host metadata, and `SKILL.md` travel together.
 
-## Build reusable ZIP packages
-
-From a repository checkout:
+## Build deterministic ZIP packages
 
 ```bash
 python3 scripts/package_skills.py
 ```
 
-This creates deterministic packages under `dist/`:
+Outputs:
 
 ```text
 shape-goal-<version>.zip
@@ -122,14 +110,13 @@ loop-engineering-skills-<version>.zip
 SHA256SUMS
 ```
 
-Individual ZIPs place `SKILL.md` at the archive root for upload-oriented hosts. The bundle preserves both `skills/<name>/` directories. GitHub Actions builds the same artifacts on every validated change.
+Individual ZIPs place `SKILL.md` at archive root. The bundle preserves both skill directories.
 
 ## Validate a checkout
 
 ```bash
+python3 scripts/sync_goal_docs.py --check
 python3 scripts/validate_repository.py
 python3 scripts/package_skills.py
 npx -y skills@1.5.23 add . --list
 ```
-
-The first command checks the repository contract. The second validates deterministic packaging. The third confirms that the Agent Skills CLI discovers both skills.

@@ -1,37 +1,35 @@
 # Brownfield Continue / Finish
 
-**Use when:** An existing project has an approved outcome, partial implementation, or unfinished milestone and should advance autonomously.
+**Use when:** An existing repository has an approved direction, partial implementation, or unfinished milestone and should advance autonomously.
 
-## Recommended: skill-backed
+**In simple terms:** Understand the real current state and keep completing the most important unblocked work.
 
-Use `shape-goal` first when no approved target exists. Then run:
+## Run unchanged — recommended
 
-```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the Brownfield Continue / Finish profile. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve a reusable closeout packet and leave a restartable handoff.
-```
-
-The Goal Contract holds project-specific truth; `goal-engine` supplies the reusable execution loop.
-
-## What does the target mean?
-
-The target is not a task list. It is either a verifiable end state or a pointer such as `GOAL.md`, an approved issue, milestone, PRD, or acceptance checklist.
-
-> **[Observable outcome]** is true for **[scope]**, proven by **[acceptance evidence]**, while **[protected behavior]** remains intact.
-
-When it is unclear:
-
-| Claude Code | Codex CLI / IDE |
-|---|---|
-| `/shape-goal Continue this project` | `$shape-goal Continue this project` |
-
-Do not start autonomous execution with an unresolved placeholder.
-
-## Standalone fallback
-
-Use this when `goal-engine` is not installed:
+Copy this command exactly. It uses `shape-goal` to discover and approve the missing inputs, then `goal-engine` to execute the result.
 
 ```text
-/goal Bring this existing repository to [APPROVED TARGET OR GOAL-CONTRACT PATH]. First establish the actual state: read applicable repository instructions, specifications/PRDs, architecture, approved plans, progress/handoffs, prior goal archives, native scripts/CI/tests, and Git status/diff/history. Reconcile stale or conflicting artifacts by authority, recency, and executable evidence; protect user, uncommitted, and unrelated work. Then repeat: select the highest-priority unblocked gap; verify it; make the smallest coherent reversible production change; run repository-native relevant checks; review the diff; add regression coverage for fixed failures; keep only changes that preserve or improve the baseline; and update existing progress/handoff state with evidence and the next action. Continue autonomously—do not stop at planning, analysis, documentation, or tests while production work remains, and do not ask what to do next when the repository answers it. Finish only when every in-scope gap is closed and the approved target's acceptance evidence passes with results surfaced. Stop earlier only for a genuine external/owner-approval blocker, an exhausted contract-defined budget, or two consecutive no-progress cycles. At any terminal outcome, preserve a reusable closeout packet under the repository's goal-history convention (default `docs/goals/<goal-id>/`) containing `CONTRACT.md`, final `PROGRESS.md`, and `RESULT.md`; update the history index, promote verified reusable tests/docs/ADRs/runbooks/fixtures/tooling, and exclude secrets, private data, raw production dumps, and unnecessarily large logs. Never perform destructive, deployment, credential, release, or external-system actions without explicit approval.
+/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Brownfield Continue / Finish objective. During shaping, load shape-goal's required-input specification for Brownfield Continue / Finish; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Then hand off within this same goal to goal-engine to reconcile current state, select the highest-priority dependency-safe gap, and finish the approved outcome rather than merely planning it; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
 ```
 
-**Why it works:** It begins from an approved outcome and current evidence, gives the agent authority to choose the next safe action, and preserves both execution state and reusable closeout knowledge.
+## Inputs the skills resolve
+
+- Authoritative outcome or next approved milestone
+- Priority and dependency order
+- Acceptance evidence
+- Protected existing behavior and user work
+- Common contract inputs: outcome, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, goal relationships, state paths, and closeout paths.
+
+**Suggested assurance overlays:** None by default; select only those required by the contract.
+
+`shape-goal` must search the repository and connected authoritative sources before asking. It asks only material unresolved decisions, one at a time with a recommendation. The active `/goal` is not complete when the contract is shaped; execution and passing evidence are still required.
+
+## Run unchanged — self-contained fallback
+
+Use this command when the skills are unavailable. It reproduces the same shape-then-execute gate without requiring placeholders.
+
+```text
+/goal Determine, obtain approval for, and complete this repository's next Brownfield Continue / Finish objective without requiring the user to prefill placeholders. Phase 1 — shape: establish the actual repository state from instructions, Git state/history, requirements, architecture, plans, prior goals, tests/CI, runtime behavior, and available authoritative tools or connected sources. Build an input ledger for the target, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, and the profile-specific inputs described in this goal. Search before asking; when a material decision cannot be derived, ask the user one question at a time, include the evidence and a recommended answer, record the decision, and continue until a concise Goal Contract is approved. Do not edit production before approval, and do not treat contract creation as completion. Phase 2 — execute: reconcile current state, select the highest-priority dependency-safe gap, and finish the approved outcome rather than merely planning it. In particular, select the highest-priority unblocked gap; verify the gap before editing; do not stop at planning, tests, or documentation while required production work remains. Make small coherent reversible changes; use repository-native checks; verify findings before fixing; add regression protection; review important diffs independently when practical; keep only changes that preserve or improve the verified baseline; and persist progress, failed approaches, evidence, reusable outputs, and the next action. Finish only when every approved acceptance and assurance item passes with surfaced evidence and protected behavior remains intact. Stop for a genuine external blocker, required approval, exhausted approved budget, material goal drift, or two consecutive no-progress cycles. At every terminal outcome, preserve a reusable closeout packet containing CONTRACT.md, final PROGRESS.md, and RESULT.md under the repository's goal-history convention, update the portfolio/history, promote durable tests/docs/ADRs/runbooks/fixtures/tooling, and never archive secrets, private data, production dumps, exploit-enabling evidence, or unnecessary large logs. Never perform destructive, deployment, release, credential, billing, or external-system actions without explicit approval.
+```
+
+**Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.

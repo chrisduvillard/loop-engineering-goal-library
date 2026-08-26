@@ -8,6 +8,45 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.4.0] - 2026-08-25
+
+### Added
+
+- Zero-friction two-phase launchers for every goal: `shape-goal` resolves and approves missing inputs, then `goal-engine` executes the approved contract.
+- A profile-specific input specification covering every goal and an exhaustive-but-bounded search-and-question protocol.
+- Durable append-only shaping histories under `docs/goals/<goal-id>/SHAPING.md`.
+- Stable shaping round and question identifiers, saved recommendations and answers, correction/supersession records, deferred-decision tracking, and approval-round linkage.
+- Repeatable deepening rounds for users who want to challenge or refine a proposed Goal Contract without losing earlier answers.
+- A shaping-history protocol, reusable template, and worked two-round example.
+- Nine dedicated product and quality profiles:
+  - Frontend UI / UX / Accessibility
+  - Documentation Synchronization / Knowledge Transfer
+  - Security / Privacy Hardening
+  - Reliability / Resilience Hardening
+  - API / Integration Contract Compatibility
+  - Observability / Operability
+  - Developer Experience / Tooling
+  - Data Quality / Pipeline Assurance
+  - Compliance / Audit Readiness
+- A machine-readable `goals/catalog.json` and generated `goals/README.md`.
+- `QUALITY_GOALS.md` for the product and quality profiles.
+- OpenAI host metadata for both skills.
+- A real closeout packet for this repository's final deep review.
+
+### Changed
+
+- All 22 recommended `/goal` commands run unchanged and contain no repository-specific placeholders.
+- Every goal also has a self-contained no-placeholder fallback.
+- `shape-goal` supports bootstrap mode inside an already-active native `/goal`, keeps an input ledger, searches before asking, saves every asked question and answer, supports repeated deeper rounds, and hands off without claiming completion.
+- `goal-engine` reads the shaping decision trail, avoids reopening settled decisions without new evidence, and preserves `SHAPING.md` at pause and closeout.
+- Goal Contracts record shaping-history path, completed rounds, last round, and approval round.
+- Progress, result, history, README, quick reference, architecture, and state templates link the durable shaping record.
+- Sensitive shaping answers are redacted and linked to approved secure evidence rather than committed verbatim.
+- The README, catalog, generated libraries, and contribution guidance reflect the zero-friction workflow.
+- CI validates launcher invariants, profile input coverage, shaping-history schemas, generated catalogs, host metadata, and immutable GitHub Action pins.
+- GitHub Actions are pinned to full commit SHAs.
+- A temporary write-enabled workflow used to assemble the review branch was removed before merge.
+
 ## [0.3.0] - 2026-08-25
 
 ### Added
@@ -19,10 +58,10 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 ### Changed
 
-- The library now contains seven core and six specialist standalone goals, for thirteen presets total.
-- `shape-goal`, Goal Contract templates, quick reference, architecture, and validation now recognize all thirteen presets.
-- The specialist library now includes optimization and feasibility profiles.
-- The worked example's follow-on performance goal now uses the dedicated optimization profile.
+- The library contains seven core and six specialist standalone goals, for thirteen presets total.
+- `shape-goal`, Goal Contract templates, quick reference, architecture, and validation recognize all thirteen presets.
+- The specialist library includes optimization and feasibility profiles.
+- The worked example's follow-on performance goal uses the dedicated optimization profile.
 
 ## [0.2.0] - 2026-08-25
 
@@ -32,18 +71,17 @@ The project follows semantic versioning while it is field-tested. Versions below
 - Explicit lifecycle transitions: clarify, amend, reprioritize, pause, resume, supersede, split, merge, cancel, and close.
 - Parent, dependency, priority, revision, and supersession relationships in Goal Contracts.
 - Assurance overlays for security/privacy, reliability/recovery, performance/cost, UX/accessibility, data governance, compatibility, operability, documentation, and compliance.
-- A `Custom Contract-Driven` fallback when none of the eleven presets fits.
-- A packaged standalone custom `/goal` fallback for environments without installed skills.
-- A reusable project-harness template for setup, run, reset, realistic workflow, and repository-native verification knowledge.
-- A completed example portfolio showing one achieved goal and a different ready goal that follows it.
+- A `Custom Contract-Driven` fallback.
+- A packaged standalone custom `/goal` fallback.
+- A reusable project-harness template.
+- A completed example portfolio.
 
 ### Changed
 
-- The eleven standalone goals are described as high-value control-loop presets rather than an exhaustive list of project types.
+- The standalone goals are high-value control-loop presets rather than an exhaustive list of project types.
 - `shape-goal` manages changing priorities and multiple goals without silently overwriting the active contract.
 - `goal-engine` performs a goal-fit gate at checkpoints and pauses for reshaping when the user's need materially changes.
-- One native `/goal` session or worktree is explicitly bound to one dependency-safe leaf contract; parallel goals require isolation and coordination.
-- Progress, result, history, README, architecture, and quick-reference artifacts record profiles, overlays, portfolio state, harness reuse, and related goals.
+- One native `/goal` session or worktree is bound to one dependency-safe leaf contract.
 
 ## [0.1.0] - 2026-08-25
 
@@ -55,14 +93,8 @@ The project follows semantic versioning while it is field-tested. Versions below
 - Goal Contract, progress-state, closeout, and goal-history templates.
 - Durable goal archival under `docs/goals/<goal-id>/`.
 - Installation, update, packaging, and completed-cycle documentation.
-- Deterministic ZIP packaging for reuse in Agent Skills hosts and ChatGPT uploads.
+- Deterministic ZIP packaging.
 - Repository validation, Agent Skills CLI discovery checks, and packaged-artifact CI.
-
-### Changed
-
-- Global installation is the recommended default for reuse across projects.
-- Completed, blocked, stalled, and budget-exhausted goals produce a reusable closeout archive.
-- Skill metadata records the library source and version for reproducibility.
 
 ### Known pre-release validation
 

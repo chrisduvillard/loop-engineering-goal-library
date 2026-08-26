@@ -8,7 +8,11 @@
 **Owner:** Product owner  
 **Created:** 2026-08-25  
 **Last updated:** 2026-08-25  
-**Library:** chrisduvillard/loop-engineering-goal-library @ 0.2.0  
+**Library:** chrisduvillard/loop-engineering-goal-library @ 0.4.0  
+**Shaping history:** `SHAPING.md`  
+**Completed shaping rounds:** R1, R2  
+**Last shaping round:** R2  
+**Approval shaping round:** R2  
 **Current branch/worktree/SHA:** `codex/portfolio-import-v1-4` / isolated worktree / `def5678`  
 **Primary profile:** PRD / Spec Compliance  
 **Assurance overlays:** Data Integrity & Governance; Compatibility & Portability  
@@ -27,6 +31,25 @@
 ## Why this is next
 
 The approved v1.4 PRD is the current P1 milestone, CSV import is stable, and XLSX parsing is the only verified product gap blocking completion.
+
+## Shaping history and decision trace
+
+- **History path:** `SHAPING.md`
+- **Current decision sources:** R1-Q1, R1-Q2, R2-Q1, R2-Q2
+- **Open or deferred decisions:** large-file performance budget, deferred to a follow-on goal
+- **Corrections or superseded answers:** none
+- **Approval basis:** R2 resolved date semantics and separated performance scope; the product owner approved the resulting contract.
+
+## Input resolution record
+
+| Input | Resolution | Evidence or approved decision source |
+|---|---|---|
+| Outcome | Owner decision | R1-Q1 and approved PRD |
+| Scope and exclusions | Owner decision | R1-Q1, R2-Q2 |
+| Acceptance evidence | Evidence + owner confirmation | Import/UAT/export scripts and R2 summary |
+| Protected behavior | Owner decision | R1-Q2 |
+| Authority boundaries | Repository policy + owner confirmation | R1 summary |
+| Profile-specific inputs | Evidence + owner decision | PRD, tests, R2-Q1 |
 
 ## In scope
 
@@ -84,11 +107,11 @@ PRD / Spec Compliance — maintain a requirement-to-evidence map and never weake
 - Dependencies: none
 - Related goal: `2026-08-26-import-performance-budget` follows this goal but is a different outcome.
 
-Performance work is explicitly out of scope and receives a new Goal ID rather than being appended here.
+Performance work is explicitly out of scope and receives a new Goal ID rather than being appended here. Prior shaping answers remain immutable; a later correction would append a new round.
 
 ## Goal-drift review triggers
 
-Re-run `shape-goal` if the PRD changes, a production incident interrupts the work, or performance becomes a higher priority before correctness is complete.
+Re-run `shape-goal` and append a new shaping round if the PRD changes, a production incident interrupts the work, or performance becomes a higher priority before correctness is complete.
 
 ## Authority boundaries
 
@@ -104,9 +127,11 @@ Explicit approval is required before merge, push, tag, release, deployment, dest
 - Budget: 20 serious implementation cycles.
 - Stalled: two no-progress cycles.
 - Goal drift: pause and reshape rather than silently expand scope.
+- Shaping not accepted: run another round or pause without production changes.
 
 ## Sources of truth
 
+- `SHAPING.md`
 - `docs/product/portfolio-import-v1.4.md`
 - `tests/imports/`
 - `tests/exports/`
@@ -117,16 +142,23 @@ Explicit approval is required before merge, push, tag, release, deployment, dest
 
 Archive: `docs/goals/2026-08-25-portfolio-import-v1-4/`
 
+```text
+SHAPING.md
+CONTRACT.md
+PROGRESS.md
+RESULT.md
+```
+
 **Expected reusable outputs:** regression tests, parser fixture, normalization rule, and verified harness commands
 
 ## Native `/goal` command
 
 ```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its PRD / Spec Compliance profile, Data Integrity & Governance and Compatibility & Portability overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its PRD / Spec Compliance profile, Data Integrity & Governance and Compatibility & Portability overlays, project harness, and shaping decision record. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
 
 ## Revision and approval record
 
-| Revision | Date | Change | Lifecycle decision | Approved by |
-|---|---|---|---|---|
-| 1 | 2026-08-25 | Initial contract | New | Product owner |
+| Revision | Date | Change | Lifecycle decision | Shaping round | Approved by |
+|---|---|---|---|---|---|
+| 1 | 2026-08-25 | Initial contract | New | R2 | Product owner |

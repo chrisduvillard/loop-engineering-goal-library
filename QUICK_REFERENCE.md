@@ -7,72 +7,137 @@ npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
   --skill '*' --global --agent codex --agent claude-code --yes
 ```
 
-## Common actions
+## Fastest path
+
+1. Open the repository root in Codex or Claude Code.
+2. Choose a profile in [`goals/README.md`](goals/README.md).
+3. Copy its first `/goal` command unchanged.
+4. Answer only the owner decisions `shape-goal` cannot derive.
+5. Review the saved shaping history; request another round when needed.
+6. Approve the Goal Contract.
+7. Let `goal-engine` execute until the evidence passes.
+8. Reuse the archived result and shape the next goal.
+
+No placeholder replacement is required in the recommended commands.
+
+## Let the system choose
 
 | Need | Claude Code | Codex CLI / IDE |
 |---|---|---|
 | Shape or continue | `/shape-goal Continue this project` | `$shape-goal Continue this project` |
-| Add a goal | `/shape-goal New goal: [INTENT]` | `$shape-goal New goal: [INTENT]` |
-| Change direction | `/shape-goal Change current goal: [NEED]` | `$shape-goal Change current goal: [NEED]` |
+| Add a goal | `/shape-goal New goal: describe the intent` | `$shape-goal New goal: describe the intent` |
+| Go deeper | `/shape-goal Deepen the current goal` | `$shape-goal Deepen the current goal` |
+| Deepen a saved goal | `/shape-goal Run another shaping round for goal-id` | `$shape-goal Run another shaping round for goal-id` |
 | Review priorities | `/shape-goal Review the goal portfolio` | `$shape-goal Review the goal portfolio` |
-| Resume | `/shape-goal Resume [GOAL ID]` | `$shape-goal Resume [GOAL ID]` |
+| Resume | `/shape-goal Resume goal-id` | `$shape-goal Resume goal-id` |
 
-## Start execution
+## Zero-friction launch rule
+
+Every recommended goal command performs two phases inside one native `/goal`:
 
 ```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
+Phase 1: shape-goal discovers inputs, saves questions/answers, and obtains approval
+Phase 2: goal-engine implements, verifies, reviews, records, and closes
 ```
+
+Production edits are forbidden before approval. Shaping alone is never successful completion.
+
+## Saved shaping rounds
+
+Default path:
+
+```text
+docs/goals/<goal-id>/SHAPING.md
+```
+
+The file preserves:
+
+- Every question actually asked
+- The user's answer, verbatim when safe
+- Evidence and recommendation
+- Normalized contract decision
+- Corrections and superseded answers
+- Round summaries and readiness
+- The round that approved execution
+
+The history is append-only. A correction creates a new entry; it does not erase the earlier answer. Sensitive material is redacted and linked to an approved secure source.
+
+A deepening round reads all previous rounds, selects an unexplored or weak lens, and asks only non-duplicate material questions one at a time. Repeat until the user approves, pauses, or a genuine blocker exists.
+
+## Common goal choices
+
+| Need | Goal |
+|---|---|
+| Finish existing approved work | Brownfield Continue / Finish |
+| Close requirements | PRD / Spec Compliance |
+| Deliver the next roadmap increment | Next Milestone |
+| Find and fix important problems | Deep Audit + Remediation |
+| Prove real product workflows | QA / Regression / UAT |
+| Modernize without behavior drift | Safe Refactor / Modernization |
+| Prepare a release | Release Readiness |
+| Recover from a severe failure | Incident Recovery / Stabilization |
+| Upgrade an ecosystem dependency | Dependency / Framework Upgrade |
+| Migrate stored data or schema | Data Migration / Integrity |
+| Recover work from a divergent branch | Branch Rescue / Integration |
+| Improve a stable metric | Measured Optimization / Benchmark |
+| Answer a technical unknown | Technical Spike / Feasibility |
+| Improve frontend quality | Frontend UI / UX / Accessibility |
+| Correct and verify documentation | Documentation Synchronization / Knowledge Transfer |
+| Harden security and privacy | Security / Privacy Hardening |
+| Prove failure and recovery behavior | Reliability / Resilience Hardening |
+| Evolve APIs or integrations safely | API / Integration Contract Compatibility |
+| Improve logs, metrics, alerts, and runbooks | Observability / Operability |
+| Improve setup, build, test, or debug workflows | Developer Experience / Tooling |
+| Assure pipeline and dataset quality | Data Quality / Pipeline Assurance |
+| Prepare technical evidence for an audit | Compliance / Audit Readiness |
+| None fits | Custom Contract-Driven |
+
+## How missing inputs are resolved
+
+`shape-goal` searches repository instructions, Git, current/prior goals and shaping histories, PRDs, architecture, scripts, CI, tests, runtime evidence, project harness, connected authoritative systems, and current official documentation before asking.
+
+Questions are:
+
+- Limited to material owner decisions
+- Asked one at a time
+- Accompanied by evidence and a recommendation
+- Saved immediately in the shaping history
+- Linked to the input ledger and contract
+- Never repeated without materially new evidence
 
 ## Multiple goals over time
 
-A project may have many goals. Use one dependency-safe contract per native `/goal` session or worktree.
-
-| New need | Correct transition |
+| Change | Lifecycle action |
 |---|---|
-| Wording or evidence reference only | Clarify; same Goal ID, revision log |
-| Same outcome, material scope/evidence change | Amend; pause, approve, increment revision |
-| Different priority | Reprioritize portfolio; do not rewrite contracts |
-| Temporary interruption | Pause; preserve progress and resume condition |
-| Same goal later | Resume from preserved state |
-| Different outcome replaces current | Supersede; archive old, create new Goal ID |
-| Goal is too broad | Split into child goals; execute one leaf |
-| Goal no longer has value | Cancel with reason and closeout evidence |
+| Wording or source reference only | Clarify; append shaping note and keep Goal ID |
+| Same outcome, material contract change | Amend; pause, run another shaping round, and approve a new revision |
+| Different priority | Reprioritize portfolio |
+| Temporary interruption | Pause and preserve shaping/progress resume state |
+| Same goal later | Resume |
+| Different outcome replaces current | Supersede and create a new Goal ID |
+| Goal too broad | Split into dependency-safe children |
+| Goal no longer valuable | Cancel with a closeout |
+| Terminal result | Close and archive |
 
-Use the existing issue tracker or roadmap when possible. Otherwise create `docs/goals/PORTFOLIO.md` from the [portfolio template](skills/shape-goal/templates/goal-portfolio-template.md).
+One native goal session/worktree executes one dependency-safe leaf contract.
 
-## Coverage model
-
-The thirteen standalone goals are presets, not a ceiling:
+## State and archive
 
 ```text
-Primary execution profile
-+ Assurance overlays
-+ Project harness
-+ Custom Contract-Driven fallback
+GOAL.md
+GOAL_PROGRESS.md
+docs/goals/PORTFOLIO.md
+docs/goals/INDEX.md
+docs/goals/<goal-id>/
+├── SHAPING.md
+├── CONTRACT.md
+├── PROGRESS.md
+└── RESULT.md
 ```
 
-### Primary profiles
+## Assurance overlays
 
-| Work | Profile |
-|---|---|
-| Continue existing work | Brownfield Continue / Finish |
-| Close requirements | PRD / Spec Compliance |
-| Deliver one roadmap increment | Next Milestone |
-| Find and repair important problems | Deep Audit + Remediation |
-| Exercise real workflows | QA / Regression / UAT |
-| Change internals without behavior drift | Safe Refactor / Modernization |
-| Remove release blockers | Release Readiness |
-| Recover a degraded system | Incident Recovery / Stabilization |
-| Upgrade a dependency/framework/runtime | Dependency / Framework Upgrade |
-| Transform schema or stored data | Data Migration / Integrity |
-| Recover divergent branch value | Branch Rescue / Integration |
-| Improve a stable metric against a fixed baseline | Measured Optimization / Benchmark |
-| Answer a bounded technical unknown before production | Technical Spike / Feasibility |
-| None fits | Custom Contract-Driven |
-
-### Assurance overlays
-
-Add only what the target needs:
+Add only the proof that matters:
 
 - Security & Privacy
 - Reliability & Recovery
@@ -84,33 +149,15 @@ Add only what the target needs:
 - Documentation & Knowledge Transfer
 - Compliance & Auditability
 
-See [`assurance-overlays.md`](skills/goal-engine/references/assurance-overlays.md).
+Use a dedicated profile when the concern is the primary outcome; use an overlay when it is secondary.
 
-## Save reusable project mechanics
+## Ultra-short strict-mode command
 
-Use existing instructions and scripts. When setup/run/verify knowledge is repeatedly rediscovered, create or refresh `docs/agent/PROJECT_HARNESS.md` from the [Project Harness template](skills/goal-engine/templates/project-harness-template.md).
-
-## State and archive
+When `GOAL.md` is already approved:
 
 ```text
-GOAL.md                    current approved contract
-GOAL_PROGRESS.md           mutable execution evidence
-docs/goals/PORTFOLIO.md    optional multi-goal coordination
-docs/goals/INDEX.md        closed-goal history
-docs/goals/<goal-id>/      CONTRACT.md + PROGRESS.md + RESULT.md
+/goal Follow goal-engine to complete GOAL.md using its profile, overlays, project harness, and shaping decision record. Stop only when every acceptance item passes with surfaced evidence, or when a contract-defined blocker, approval boundary, budget, goal-drift review, or two-cycle stall applies; preserve reusable state and leave a restartable handoff.
 ```
-
-Never commit secrets, credentials, private data, raw production dumps, exploit-enabling evidence, or unnecessary large logs.
-
-## Ultra-short default
-
-```text
-/goal Follow goal-engine to complete GOAL.md using its profile, overlays, and project harness. Stop only when every acceptance item passes with surfaced evidence, or when a contract-defined blocker, approval boundary, budget, goal-drift review, or two-cycle stall applies; preserve reusable state and leave a restartable handoff.
-```
-
-## Standalone custom fallback
-
-When none of the thirteen presets fits and the skills are not installed, use [`custom-contract-driven-goal.md`](skills/shape-goal/templates/custom-contract-driven-goal.md). It requires the contract to define a bounded iteration, verifier, keep-or-revert rule, review strategy, and stop condition.
 
 ## Update
 

@@ -1,17 +1,35 @@
 # Technical Spike / Feasibility
 
-**Use when:** A bounded technical unknown must be answered before committing to a production implementation, architecture, vendor, migration, or other costly or risky direction.
+**Use when:** A bounded technical unknown must be resolved before production commitment.
 
-## Recommended: skill-backed
+**In simple terms:** Run an isolated experiment and return a Go, Conditional Go, or No-Go decision.
 
-```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in [PATH OR ISSUE]. Use the Technical Spike / Feasibility profile. Keep the investigation isolated, define the decision questions and Go / Conditional Go / No-Go criteria before experimenting, test the smallest representative prototype under realistic constraints, and continue until every question has an evidence-backed answer and a follow-on recommendation; preserve a reusable closeout packet and do not silently turn the spike into production implementation.
-```
+## Run unchanged — recommended
 
-## Standalone fallback
+Copy this command exactly. It uses `shape-goal` to discover and approve the missing inputs, then `goal-engine` to execute the result.
 
 ```text
-/goal Determine whether [APPROACH, VENDOR, ARCHITECTURE, OR TECHNIQUE] is feasible for [USE CASE] under [CONSTRAINTS], and produce a Go / Conditional Go / No-Go recommendation. First establish the actual repository state from applicable instructions, requirements, architecture, prior decisions and goals, native scripts/CI/tests, runtime behavior, supported environments, and Git status/diff/history; protect user, uncommitted, unrelated, and production work. Before building, define the bounded decision questions, alternatives, representative scenarios or data, success and rejection thresholds, evidence required, experiment budget, cleanup rule, and which artifacts may survive the spike. Work in an isolated branch, worktree, sandbox, fixture, or clearly disposable path. Then repeat: test one material assumption with the smallest prototype, adapter, simulation, or experiment that can answer it; use repository-native checks and realistic constraints; compare alternatives consistently; verify documentation claims with executable evidence where practical; record results, failure modes, integration cost, operational risk, limitations, and the next unanswered question; and discard or revert experiments that do not produce reusable evidence. Do not weaken the decision criteria, mutate production, commit to a vendor, or silently convert exploratory code into production implementation. Finish only when every decision question has an evidence-backed answer, the recommendation and its conditions are explicit, important assumptions have been independently reviewed where practical, and any approved follow-on production work is captured as a separate Goal Contract, issue, or milestone. Stop for a contract-defined blocker, approval boundary, exhausted [SPIKE BUDGET], proof that the approach is infeasible, or two consecutive no-progress cycles. At any terminal outcome, preserve a reusable closeout packet under the repository's goal-history convention (default `docs/goals/<goal-id>/`) containing `CONTRACT.md`, final `PROGRESS.md`, and `RESULT.md`; update the history index, retain only approved reusable tests/docs/ADRs/runbooks/fixtures/tooling, clean up disposable artifacts, and exclude secrets, private data, raw production dumps, exploit-enabling evidence, and unnecessarily large logs. Never purchase services, accept binding terms, send sensitive data externally, or cross another irreversible boundary without explicit approval.
+/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next Technical Spike / Feasibility objective. During shaping, load shape-goal's required-input specification for Technical Spike / Feasibility; exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, and any connected authoritative sources before asking the user. Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Then hand off within this same goal to goal-engine to frame one decision question, test the smallest isolated prototypes, compare options, and deliver evidence rather than production code; apply relevant assurance overlays, repository-native verification, regression protection, independent review where warranted, durable progress state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and overlay gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
 ```
 
-**Why it works:** It treats knowledge and a decision—not prototype volume—as the deliverable, keeps exploratory code from leaking into production, and saves the evidence needed to shape the next goal confidently.
+## Inputs the skills resolve
+
+- Decision question and options
+- Decision criteria and evidence
+- Time/cost budget
+- Isolation, cleanup, and decision owner
+- Common contract inputs: outcome, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, goal relationships, state paths, and closeout paths.
+
+**Suggested assurance overlays:** Documentation & Knowledge Transfer
+
+`shape-goal` must search the repository and connected authoritative sources before asking. It asks only material unresolved decisions, one at a time with a recommendation. The active `/goal` is not complete when the contract is shaped; execution and passing evidence are still required.
+
+## Run unchanged — self-contained fallback
+
+Use this command when the skills are unavailable. It reproduces the same shape-then-execute gate without requiring placeholders.
+
+```text
+/goal Determine, obtain approval for, and complete this repository's next Technical Spike / Feasibility objective without requiring the user to prefill placeholders. Phase 1 — shape: establish the actual repository state from instructions, Git state/history, requirements, architecture, plans, prior goals, tests/CI, runtime behavior, and available authoritative tools or connected sources. Build an input ledger for the target, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, and the profile-specific inputs described in this goal. Search before asking; when a material decision cannot be derived, ask the user one question at a time, include the evidence and a recommended answer, record the decision, and continue until a concise Goal Contract is approved. Do not edit production before approval, and do not treat contract creation as completion. Phase 2 — execute: frame one decision question, test the smallest isolated prototypes, compare options, and deliver evidence rather than production code. In particular, keep spike code isolated and disposable; do not let prototype become production silently; finish with a decision and explicit conditions. Make small coherent reversible changes; use repository-native checks; verify findings before fixing; add regression protection; review important diffs independently when practical; keep only changes that preserve or improve the verified baseline; and persist progress, failed approaches, evidence, reusable outputs, and the next action. Finish only when every approved acceptance and assurance item passes with surfaced evidence and protected behavior remains intact. Stop for a genuine external blocker, required approval, exhausted approved budget, material goal drift, or two consecutive no-progress cycles. At every terminal outcome, preserve a reusable closeout packet containing CONTRACT.md, final PROGRESS.md, and RESULT.md under the repository's goal-history convention, update the portfolio/history, promote durable tests/docs/ADRs/runbooks/fixtures/tooling, and never archive secrets, private data, production dumps, exploit-enabling evidence, or unnecessary large logs. Never perform destructive, deployment, release, credential, billing, or external-system actions without explicit approval.
+```
+
+**Why it works:** The user chooses only the kind of outcome. The skills or fallback derive the exact target and proof from the real repository, obtain approval for material decisions, and then keep working until the approved evidence—not agent confidence—says the goal is complete.

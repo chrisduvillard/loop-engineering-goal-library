@@ -4,16 +4,27 @@
 **Outcome:** Achieved  
 **Closed:** 2026-08-25  
 **Contract:** `GOAL.md`  
+**Shaping history:** `SHAPING.md`  
+**Completed / approval shaping rounds:** R1, R2 / R2  
 **Profile:** PRD / Spec Compliance  
 **Assurance overlays:** Data Integrity & Governance; Compatibility & Portability  
 **Project harness:** `docs/agent/PROJECT_HARNESS.md`  
-**Library:** chrisduvillard/loop-engineering-goal-library @ 0.2.0  
+**Library:** chrisduvillard/loop-engineering-goal-library @ 0.4.0  
 **Final branch/worktree/SHA:** `codex/portfolio-import-v1-4` / isolated worktree / `def5678`  
 **Portfolio updated:** `docs/goals/PORTFOLIO.md`
 
 ## Target
 
 The documented portfolio import v1.4 workflow accepts supported CSV and XLSX files, passes its UAT matrix, and preserves existing exports.
+
+## Shaping decision trace
+
+- Approval round: R2
+- Material decision IDs: R1-Q1, R1-Q2, R2-Q1, R2-Q2
+- Deferred decision: large-file performance budget, moved to `2026-08-26-import-performance-budget`
+- Corrections or superseded answers: none
+
+See `SHAPING.md` for the exact questions, user answers, recommendations, and round summaries.
 
 ## Acceptance and overlay evidence
 
@@ -48,6 +59,7 @@ The documented portfolio import v1.4 workflow accepts supported CSV and XLSX fil
 
 ## Decisions and durable knowledge
 
+- Shaping history: `SHAPING.md`
 - Regression tests: `tests/imports/test_spreadsheet_dates.py`
 - Documentation: `docs/product/portfolio-import-v1.4.md`
 - Project harness: verified import/UAT/export commands

@@ -1,0 +1,68 @@
+# Goal Shaping History: [GOAL NAME]
+
+**Goal ID:** [GOAL ID]  
+**Contract:** [PATH OR ISSUE]  
+**Lifecycle state:** Candidate / Ready / Active / Paused / Closed  
+**Created:** [DATE]  
+**Last updated:** [DATE]  
+**Completed rounds:** [COUNT / IDS]  
+**Latest round:** [ROUND ID]  
+**Approval round:** [ROUND ID OR NONE]  
+**Storage note:** Preserve every asked question and answer; redact sensitive material and link approved secure evidence when necessary.
+
+## Current decision index
+
+| Decision | Current answer | Source | Contract impact | Status |
+|---|---|---|---|---|
+| [DECISION] | [NORMALIZED ANSWER] | [R1-Q1] | [SECTIONS] | Current / Superseded / Deferred |
+
+## Round R1 — Initial shaping
+
+**Purpose:** Resolve the minimum material decisions required for a safe, verifiable Goal Contract.  
+**Started / completed:** [DATES]  
+**Lenses covered:** [OUTCOME / SCOPE / EVIDENCE / PROTECTION / AUTHORITY / OTHER]
+
+### Questions and answers
+
+#### R1-Q1 — [DECISION TITLE]
+
+- **Status:** Answered / Deferred / Declined / Superseded
+- **Why this was asked:** [MATERIAL UNCERTAINTY]
+- **Evidence considered:** [REPOSITORY / RUNTIME / CONNECTED SOURCE]
+- **Recommendation:** [RECOMMENDED ANSWER AND REASON]
+- **Options or trade-off:** [CONCISE OPTIONS]
+- **Exact question:**
+
+> [QUESTION AS ASKED]
+
+- **User answer:**
+
+> [VERBATIM ANSWER WHEN SAFE, OTHERWISE REDACTED SUMMARY + SECURE REFERENCE]
+
+- **Normalized decision:** [DECISION USED BY THE CONTRACT]
+- **Contract impact:** [TARGET / SCOPE / EVIDENCE / PROTECTION / AUTHORITY / EXIT / OTHER]
+- **Supersedes:** [QUESTION OR DECISION ID / NONE]
+
+### Round summary
+
+- **New decisions:** [LIST]
+- **Contract revisions:** [LIST]
+- **Remaining uncertainty:** [LIST OR NONE]
+- **Readiness:** Ready for approval / Deeper shaping recommended / Blocked / Paused
+- **Next step:** Approve / Run another round / Resolve blocker / Pause
+
+## Round R2 — Deepening
+
+Copy the round structure above. Read all earlier rounds first, select an unexplored or weak lens, and ask only non-duplicate material questions one at a time.
+
+## Corrections and supersessions
+
+| Date | New source | Superseded source | Change | Reason |
+|---|---|---|---|---|
+| [DATE] | [R2-Q1] | [R1-Q1] | [OLD → NEW] | [NEW EVIDENCE OR USER REVISION] |
+
+## Open and deferred decisions
+
+| Decision | Status | Why unresolved | Owner / trigger | Contract treatment |
+|---|---|---|---|---|
+| [DECISION] | Deferred / Blocked | [REASON] | [OWNER / EVENT] | Out of scope / Approval required / Prevents readiness |

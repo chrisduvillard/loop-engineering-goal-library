@@ -37,8 +37,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python scripts/fix_apply_script.py
           python scripts/apply_adversarial_robustness.py
           npm install --package-lock-only --ignore-scripts
+          rm -f scripts/fix_apply_script.py
           rm -f scripts/apply_adversarial_robustness.py
           rm -f .github/workflows/apply-adversarial-robustness.yml
           python -m compileall -q scripts tests

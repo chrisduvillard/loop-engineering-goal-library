@@ -1,30 +1,45 @@
-# Custom Contract-Driven `/goal`
+# Custom Contract-Driven Goal
 
 **Use when:** The desired outcome is measurable, but none of the catalog's primary profiles matches the dominant control loop.
 
-**In simple terms:** Let the skills discover the unusual loop, make it measurable and bounded, obtain approval, then execute it safely.
+**In simple terms:** Let `shape-goal` discover the unusual loop, make it measurable and bounded, obtain approval, and then return the exact execution `/goal`.
 
-## Run unchanged — recommended
+## Recommended — interactive shaping
 
-Copy this command exactly.
+Run this outside an active `/goal`:
 
-```text
-/goal Use the installed shape-goal and goal-engine skills to discover, approve, and complete this repository's next measurable engineering objective whose dominant execution loop does not fit an existing catalog profile. During shaping, exhaustively inspect repository instructions, Git state and history, requirements, architecture, plans, tests and CI, runtime behavior, prior goal state, the project harness, the complete profile catalog, and any connected authoritative sources before asking the user. Prove that no existing profile cleanly fits; then resolve and obtain approval for one observable outcome, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, one bounded iteration unit, one primary verifier or stable rubric, a keep-or-revert rule, review and regression obligations, and objective success, blocker, goal-drift, budget, and stall exits. Ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract. Then hand off within this same goal to goal-engine to run the approved custom loop through small reversible iterations, consistent evaluation, keep-or-revert decisions, repository-native checks, independent review where warranted, durable state, and reusable closeout. Do not declare success when shaping is complete. Finish only when every approved acceptance and assurance gate passes with surfaced evidence and protected behavior has not regressed. Stop only for a contract-defined blocker, approval boundary, budget, material goal drift, or two consecutive no-progress cycles.
-```
+| Host | Command |
+|---|---|
+| Claude Code | `/shape-goal Use a Custom Contract-Driven profile` |
+| Codex CLI / IDE | `$shape-goal Use a Custom Contract-Driven profile` |
 
-## Inputs the skills resolve
+`shape-goal` proves that no existing profile cleanly fits, resolves the iteration and verification model, asks one material question per turn, and returns the execution command only after approval.
+
+## Inputs the skill resolves
 
 - Why no existing primary profile fits
-- One bounded unit of iteration
-- One primary verifier or stable evaluation rubric
+- One observable outcome
+- One bounded iteration unit
+- One primary verifier or stable rubric
 - Keep-or-revert rule
-- Review, regression, authority, budget, and stopping logic
-- Common Goal Contract inputs and durable state paths
+- Review and regression strategy
+- Scope, exclusions, protected behavior, authority, budget, and stopping logic
+- Durable state and closeout paths
 
-## Run unchanged — self-contained fallback
+## Advanced — autonomous preflight
+
+Use only when an approved repository artifact already resolves every owner decision.
 
 ```text
-/goal Determine, obtain approval for, and complete this repository's next measurable engineering objective whose dominant loop does not fit an existing catalog profile, without requiring the user to prefill placeholders. Phase 1 — shape: inspect repository instructions, Git state/history, requirements, architecture, plans, prior goals, tests/CI, runtime behavior, and every available authoritative source. Search before asking. Build an input ledger and prove that a standard profile does not fit; resolve one observable outcome, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, one bounded iteration unit, one primary verifier or stable rubric, a keep-or-revert rule, review and regression obligations, and objective stop conditions. Ask only unresolved owner decisions, one at a time with evidence and a recommended answer. Do not edit production before a Goal Contract is approved, and do not treat contract creation as completion. Phase 2 — execute: repeat the approved bounded iteration, run the same verifier under the required conditions, apply the keep-or-revert rule, run relevant repository-native and assurance checks, review the diff, record evidence and failed approaches, and continue until the approved success condition passes. Do not silently change the outcome, verifier, thresholds, iteration unit, or authority. Finish only when every acceptance and assurance item passes with surfaced evidence and protected behavior remains intact. Stop for a genuine blocker, required approval, exhausted approved budget, material goal drift, or two consecutive no-progress cycles. At every terminal outcome, preserve a reusable closeout packet containing CONTRACT.md, final PROGRESS.md, and RESULT.md; update history/portfolio, promote durable tests/docs/ADRs/runbooks/fixtures/tooling, and never archive secrets, private data, production dumps, exploit-enabling evidence, or unnecessary large logs. Never perform destructive, deployment, release, credential, billing, or external-system actions without explicit approval.
+/goal Use the installed shape-goal and goal-engine skills to discover and complete this repository's next measurable engineering objective whose dominant execution loop does not fit an existing catalog profile. Search repository and connected authoritative evidence first and prove that no standard profile cleanly fits. Continue inside this /goal only when an already-approved Goal Contract or authoritative artifact resolves the outcome, scope, exclusions, evidence, protection, authority, budget, bounded iteration unit, primary verifier, keep-or-revert rule, review strategy, and stop conditions. Otherwise create or resume SHAPING.md, save the unresolved decision and one recommended question, stop as Approval required, and tell the user to resume shape-goal outside /goal; do not ask the question or take another autonomous turn. After approval, use goal-engine to run small reversible iterations, apply the same verifier, keep or revert by evidence, run repository-native and assurance checks, review important changes, preserve reusable state, and finish only when every approved gate passes without protected-behavior regression. Never perform destructive, production, deployment, release, credential, billing, or external-system actions without explicit approval.
+```
+
+## Advanced — self-contained preflight
+
+Use only when the skills are unavailable and no owner interaction is expected.
+
+```text
+/goal Determine and complete this repository's next measurable engineering objective whose dominant loop does not fit an existing catalog profile, without requiring the user to prefill placeholders. Search repository and authoritative evidence first and prove that no standard profile fits. Continue only when an existing approved artifact resolves one outcome, scope, exclusions, evidence, protected behavior, authority, budget, bounded iteration unit, primary verifier, keep-or-revert rule, review strategy, regression obligations, and objective exits. Otherwise create or resume SHAPING.md, save the unresolved decision and one recommended question, stop as Approval required, and tell the user to continue shaping outside /goal; do not ask the question or take another autonomous turn. Once approved, repeat the bounded iteration, run the same verifier, apply the keep-or-revert rule, run repository-native and assurance checks, review the diff, preserve progress and failed approaches, and finish only when every gate passes with surfaced evidence. Preserve a reusable closeout packet with SHAPING.md, CONTRACT.md, PROGRESS.md, and RESULT.md. Never perform destructive, production, deployment, release, credential, billing, or external-system actions without explicit approval.
 ```
 
 **Why it works:** It preserves the universal brownfield safety system while allowing an unusual iteration and evaluation pattern to remain explicit, falsifiable, bounded, reviewable, and reusable.

@@ -1,6 +1,6 @@
 ---
 name: goal-engine
-description: Execute one approved Goal Contract safely inside a native /goal loop. Also receives zero-friction launchers after shape-goal has discovered and approved their missing inputs. Use for brownfield orientation, any library profile or custom loop, assurance overlays, repository-native verification, regression protection, independent review, durable progress, reusable closeout, and goal-drift detection. Never invent or materially redefine the target.
+description: Execute one approved Goal Contract safely inside a native /goal loop. Also receives zero-friction launchers after shape-goal has discovered and approved their missing inputs and preserved the full shaping question-and-answer history. Use for brownfield orientation, any library profile or custom loop, assurance overlays, repository-native verification, regression protection, independent review, durable progress, reusable closeout, and goal-drift detection. Never invent or materially redefine the target.
 compatibility: Portable Agent Skills host with repository read/write tools. Native /goal support is required for durable continuation and host-side completion evaluation.
 user-invocable: true
 disable-model-invocation: false
@@ -13,9 +13,9 @@ metadata:
 
 # Goal Engine
 
-Execute one approved outcome without losing brownfield safety, changing the goal silently, or discarding reusable knowledge.
+Execute one approved outcome without losing brownfield safety, changing the goal silently, reopening settled decisions without cause, or discarding reusable knowledge.
 
-> **Profile = loop shape · overlays = additional proof · harness = project mechanics · contract = project truth · native `/goal` = persistence**
+> **Profile = loop shape · overlays = additional proof · harness = project mechanics · shaping history = decision trail · contract = project truth · native `/goal` = persistence**
 
 ## Zero-friction handoff
 
@@ -24,10 +24,11 @@ A native `/goal` may begin with `shape-goal` because the user copied a parameter
 In that case:
 
 1. Do not edit production until `shape-goal` has produced an approved contract.
-2. Re-read the approved contract, input ledger, profile, overlays, harness, and state paths.
-3. Surface the exact outcome and acceptance evidence for the native evaluator.
-4. Continue execution; do not treat shaping as completion.
-5. If the contract cannot be approved, preserve the draft and stop as Blocked or Approval required, never Achieved.
+2. Re-read the approved contract, shaping history, input ledger, profile, overlays, harness, and state paths.
+3. Confirm the contract names its approval shaping round.
+4. Surface the exact outcome and acceptance evidence for the native evaluator.
+5. Continue execution; do not treat shaping as completion.
+6. If the contract cannot be approved, preserve the draft and shaping history and stop as Blocked or Approval required, never Achieved.
 
 Outside bootstrap mode, if no approved contract exists, stop before production edits and invoke `shape-goal`.
 
@@ -36,12 +37,15 @@ Outside bootstrap mode, if no approved contract exists, stop before production e
 Identify:
 
 1. Approved Goal Contract, Goal ID, revision, state, and priority
-2. Dependencies, related goals, portfolio path, and branch/worktree
-3. Primary profile or custom-loop definition
-4. Assurance overlays
-5. Project harness or authoritative setup/run/verify sources
-6. Acceptance evidence and protected behavior
-7. Progress, archive, history, library version, and authority boundaries
+2. Shaping-history path, completed rounds, last round, and approval round
+3. Dependencies, related goals, portfolio path, and branch/worktree
+4. Primary profile or custom-loop definition
+5. Assurance overlays
+6. Project harness or authoritative setup/run/verify sources
+7. Acceptance evidence and protected behavior
+8. Progress, archive, history, library version, and authority boundaries
+
+The Goal Contract is the current authority. The shaping history explains why decisions were made, records rejected alternatives, and prevents repeated questions; it does not override a later approved contract revision.
 
 Contract clauses override profile and overlay defaults. Profiles and overlays may strengthen proof but may not weaken acceptance criteria or expand authority.
 
@@ -50,10 +54,12 @@ Contract clauses override profile and overlay defaults. Profiles and overlays ma
 Before persistent changes, read applicable:
 
 - Repository and agent instructions
-- Approved contract, input ledger, and authoritative sources
+- Approved contract, shaping history, input ledger, and authoritative sources
 - Architecture, ADRs, PRDs, specifications, plans, portfolio, prior goal archives, and handoffs
 - Project harness, native scripts, CI, tests, fixtures, benchmarks, release gates, and runtime entry points
 - Git status, diff, branch, HEAD, worktrees, and relevant history
+
+Use the shaping history to understand non-goals, user priorities, accepted trade-offs, and alternatives already rejected. Do not reopen a settled owner decision merely because implementation is difficult. Reopen only when materially new evidence triggers goal drift.
 
 Protect uncommitted, user-authored, and unrelated work. Never discard changes merely to obtain a clean tree.
 
@@ -61,10 +67,11 @@ Protect uncommitted, user-authored, and unrelated work. Never discard changes me
 
 Resolve contradictions using:
 
-1. Explicit authority in repository instructions or the contract
-2. Later approved decisions over drafts
+1. Explicit authority in repository instructions or the approved contract
+2. Later approved contract revisions over earlier drafts or shaping answers
 3. Current executable evidence over unsupported status claims
-4. Owner escalation when materially different outcomes remain plausible
+4. The shaping decision trail for rationale and intended semantics
+5. Owner escalation through a new shaping round when materially different outcomes remain plausible
 
 A stale checkbox is not proof that work remains. Existing code is not proof that a requirement passes.
 
@@ -73,7 +80,8 @@ A stale checkbox is not proof that work remains. Existing code is not proof that
 Proceed only when:
 
 - Contract is Approved or Active and names one outcome
-- Goal ID, revision, profile/custom loop, overlays, state, and archive paths are defined
+- Goal ID, revision, profile/custom loop, overlays, state, shaping, and archive paths are defined
+- The approval shaping round is recorded
 - Dependencies are satisfied or explicitly handled
 - Scope, verifiers, protected behavior, authority, review triggers, and exits are clear
 - Branch/worktree matches the active portfolio entry
@@ -111,6 +119,7 @@ A stale harness is a hypothesis, not authority.
 Record:
 
 - Branch/SHA/worktree and preserved changes
+- Contract revision and approval shaping round
 - Exact native checks and results
 - Known pre-existing failures and accepted exceptions
 - Acceptance and overlay ledger
@@ -133,11 +142,11 @@ Repeat:
 7. **Apply overlays** and broaden verification at meaningful checkpoints.
 8. **Keep or revert** based on evidence.
 9. **Record** evidence, attempts, reusable discoveries, portfolio-relevant changes, and the next action.
-10. **Repeat** without asking what comes next when the contract and repository answer it.
+10. **Repeat** without asking what comes next when the contract, shaping decisions, and repository answer it.
 
 Do not stop at planning, scaffolding, documentation, analysis, or test creation while required production implementation remains.
 
-## 8. Goal-fit gate
+## 8. Goal-fit gate and deeper reshaping
 
 At meaningful checkpoints, ask whether the approved contract still represents the user's current need.
 
@@ -151,8 +160,17 @@ Pause and invoke `shape-goal` when a material change affects:
 - Dependencies or lifecycle state
 - Primary profile or assurance overlays
 - Budget or stop conditions
+- User satisfaction with the current contract
 
-Preserve progress before switching. Never silently expand scope.
+When the user requests deeper shaping:
+
+1. Preserve current progress and branch/SHA.
+2. Reopen shaping, not production implementation.
+3. Append a new non-duplicate round to the existing `SHAPING.md`.
+4. Keep prior questions and answers immutable.
+5. Resume execution only after the revised contract is explicitly approved and records the new approval round.
+
+Never silently expand scope or edit prior shaping answers.
 
 ## 9. Evidence for the evaluator
 
@@ -163,6 +181,7 @@ After each checkpoint, surface:
 - Regressions checked
 - Diff and review status
 - Goal-fit result
+- Current contract revision and approval shaping round
 - No-progress count
 - Remaining gap and next action
 - State artifact updated
@@ -173,7 +192,7 @@ The evaluator may not inspect files or run commands independently. “Implemente
 
 Use fresh review or isolated subagents for high-blast-radius, security, authorization, migration, concurrency, reliability, architecture, compliance, accessibility, or subjective visual changes when practical.
 
-Provide the reviewer the contract, relevant diff, evidence, and overlays—not the implementer's persuasive narrative. Treat findings as hypotheses until verified.
+Provide the reviewer the contract, relevant shaping decisions, diff, evidence, and overlays—not the implementer's persuasive narrative. Treat findings as hypotheses until verified.
 
 ## 11. Stall detection
 
@@ -185,8 +204,9 @@ Progress requires at least one of:
 - Closed acceptance gap
 - Newly proven blocker or approval boundary
 - Reusable verifier, fixture, diagnostic, or harness improvement that materially advances the next cycle
+- A completed shaping round that resolves a genuine material ambiguity
 
-After two consecutive no-progress cycles, stop as Stalled and preserve a restartable handoff. Do not repeat unchanged deterministic failures.
+Repeated searches or questions without new evidence or decisions do not count as progress. After two consecutive no-progress cycles, stop as Stalled and preserve a restartable handoff.
 
 ## 12. Authority boundaries
 
@@ -213,19 +233,19 @@ Move verified recurring knowledge to the correct maintained home:
 - Stable evaluation → benchmark or test
 - Important limitation → residual-risk documentation
 
-Do not permanently document speculation or duplicate authoritative material.
+The shaping history remains the durable record of questions, answers, trade-offs, and supersessions. Promote only stable decisions that belong in maintained product or architecture artifacts; do not duplicate the entire interview elsewhere.
 
 ## 14. Preserve lifecycle state and closeout
 
-- **Paused** is non-terminal: persist progress, branch/SHA, next action, and resume condition.
+- **Paused** is non-terminal: persist shaping history, progress, branch/SHA, next action, and resume condition.
 - **Achieved, Cancelled, Superseded, Blocked, Approval required, Budget exhausted, and Stalled** receive closeout packets when the run is closed.
 
 At closeout:
 
-1. Snapshot `CONTRACT.md`, `PROGRESS.md`, and `RESULT.md`
+1. Preserve `SHAPING.md` and snapshot `CONTRACT.md`, `PROGRESS.md`, and `RESULT.md`
 2. Update portfolio and history
-3. Link reusable outputs and related goals
-4. Record library version and contract revision
+3. Link reusable outputs, important decision IDs, and related goals
+4. Record library version, contract revision, completed shaping rounds, and approval round
 5. Exclude secrets, private data, production dumps, exploit-enabling evidence, and unnecessary logs
 
 Closed evidence is immutable. Later work receives a new Goal ID or approved revision and links back.
@@ -238,7 +258,7 @@ Declare **Achieved** only when:
 - Required overlay and broader gates pass
 - Protected behavior and baseline have not regressed
 - Important changes are reviewed and unexplained diffs resolved
-- Durable state, harness, and knowledge are current
+- Durable shaping history, contract, progress, harness, and knowledge are current
 - Closeout packet is complete
 - Working tree has no unexplained agent-created changes
 
@@ -247,6 +267,7 @@ Close with:
 ```text
 Outcome:
 Goal ID / revision / portfolio state:
+Shaping history / completed rounds / approval round:
 Acceptance and overlay evidence:
 Delivered behavior:
 Regression and review status:

@@ -40,7 +40,8 @@ jobs:
           set -euo pipefail
           python scripts/fix_refinement_script.py
           python scripts/refine_adversarial_robustness.py
-          rm -f scripts/fix_refinement_script.py scripts/refine_adversarial_robustness.py
+          python scripts/post_refinement_fix.py
+          rm -f scripts/fix_refinement_script.py scripts/refine_adversarial_robustness.py scripts/post_refinement_fix.py
           mv .github/workflows/apply-second-pass-robustness.yml /tmp/apply-second-pass-robustness.yml
           npm ci --ignore-scripts
           python -m compileall -q scripts tests

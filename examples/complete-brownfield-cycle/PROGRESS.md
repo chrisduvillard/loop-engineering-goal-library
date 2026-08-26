@@ -3,7 +3,9 @@
 **Goal ID / revision:** 2026-08-25-portfolio-import-v1-4 / 1  
 **Portfolio state / priority:** Closed / P1  
 **Contract:** `GOAL.md`  
-**Library:** chrisduvillard/loop-engineering-goal-library @ 0.2.0  
+**Shaping history:** `SHAPING.md`  
+**Completed / approval shaping rounds:** R1, R2 / R2  
+**Library:** chrisduvillard/loop-engineering-goal-library @ 0.4.0  
 **Profile:** PRD / Spec Compliance  
 **Assurance overlays:** Data Integrity & Governance; Compatibility & Portability  
 **Project harness:** `docs/agent/PROJECT_HARNESS.md`  
@@ -11,12 +13,14 @@
 **Last checkpoint:** 2026-08-25 closeout  
 **No-progress count:** 0
 
-## Dependencies and goal fit
+## Dependencies, shaping, and goal fit
 
 - Parent goal: none
 - Depends on: none
 - Related goal: `2026-08-26-import-performance-budget`
 - Current contract still fits user need: Yes
+- Latest shaping round: R2
+- New shaping round required: No — every material decision remained valid through closeout
 - Last lifecycle decision: Close
 
 ## Baseline
@@ -56,15 +60,17 @@
 
 ## Reusable discoveries and harness updates
 
+- `SHAPING.md` preserves the scope, compatibility, date-semantics, and follow-on performance decisions.
 - `tests/imports/test_spreadsheet_dates.py`
 - `tests/fixtures/imports/portfolio_dates.xlsx`
 - `docs/product/portfolio-import-v1.4.md`
 - Verified import and export commands recorded in the project harness.
 
-## Blockers and approvals
+## Blockers, approvals, and deferred shaping decisions
 
-- None.
+- Large-file performance budget — deferred in R2-Q2 to the follow-on optimization goal.
+- No execution blockers or approvals remain.
 
 ## Next action
 
-Archive closeout, update portfolio/history, then shape `2026-08-26-import-performance-budget` only when the owner chooses to start it.
+Archive `SHAPING.md`, contract, progress, and result; update portfolio/history; then shape `2026-08-26-import-performance-budget` only when the owner chooses to start it.

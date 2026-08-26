@@ -14,6 +14,10 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Zero-friction two-phase launchers for every goal: `shape-goal` resolves and approves missing inputs, then `goal-engine` executes the approved contract.
 - A profile-specific input specification covering every goal and an exhaustive-but-bounded search-and-question protocol.
+- Durable append-only shaping histories under `docs/goals/<goal-id>/SHAPING.md`.
+- Stable shaping round and question identifiers, saved recommendations and answers, correction/supersession records, deferred-decision tracking, and approval-round linkage.
+- Repeatable deepening rounds for users who want to challenge or refine a proposed Goal Contract without losing earlier answers.
+- A shaping-history protocol, reusable template, and worked two-round example.
 - Nine dedicated product and quality profiles:
   - Frontend UI / UX / Accessibility
   - Documentation Synchronization / Knowledge Transfer
@@ -25,19 +29,23 @@ The project follows semantic versioning while it is field-tested. Versions below
   - Data Quality / Pipeline Assurance
   - Compliance / Audit Readiness
 - A machine-readable `goals/catalog.json` and generated `goals/README.md`.
-- `QUALITY_GOALS.md` for the new product and quality profiles.
+- `QUALITY_GOALS.md` for the product and quality profiles.
 - OpenAI host metadata for both skills.
 - A real closeout packet for this repository's final deep review.
 
 ### Changed
 
-- All 22 recommended `/goal` commands now run unchanged and contain no repository-specific placeholders.
+- All 22 recommended `/goal` commands run unchanged and contain no repository-specific placeholders.
 - Every goal also has a self-contained no-placeholder fallback.
-- `shape-goal` now supports bootstrap mode inside an already-active native `/goal`, keeps an input ledger, searches before asking, and hands off without claiming completion.
-- `goal-engine` now has an explicit zero-friction handoff gate and distinguishes dedicated quality profiles from secondary assurance overlays.
-- The README, quick reference, architecture, contract template, catalog, generated libraries, and contribution guidance now reflect the zero-friction workflow.
-- CI now validates launcher invariants, profile input coverage, generated catalogs, host metadata, and immutable GitHub Action pins.
+- `shape-goal` supports bootstrap mode inside an already-active native `/goal`, keeps an input ledger, searches before asking, saves every asked question and answer, supports repeated deeper rounds, and hands off without claiming completion.
+- `goal-engine` reads the shaping decision trail, avoids reopening settled decisions without new evidence, and preserves `SHAPING.md` at pause and closeout.
+- Goal Contracts record shaping-history path, completed rounds, last round, and approval round.
+- Progress, result, history, README, quick reference, architecture, and state templates link the durable shaping record.
+- Sensitive shaping answers are redacted and linked to approved secure evidence rather than committed verbatim.
+- The README, catalog, generated libraries, and contribution guidance reflect the zero-friction workflow.
+- CI validates launcher invariants, profile input coverage, shaping-history schemas, generated catalogs, host metadata, and immutable GitHub Action pins.
 - GitHub Actions are pinned to full commit SHAs.
+- A temporary write-enabled workflow used to assemble the review branch was removed before merge.
 
 ## [0.3.0] - 2026-08-25
 

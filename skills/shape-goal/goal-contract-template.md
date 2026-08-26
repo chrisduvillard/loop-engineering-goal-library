@@ -10,6 +10,10 @@
 **Library:** chrisduvillard/loop-engineering-goal-library @ [VERSION OR COMMIT]  
 **Launcher:** [GOAL FILE / DIRECT SHAPING / AUTHORITATIVE ISSUE]  
 **Input ledger:** [THIS DOCUMENT SECTION / PATH]  
+**Shaping history:** [EXISTING DECISION LOG OR `docs/goals/[GOAL ID]/SHAPING.md`]  
+**Completed shaping rounds:** [COUNT / IDS]  
+**Last shaping round:** [ROUND ID]  
+**Approval shaping round:** [ROUND ID OR NONE]  
 **Branch / worktree / SHA:** [OPTIONAL]  
 **Primary profile:** [ONE OF THE CATALOG PROFILES OR CUSTOM CONTRACT-DRIVEN]  
 **Assurance overlays:** [LIST OR NONE]  
@@ -29,11 +33,21 @@
 
 [Short evidence-backed priority and dependency rationale.]
 
+## Shaping history and decision trace
+
+- **History path:** [PATH]
+- **Current decision source:** [ROUND / QUESTION IDS]
+- **Open or deferred decisions:** [LIST OR NONE]
+- **Corrections or superseded answers:** [IDS OR NONE]
+- **Approval basis:** [ROUND SUMMARY AND APPROVER]
+
+The detailed questions, answers, evidence, recommendations, and corrections live in the shaping history. Do not duplicate the full interview here.
+
 ## Input resolution record
 
-| Input | Resolution | Evidence or approved decision |
+| Input | Resolution | Evidence or approved decision source |
 |---|---|---|
-| Outcome | Evidence / Safe default / Owner decision | [SOURCE] |
+| Outcome | Evidence / Safe default / Owner decision | [SOURCE OR QUESTION ID] |
 | Scope and exclusions | ... | ... |
 | Acceptance evidence | ... | ... |
 | Protected behavior | ... | ... |
@@ -102,14 +116,15 @@ Complete only when no preset fits:
 
 Keep this Goal ID only while the observable outcome remains the same.
 
-- Clarifications record a revision note.
-- Material contract changes pause execution, require approval, and increment revision.
+- Clarifications append a shaping entry and revision note.
+- Material contract changes pause execution, require a new shaping round and approval, and increment revision.
 - A different outcome receives a new Goal ID.
 - Unrelated requests enter the portfolio rather than this contract.
+- Prior questions and answers remain immutable; corrections append and supersede them.
 
 ## Goal-drift review triggers
 
-Re-run `shape-goal` when:
+Re-run `shape-goal` and append a new shaping round when:
 
 - [PRIORITY / REQUIREMENT / INCIDENT / DEPENDENCY / DATE / CHECKPOINT]
 
@@ -135,6 +150,7 @@ Explicit approval is required before:
 - **Budget:** [TURN / TIME / COST / EXPERIMENT BOUND]
 - **Stalled:** Two serious iterations produce neither new evidence nor measurable progress.
 - **Goal drift:** Pause and return to `shape-goal` when the contract no longer represents the desired outcome.
+- **Shaping not accepted:** Preserve the draft and history; run another round or pause rather than beginning production work.
 
 ## Sources of truth
 
@@ -148,6 +164,7 @@ At terminal closeout preserve:
 
 ```text
 [ARCHIVE PATH]/
+├── SHAPING.md
 ├── CONTRACT.md
 ├── PROGRESS.md
 └── RESULT.md
@@ -155,7 +172,7 @@ At terminal closeout preserve:
 
 Update goal history and portfolio. Promote verified knowledge to tests, ADRs/docs, runbooks, design references, project harness, fixtures, scripts, benchmarks, or residual-risk records.
 
-Never archive secrets, private user data, production dumps, exploit-enabling evidence, or unnecessary large logs.
+Never archive secrets, private user data, production dumps, exploit-enabling evidence, or unnecessary large logs. Redact sensitive shaping answers and link approved secure evidence instead.
 
 **Expected reusable outputs:** [LIST OR NONE]
 
@@ -164,11 +181,11 @@ Never archive secrets, private user data, production dumps, exploit-enabling evi
 Strict two-step mode:
 
 ```text
-/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its selected execution profile, assurance overlays, and project harness. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
+/goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its selected execution profile, assurance overlays, project harness, and shaping decision record. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
 
 ## Revision and approval record
 
-| Revision | Date | Change | Lifecycle decision | Approved by |
-|---|---|---|---|---|
-| 1 | [DATE] | Initial contract | New | [OWNER] |
+| Revision | Date | Change | Lifecycle decision | Shaping round | Approved by |
+|---|---|---|---|---|---|
+| 1 | [DATE] | Initial contract | New | [ROUND ID] | [OWNER] |

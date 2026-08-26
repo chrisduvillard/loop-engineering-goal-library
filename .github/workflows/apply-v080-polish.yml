@@ -1,0 +1,67 @@
+name: Apply v0.8.0 final polish
+
+on:
+  push:
+    branches: [codex/v080-final-review]
+
+concurrency:
+  group: v080-final-polish
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out review branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: codex/v080-final-review
+          fetch-depth: 0
+
+      - name: Polish references and verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("skills/shape-goal/references/profile-inputs.md")
+          text = path.read_text(encoding="utf-8")
+          text = text.replace("- map the real architecture", "- Map the real architecture")
+          text = text.replace("- inventory the public surface", "- Inventory the public surface")
+          text = text.replace(
+              "and protected behavior has not regressed.\n## Routing distinctions for profiles 25–31",
+              "and protected behavior has not regressed.\n\n## Routing distinctions for profiles 25–31",
+          )
+          text = text.replace(
+              "unsupported ranking guarantee.\n## Routing distinctions for profiles 25–31",
+              "unsupported ranking guarantee.\n\n## Routing distinctions for profiles 25–31",
+          )
+          path.write_text(text, encoding="utf-8")
+
+          path = Path("skills/goal-engine/references/loop-profiles.md")
+          text = path.read_text(encoding="utf-8").replace(
+              "repository checks alone.\n## Boundary checks for profiles 25–31",
+              "repository checks alone.\n\n## Boundary checks for profiles 25–31",
+          )
+          path.write_text(text, encoding="utf-8")
+          PY
+          rm -f .github/workflows/apply-v080-polish.yml
+          python scripts/sync_goal_launchers.py --check
+          python scripts/sync_goal_docs.py --check
+          python scripts/validate_shaping_history_diff.py --self-test --base-ref origin/main
+          python scripts/validate_repository.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Polish v0.8.0 profile references"
+          git push origin HEAD:codex/v080-final-review

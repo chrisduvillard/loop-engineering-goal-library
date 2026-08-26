@@ -38,6 +38,32 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace(path: str, old: str, new: str) -> None:
+              target = Path(path)
+              source = target.read_text(encoding="utf-8")
+              if source.count(old) != 1:
+                  raise SystemExit(f"{path}: expected one occurrence, found {source.count(old)}")
+              target.write_text(source.replace(old, new, 1), encoding="utf-8", newline="\n")
+
+          replace(
+              "scripts/package_skills.py",
+              "VERSION is not a safe semantic version:",
+              "VERSION is not semantic; expected a safe semantic version:",
+          )
+          replace(
+              "scripts/package_skills.py",
+              "archive contains case-insensitive or Unicode-colliding paths:",
+              "archive paths collide after case-folding or Unicode normalization:",
+          )
+          replace(
+              "tests/test_adversarial_robustness.py",
+              'appended = before + f"\\n## Round R2\\n\\n#### R2-Q1 — Next\\n\\n- **Status:** Proposed\\n"',
+              'appended = before + f"\\n## Round R2\\n\\n#### R2-Q1 — Next\\n\\n- **Status:** Proposed\\n- **Exact question:** Next?\\n"',
+          )
+          PY
           python scripts/refine_adversarial_review.py
           rm -f scripts/refine_adversarial_review.py
           rm -f .github/workflows/refine-adversarial-review.yml

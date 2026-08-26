@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build deterministic and path-safe ZIP packages for the Agent Skills."""
+"""Build deterministic, path-safe ZIP packages for the repository's Agent Skills."""
 
 from __future__ import annotations
 
@@ -20,171 +20,145 @@ SKILLS_DIR = ROOT / "skills"
 VERSION_FILE = ROOT / "VERSION"
 SKILL_NAMES = ("shape-goal", "goal-engine")
 FIXED_TIMESTAMP = (2020, 1, 1, 0, 0, 0)
-SEMVER = re.compile(r"\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?")
-ARTIFACT = re.compile(
-    r"(?:shape-goal|goal-engine|loop-engineering-skills)-"
-    r"\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?\.zip|SHA256SUMS"
+SEMVER_TEXT = (
+    r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)"
+    r"(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?"
+    r"(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?"
 )
-MAX_SKILL_FILE_BYTES = 2 * 1024 * 1024
-MAX_SKILL_TOTAL_BYTES = 16 * 1024 * 1024
+SEMVER = re.compile(SEMVER_TEXT)
+GENERATED_ARTIFACT = re.compile(
+    rf"(?:(?:shape-goal|goal-engine|loop-engineering-skills)-(?:{SEMVER_TEXT})\.zip|SHA256SUMS)"
+)
+MAX_FILE_BYTES = 2 * 1024 * 1024
+MAX_PACKAGE_BYTES = 16 * 1024 * 1024
 
 
-def within(path: Path, parent: Path) -> bool:
+def is_relative_to(path: Path, parent: Path) -> bool:
     try:
         path.relative_to(parent)
-        return True
     except ValueError:
         return False
+    return True
 
 
 def read_version() -> str:
     version = VERSION_FILE.read_text(encoding="utf-8").strip()
     if not SEMVER.fullmatch(version):
-        raise ValueError(f"VERSION is not semantic: {version!r}")
+        raise ValueError(f"VERSION is not a safe semantic version: {version!r}")
     return version
 
 
-def validate_archive_name(name: str) -> str:
-    if not name or "\\" in name or "\x00" in name:
+def safe_archive_name(name: str) -> str:
+    if not name or "\x00" in name or "\\" in name:
         raise ValueError(f"unsafe archive path: {name!r}")
-    parsed = PurePosixPath(name)
-    if parsed.is_absolute() or any(part in {"", ".", ".."} for part in parsed.parts):
+    candidate = PurePosixPath(name)
+    if candidate.is_absolute() or any(part in {"", ".", ".."} for part in candidate.parts):
         raise ValueError(f"unsafe archive path: {name!r}")
-    return name
+    normalized = unicodedata.normalize("NFC", candidate.as_posix())
+    if normalized != name:
+        raise ValueError(f"archive path is not NFC-normalized: {name!r}")
+    return normalized
 
 
-def collision_key(name: str) -> str:
-    return unicodedata.normalize("NFC", name).casefold()
+def validate_unique_names(names: list[str]) -> None:
+    seen: dict[str, str] = {}
+    for name in names:
+        safe_archive_name(name)
+        key = unicodedata.normalize("NFC", name).casefold()
+        previous = seen.get(key)
+        if previous is not None:
+            raise ValueError(
+                f"archive contains case-insensitive or Unicode-colliding paths: {previous!r} and {name!r}"
+            )
+        seen[key] = name
 
 
-def source_files(source_dir: Path) -> list[tuple[str, Path]]:
-    if source_dir.is_symlink() or not source_dir.is_dir():
-        raise FileNotFoundError(f"{source_dir} is not a safe skill directory")
+def collect_source_entries(skill_name: str, *, bundle: bool) -> list[tuple[str, Path]]:
+    source_dir = SKILLS_DIR / skill_name
+    skill_file = source_dir / "SKILL.md"
+    if source_dir.is_symlink() or not skill_file.is_file() or skill_file.is_symlink():
+        raise FileNotFoundError(f"{skill_file} is missing or unsafe")
 
     entries: list[tuple[str, Path]] = []
-    total = 0
-    seen: dict[str, str] = {}
-    for current, dirnames, filenames in os.walk(source_dir, followlinks=False):
-        current_path = Path(current)
+    total_size = 0
+    for directory, dirnames, filenames in os.walk(source_dir, followlinks=False):
+        directory_path = Path(directory)
         for dirname in list(dirnames):
-            candidate = current_path / dirname
+            candidate = directory_path / dirname
             if candidate.is_symlink():
-                raise ValueError(f"skill source contains a symlink directory: {candidate}")
+                raise ValueError(f"skill source contains a symlinked directory: {candidate}")
         for filename in filenames:
-            source = current_path / filename
+            source = directory_path / filename
             if source.is_symlink():
-                raise ValueError(f"skill source contains a symlink file: {source}")
+                raise ValueError(f"skill source contains a symlinked file: {source}")
             mode = source.stat().st_mode
             if not stat.S_ISREG(mode):
                 raise ValueError(f"skill source is not a regular file: {source}")
             size = source.stat().st_size
-            if size > MAX_SKILL_FILE_BYTES:
-                raise ValueError(f"skill source is too large: {source} ({size} bytes)")
-            total += size
-            if total > MAX_SKILL_TOTAL_BYTES:
-                raise ValueError(f"skill source exceeds {MAX_SKILL_TOTAL_BYTES} bytes: {source_dir}")
-            arcname = validate_archive_name(source.relative_to(source_dir).as_posix())
-            key = collision_key(arcname)
-            if key in seen:
-                raise ValueError(
-                    f"archive paths collide across case or Unicode normalization: {seen[key]!r} and {arcname!r}"
-                )
-            seen[key] = arcname
-            entries.append((arcname, source))
-    return sorted(entries)
+            if size > MAX_FILE_BYTES:
+                raise ValueError(f"skill source is unexpectedly large ({size} bytes): {source}")
+            total_size += size
+            if total_size > MAX_PACKAGE_BYTES:
+                raise ValueError(f"skill package exceeds {MAX_PACKAGE_BYTES} uncompressed bytes")
+            relative = source.relative_to(source_dir).as_posix()
+            arcname = f"skills/{skill_name}/{relative}" if bundle else relative
+            entries.append((safe_archive_name(arcname), source))
 
-
-def safe_output_dir(requested: Path) -> Path:
-    if requested.exists() and requested.is_symlink():
-        raise ValueError(f"output directory may not be a symlink: {requested}")
-    output = requested.expanduser().resolve(strict=False)
-    root = ROOT.resolve()
-    if output == root or within(root, output):
-        raise ValueError(f"refusing to use repository root or its ancestor as output: {output}")
-
-    forbidden = (
-        ROOT / ".git",
-        ROOT / ".github",
-        ROOT / "docs",
-        ROOT / "examples",
-        ROOT / "goals",
-        ROOT / "scripts",
-        ROOT / "skills",
-        ROOT / "templates",
-        ROOT / "tests",
-    )
-    for source_root in forbidden:
-        source_root = source_root.resolve(strict=False)
-        if output == source_root or within(output, source_root):
-            raise ValueError(f"refusing to place generated packages inside source tree: {output}")
-
-    if output.exists():
-        if not output.is_dir():
-            raise ValueError(f"output path is not a directory: {output}")
-        for entry in output.iterdir():
-            if entry.is_symlink() or not entry.is_file() or not ARTIFACT.fullmatch(entry.name):
-                raise ValueError(
-                    f"refusing to delete non-generated content from output directory: {entry}"
-                )
-    return output
+    entries.sort(key=lambda item: item[0])
+    validate_unique_names([name for name, _ in entries])
+    expected_skill = f"skills/{skill_name}/SKILL.md" if bundle else "SKILL.md"
+    if expected_skill not in {name for name, _ in entries}:
+        raise ValueError(f"{skill_name}: SKILL.md is not at the expected archive location")
+    return entries
 
 
 def add_file(archive: zipfile.ZipFile, source: Path, arcname: str) -> None:
-    info = zipfile.ZipInfo(validate_archive_name(arcname), FIXED_TIMESTAMP)
+    info = zipfile.ZipInfo(safe_archive_name(arcname), FIXED_TIMESTAMP)
     info.create_system = 3
     info.compress_type = zipfile.ZIP_DEFLATED
     info.external_attr = (stat.S_IFREG | 0o644) << 16
     archive.writestr(info, source.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
 
 
-def write_skill_zip(skill_name: str, destination: Path) -> list[str]:
-    source_dir = SKILLS_DIR / skill_name
-    entries = source_files(source_dir)
-    names = [name for name, _ in entries]
-    if "SKILL.md" not in names:
-        raise FileNotFoundError(f"{source_dir}/SKILL.md is missing")
-    with zipfile.ZipFile(destination, "w") as archive:
+def write_zip(entries: list[tuple[str, Path]], destination: Path) -> None:
+    with zipfile.ZipFile(destination, "w", allowZip64=True) as archive:
         for arcname, source in entries:
             add_file(archive, source, arcname)
-    return names
 
 
-def write_bundle_zip(destination: Path) -> list[str]:
-    entries: list[tuple[str, Path]] = []
-    for skill_name in SKILL_NAMES:
-        for relative, source in source_files(SKILLS_DIR / skill_name):
-            entries.append((validate_archive_name(f"skills/{skill_name}/{relative}"), source))
-    entries.sort()
-    names = [name for name, _ in entries]
-    with zipfile.ZipFile(destination, "w") as archive:
-        for arcname, source in entries:
-            add_file(archive, source, arcname)
-    return names
-
-
-def validate_zip(path: Path, expected_names: list[str]) -> None:
+def validate_zip(path: Path, expected: list[tuple[str, Path]], *, individual: bool) -> None:
+    expected_names = [name for name, _ in expected]
+    validate_unique_names(expected_names)
     with zipfile.ZipFile(path) as archive:
         bad = archive.testzip()
-        if bad:
-            raise zipfile.BadZipFile(f"{path.name}: CRC failure in {bad}")
+        if bad is not None:
+            raise ValueError(f"{path.name}: corrupt member {bad}")
         infos = archive.infolist()
         names = [info.filename for info in infos]
         if names != expected_names or names != sorted(names):
-            raise ValueError(f"{path.name}: archive entries differ from the expected sorted manifest")
-        if len(names) != len(set(names)):
-            raise ValueError(f"{path.name}: duplicate entries")
-        keys = [collision_key(validate_archive_name(name)) for name in names]
-        if len(keys) != len(set(keys)):
-            raise ValueError(f"{path.name}: case/Unicode-colliding entries")
-        for info in infos:
+            raise ValueError(f"{path.name}: archive members differ from the expected sorted manifest")
+        validate_unique_names(names)
+        for info, (name, source) in zip(infos, expected):
+            if info.filename != name:
+                raise ValueError(f"{path.name}: member order mismatch")
             if info.is_dir() or info.flag_bits & 0x1:
-                raise ValueError(f"{path.name}: directory or encrypted entry: {info.filename}")
+                raise ValueError(f"{path.name}: directories and encrypted members are not allowed")
             if info.date_time != FIXED_TIMESTAMP:
-                raise ValueError(f"{path.name}: nondeterministic timestamp: {info.filename}")
-            file_type = (info.external_attr >> 16) & 0o170000
-            permissions = (info.external_attr >> 16) & 0o777
-            if file_type != stat.S_IFREG or permissions != 0o644:
-                raise ValueError(f"{path.name}: unsafe mode for {info.filename}")
+                raise ValueError(f"{path.name}: non-deterministic timestamp for {name}")
+            if info.compress_type != zipfile.ZIP_DEFLATED:
+                raise ValueError(f"{path.name}: unexpected compression type for {name}")
+            mode = (info.external_attr >> 16) & 0xFFFF
+            if stat.S_IFMT(mode) != stat.S_IFREG or stat.S_IMODE(mode) != 0o644:
+                raise ValueError(f"{path.name}: unsafe or non-deterministic mode for {name}")
+            if archive.read(name) != source.read_bytes():
+                raise ValueError(f"{path.name}: packaged content differs from its source for {name}")
+        if individual and "SKILL.md" not in names:
+            raise ValueError(f"{path.name}: SKILL.md is not at the archive root")
+        if not individual:
+            for skill_name in SKILL_NAMES:
+                expected_skill = f"skills/{skill_name}/SKILL.md"
+                if expected_skill not in names:
+                    raise ValueError(f"{path.name}: missing {expected_skill}")
 
 
 def sha256(path: Path) -> str:
@@ -195,38 +169,85 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def ensure_safe_output_dir(output_dir: Path) -> Path:
+    if output_dir.exists() and output_dir.is_symlink():
+        raise ValueError(f"output directory must not be a symlink: {output_dir}")
+    resolved = output_dir.expanduser().resolve(strict=False)
+    root = ROOT.resolve()
+    skills = SKILLS_DIR.resolve()
+
+    if resolved == root or is_relative_to(root, resolved):
+        raise ValueError(f"refusing to delete the repository or one of its ancestors: {resolved}")
+
+    protected_roots = (
+        skills,
+        (root / ".git").resolve(strict=False),
+        (root / ".github").resolve(strict=False),
+        (root / "scripts").resolve(strict=False),
+        (root / "tests").resolve(strict=False),
+        (root / "goals").resolve(strict=False),
+        (root / "docs").resolve(strict=False),
+        (root / "examples").resolve(strict=False),
+        (root / "templates").resolve(strict=False),
+    )
+    for protected in protected_roots:
+        if resolved == protected or is_relative_to(resolved, protected):
+            raise ValueError(f"output directory overlaps protected source content: {resolved}")
+
+    if resolved.exists():
+        if not resolved.is_dir():
+            raise ValueError(f"output path is not a directory: {resolved}")
+        for entry in resolved.iterdir():
+            if entry.is_symlink() or entry.is_dir() or not GENERATED_ARTIFACT.fullmatch(entry.name):
+                raise ValueError(
+                    f"refusing to remove a non-generated entry from the output directory: {entry}"
+                )
+    return resolved
+
+
 def build(output_dir: Path) -> list[Path]:
     version = read_version()
-    output = safe_output_dir(output_dir)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    temp = Path(tempfile.mkdtemp(prefix=f".{output.name}.tmp-", dir=output.parent))
+    output_dir = ensure_safe_output_dir(output_dir)
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    temporary = Path(tempfile.mkdtemp(prefix=f".{output_dir.name}.tmp-", dir=output_dir.parent))
+    artifact_names: list[str] = []
+
     try:
-        artifacts: list[Path] = []
         for skill_name in SKILL_NAMES:
-            path = temp / f"{skill_name}-{version}.zip"
-            names = write_skill_zip(skill_name, path)
-            validate_zip(path, names)
-            artifacts.append(path)
+            entries = collect_source_entries(skill_name, bundle=False)
+            name = f"{skill_name}-{version}.zip"
+            path = temporary / name
+            write_zip(entries, path)
+            validate_zip(path, entries, individual=True)
+            artifact_names.append(name)
 
-        bundle = temp / f"loop-engineering-skills-{version}.zip"
-        bundle_names = write_bundle_zip(bundle)
-        validate_zip(bundle, bundle_names)
-        artifacts.append(bundle)
+        bundle_entries: list[tuple[str, Path]] = []
+        for skill_name in SKILL_NAMES:
+            bundle_entries.extend(collect_source_entries(skill_name, bundle=True))
+        bundle_entries.sort(key=lambda item: item[0])
+        validate_unique_names([name for name, _ in bundle_entries])
+        bundle_name = f"loop-engineering-skills-{version}.zip"
+        bundle = temporary / bundle_name
+        write_zip(bundle_entries, bundle)
+        validate_zip(bundle, bundle_entries, individual=False)
+        artifact_names.append(bundle_name)
 
-        sums = temp / "SHA256SUMS"
+        sums = temporary / "SHA256SUMS"
         sums.write_text(
-            "".join(f"{sha256(path)}  {path.name}\n" for path in artifacts),
+            "".join(f"{sha256(temporary / name)}  {name}\n" for name in artifact_names),
             encoding="utf-8",
+            newline="\n",
         )
-        artifacts.append(sums)
+        artifact_names.append("SHA256SUMS")
 
-        if output.exists():
-            shutil.rmtree(output)
-        os.replace(temp, output)
-        return [output / artifact.name for artifact in artifacts]
+        if output_dir.exists():
+            shutil.rmtree(output_dir)
+        os.replace(temporary, output_dir)
     except Exception:
-        shutil.rmtree(temp, ignore_errors=True)
+        shutil.rmtree(temporary, ignore_errors=True)
         raise
+
+    return [output_dir / name for name in artifact_names]
 
 
 def main() -> int:
@@ -238,6 +259,7 @@ def main() -> int:
         help="Directory for generated packages (default: dist)",
     )
     args = parser.parse_args()
+
     try:
         artifacts = build(args.output_dir)
     except (OSError, ValueError, zipfile.BadZipFile) as error:
@@ -247,10 +269,10 @@ def main() -> int:
     print("Packaged Agent Skills:")
     for artifact in artifacts:
         try:
-            shown = artifact.relative_to(ROOT)
+            display = artifact.relative_to(ROOT)
         except ValueError:
-            shown = artifact
-        print(f"- {shown}")
+            display = artifact
+        print(f"- {display}")
     return 0
 
 

@@ -8,18 +8,44 @@
 ## Verified attack surfaces
 
 - Destructive output-directory handling
-- Symlink and archive-path exfiltration
-- Case and Unicode extraction collisions
-- Catalog path traversal and malformed schema
-- Markdown marker and replacement corruption
-- Extra or malformed goal commands
-- New-file, reordering, fencing, and mutation gaps in shaping history
-- Write-capable workflow injection, symlinks, NUL text, and malformed input crashes
-- Prompt-injection and stale-contract trust boundaries
+- Symlink, special-file, and archive-path exfiltration
+- Case-folding and Unicode normalization collisions
+- Catalog path traversal, malformed schema, Markdown injection, and partial writes
+- Extra, malformed, or silently rewritten goal commands
+- New-file, reordering, fencing, mutation, and generated-directory gaps in shaping history
+- Workflow permission escalation, extra workflows, symlinks, NUL text, and malformed-input crashes
+- Duplicate skill frontmatter and ambiguous host invocation flags
+- Direct and transitive package-lock integrity, lifecycle-script, and registry-origin drift
+- Prompt injection, stale-contract trust, shared-resource races, and expired execution authority
+
+## Reasoning passes completed
+
+- **Pre-mortem:** modeled destructive packaging, silent decision-history corruption, compromised dependencies, stale autonomous execution, and generated-document drift.
+- **First principles:** reduced correctness to trusted inputs, safe transformations, observable invariants, bounded authority, deterministic outputs, and explicit failure.
+- **Inversion:** built concrete ways to delete the repository, exfiltrate files, smuggle commands, weaken CI, rewrite decisions, and execute stale contracts—then added blocking tests.
+- **Red team / blue team:** added exploit-style mutation cases and matching production defenses.
+- **Socratic review:** challenged every claim with a runnable verifier or preserved residual-risk statement.
+- **Constraint removal:** tested repository roots, foreign output directories, untrusted filenames, malformed catalogs, missing base refs, unsupported filesystems, and dependency directories.
+- **Stakeholder mapping:** covered users shaping goals, autonomous agents, maintainers, reviewers, CI operators, package consumers, and future contributors.
+- **Analogical reasoning:** applied filesystem transaction, archive extraction, append-only ledger, supply-chain lock, lease, and distributed-lock lessons.
+
+## Acceptance ledger
+
+| Item | Status |
+|---|---|
+| Core packaging, generators, validator, and shaping-history hardening | Pass |
+| Prompt-injection, approval-fingerprint, lease, lock, and stale-contract safeguards | Pass |
+| 42 adversarial, mutation, property, and regression tests | Pass |
+| Linux, macOS, and Windows; Python 3.9 and 3.13 | Pass |
+| Locked local Skills CLI discovery and deterministic packages | Pass |
+| Branch-only refinement and full branch validation | Pass |
+| Pull-request workflow on final human-authored head | In progress |
+| Merge, final-main validation, closeout, and branch cleanup | Pending |
+
+## Final review additions
+
+The last inversion pass tightened semantic-version parsing, compared every ZIP member with its source bytes, rejected decomposed Unicode archive paths, ignored generated dependency directories during shaping-history discovery, rejected zero-based question IDs and duplicate approval sections, blocked `write-all`, rejected duplicate frontmatter and noncanonical invocation booleans, and verified every transitive npm lock entry.
 
 ## Next action
 
-Run the complete adversarial suite, fix any remaining failures, review the diff, open a pull request, merge after CI, archive the result, and clean the branch.
-## Third-pass review
-
-The final review strengthened semantic versions, archive/source parity, Unicode normalization, shaping-history discovery, approval structure, workflow permission parsing, skill frontmatter, and the full npm lock graph. The adversarial suite now includes the corresponding regression cases.
+Wait for the permanent pull-request workflow on this final head, review the resulting diff and evidence, merge only if every gate passes, then archive the result and remove every non-main branch.

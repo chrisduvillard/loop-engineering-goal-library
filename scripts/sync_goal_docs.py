@@ -142,11 +142,10 @@ def render_readme_catalog(catalog: dict, parsed: list[tuple[dict, dict[str, str]
         "You usually do not need to choose one: `shape-goal` can select the best profile from repository evidence. "
         "Choose directly only when the type of work is already clear.",
     ]
-    for index, category in enumerate(catalog["categories"]):
-        open_attr = " open" if index == 0 else ""
+    for category in catalog["categories"]:
         lines.extend([
             "",
-            f"<details{open_attr}>",
+            "<details>",
             f"<summary><strong>{category['title']} ({len(by_category.get(category['key'], []))})</strong></summary>",
             "",
             "| Profile | Best for |",

@@ -4,6 +4,10 @@ on:
   push:
     branches: [codex/final-specialist-review]
 
+concurrency:
+  group: final-specialist-review
+  cancel-in-progress: true
+
 permissions:
   contents: write
 

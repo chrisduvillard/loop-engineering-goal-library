@@ -29,6 +29,7 @@ def atomic_write(path: Path, content: str) -> None:
     try:
         with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as stream:
             stream.write(content)
+        os.chmod(temp, 0o644)
         os.replace(temp, path)
     except Exception:
         temp.unlink(missing_ok=True)
@@ -52,7 +53,7 @@ def goal_title(text: str) -> str:
     title = lines[0][2:].strip()
     if any(ord(char) < 32 or ord(char) == 127 for char in title):
         raise ValueError("goal title contains a control character")
-    if any(char in title for char in ("|", "<", ">", "`")):
+    if any(char in title for char in ("|", "<", ">", "`", "[", "]", "(", ")")):
         raise ValueError(f"goal title contains unsafe Markdown/HTML punctuation: {title!r}")
     return title
 

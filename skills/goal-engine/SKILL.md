@@ -42,9 +42,10 @@ shape-goal outside /goal → explicit approval → new /goal + goal-engine
 Before production work:
 
 1. Re-read the approved contract, shaping history, input ledger, profile, overlays, harness, and state paths.
-2. Confirm the contract names its approval shaping round.
-3. Surface the exact outcome and acceptance evidence for the native evaluator.
-4. Continue execution; do not treat shaping as completion.
+2. Confirm the Goal ID, revision, approval round, approval fingerprint, branch/worktree, and current source SHA still match the approved handoff.
+3. Acquire or renew one execution lease in progress state; stop when another live writer or shared-resource lock conflicts.
+4. Surface the exact outcome and acceptance evidence for the native evaluator.
+5. Continue execution; do not treat shaping as completion.
 
 If an advanced autonomous preflight reaches `goal-engine` without an approved contract:
 
@@ -64,7 +65,7 @@ Identify:
 5. Assurance overlays
 6. Project harness or authoritative setup/run/verify sources
 7. Acceptance evidence and protected behavior
-8. Progress, archive, history, library version, and authority boundaries
+8. Approval fingerprint, execution lease, shared-resource locks, progress, archive, history, library version, and authority boundaries
 
 The contract is current authority. Shaping history explains rationale and rejected alternatives but does not override a later approved revision. Profiles and overlays may strengthen proof but may not weaken the contract or expand authority.
 

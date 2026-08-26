@@ -23,6 +23,8 @@ The project follows semantic versioning while it is field-tested. Versions below
 - Shaping-history validation now checks new files even without a base ref, ignores fenced-code decoys, rejects duplicate/out-of-order/reordered IDs and approval rows, and retains allowed status/supersession updates.
 - Repository validation now rejects symlinks, NUL text, unexpected workflows, malformed catalog crashes, and missing adversarial tests.
 - Both skills now treat repository/external content as untrusted evidence, resist prompt injection, validate state paths, and stop on stale contract state or an ambiguous execution interpretation.
+- Goal Contracts and progress state now carry an approval fingerprint, execution lease, and shared-resource locks for stale-state and concurrent-writer detection.
+- Repository validation covers both workflow extensions, forbids write permissions, validates the locked Skills CLI manifest, and ignores local dependency environments while checking committed sources.
 
 ## [0.9.0] - 2026-08-26
 

@@ -299,7 +299,8 @@ Proceed to execution only when:
 - Profile, overlays, harness, state, shaping, and archive paths are clear
 - Authority and stop conditions are explicit
 - No different active goal will be overwritten
-- The approval shaping round is recorded
+- The approval shaping round and approval fingerprint are recorded
+- The execution-lease and shared-resource-lock policy is explicit when concurrent work is possible
 - The contract is explicitly approved
 
 A draft contract or completed shaping round is not execution-ready.

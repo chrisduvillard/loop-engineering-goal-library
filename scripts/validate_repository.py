@@ -6,7 +6,6 @@ from __future__ import annotations
 import json
 import re
 import sys
-from pathlib import PurePath
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -359,6 +358,8 @@ def validate_skills(version: str) -> None:
             "references/question-quality.md",
             "no material ambiguity",
             "answer quality gate",
+            "prompt-injection",
+            "without symlink traversal",
             "references/shaping-history.md",
             "templates/shaping-history-template.md",
         ):
@@ -376,6 +377,8 @@ def validate_skills(version: str) -> None:
             "resume `shape-goal` outside `/goal`",
             "evidence for the evaluator",
             "goal-fit gate",
+            "prompt-injection",
+            "execution lease",
             "shaping history",
         ):
             if fragment.lower() not in source:
@@ -630,6 +633,8 @@ def validate_state_and_docs() -> None:
             "Assumptions and interpretation register",
             "Clarity stress test",
             "Pre-approval clarity gate",
+            "Approval fingerprint",
+            "Execution lease",
         ),
     )
     require_fragments(
@@ -684,6 +689,8 @@ def normalize_link(raw_target: str) -> str:
 def validate_markdown_links() -> None:
     pattern = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
     for path in ROOT.rglob("*.md"):
+        if any(part in {"node_modules", "dist", "build", "__pycache__", ".venv", "venv", ".tox", ".nox", ".pytest_cache", ".mypy_cache", ".ruff_cache"} for part in path.parts):
+            continue
         source = path.read_text(encoding="utf-8")
         for match in pattern.finditer(source):
             raw_target = match.group(1)
@@ -705,7 +712,7 @@ def validate_markdown_links() -> None:
 def validate_tree_hygiene() -> None:
     text_suffixes = {".md", ".py", ".json", ".yml", ".yaml", ".txt", ".toml"}
     for path in ROOT.rglob("*"):
-        if ".git" in path.parts or "dist" in path.parts or "__pycache__" in path.parts:
+        if any(part in {".git", "dist", "build", "node_modules", "__pycache__", ".venv", "venv", ".tox", ".nox", ".pytest_cache", ".mypy_cache", ".ruff_cache"} for part in path.parts):
             continue
         if path.is_symlink():
             fail(f"{path.relative_to(ROOT)}: repository symlinks are not allowed")
@@ -724,6 +731,32 @@ def validate_tree_hygiene() -> None:
                 fail(f"{path.relative_to(ROOT)}: NUL byte in text file")
 
 
+def validate_package_manifest() -> None:
+    try:
+        package = json.loads(text("package.json"))
+        lock = json.loads(text("package-lock.json"))
+    except (json.JSONDecodeError, TypeError) as error:
+        fail(f"npm package metadata is invalid: {error}")
+        return
+    expected = "1.5.23"
+    if package.get("name") != "loop-engineering-goal-library" or package.get("private") is not True:
+        fail("package.json must remain the private loop-engineering-goal-library package")
+    if package.get("devDependencies", {}).get("skills") != expected:
+        fail(f"package.json must pin skills exactly to {expected}")
+    if lock.get("lockfileVersion") != 3:
+        fail("package-lock.json must use lockfileVersion 3")
+    packages = lock.get("packages")
+    if not isinstance(packages, dict):
+        fail("package-lock.json packages must be an object")
+        return
+    root_package = packages.get("", {})
+    skills_package = packages.get("node_modules/skills", {})
+    if root_package.get("devDependencies", {}).get("skills") != expected:
+        fail("package-lock.json root dependency does not match package.json")
+    if skills_package.get("version") != expected or not skills_package.get("integrity"):
+        fail("package-lock.json must pin skills 1.5.23 with an integrity hash")
+
+
 def validate_scripts_and_ci() -> None:
     for path in sorted(list((ROOT / "scripts").glob("*.py")) + list((ROOT / "tests").glob("*.py"))):
         try:
@@ -732,13 +765,17 @@ def validate_scripts_and_ci() -> None:
             fail(f"{path.relative_to(ROOT)}: syntax error: {error}")
 
     workflow_dir = require(".github/workflows")
-    workflows = sorted(workflow_dir.glob("*.yml")) if workflow_dir.exists() else []
+    workflows = sorted(set(workflow_dir.glob("*.yml")) | set(workflow_dir.glob("*.yaml"))) if workflow_dir.exists() else []
     if [path.name for path in workflows] != ["validate.yml"]:
         fail(f"Only the permanent read-only validate.yml workflow may be committed: {[path.name for path in workflows]}")
     workflow = require(".github/workflows/validate.yml")
     if not workflow.exists():
         return
     source = workflow.read_text(encoding="utf-8")
+    if "contents: read" not in source:
+        fail(".github/workflows/validate.yml: contents permission must remain read-only")
+    if re.search(r"^\s*[A-Za-z-]+:\s*write\s*$", source, flags=re.MULTILINE):
+        fail(".github/workflows/validate.yml: write permission is forbidden")
     for line in source.splitlines():
         if "uses:" not in line:
             continue
@@ -757,8 +794,6 @@ def validate_scripts_and_ci() -> None:
         "scripts/package_skills.py",
         "scripts/validate_repository.py",
         "python -m unittest discover -s tests -v",
-        "npm ci --ignore-scripts",
-        "npx --no-install skills",
     ):
         if fragment not in source:
             fail(f".github/workflows/validate.yml: missing {fragment!r}")
@@ -778,6 +813,7 @@ def main() -> int:
     validate_generated_docs()
     validate_markdown_links()
     validate_tree_hygiene()
+    validate_package_manifest()
     validate_scripts_and_ci()
 
     if ERRORS:

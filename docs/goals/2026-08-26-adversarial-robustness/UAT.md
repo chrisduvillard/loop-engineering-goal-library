@@ -33,3 +33,8 @@
 - Malformed catalog data does not crash with an uncontrolled traceback.
 - Repository content attempts prompt injection or command authority.
 - The approved contract becomes stale or materially ambiguous during execution.
+- A `.yaml` workflow or write permission attempts to bypass CI policy.
+- Local `node_modules` symlinks exist after locked dependency installation.
+- Catalog text attempts Markdown link injection.
+- Package-lock metadata drifts from the pinned Skills CLI.
+- Two writers attempt to use the same Goal Contract or shared resource without a valid lease.

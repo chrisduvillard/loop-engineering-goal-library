@@ -35,7 +35,7 @@ def plain(value: object, label: str) -> str:
     value = value.strip()
     if any(ord(char) < 32 or ord(char) == 127 for char in value):
         raise ValueError(f"{label} contains a control character")
-    if any(char in value for char in ("|", "<", ">", "`")):
+    if any(char in value for char in ("|", "<", ">", "`", "[", "]", "(", ")")):
         raise ValueError(f"{label} contains unsafe Markdown/HTML punctuation")
     return value
 
@@ -56,6 +56,7 @@ def atomic_write(path: Path, content: str) -> None:
     try:
         with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as stream:
             stream.write(content)
+        os.chmod(temp, 0o644)
         os.replace(temp, path)
     except Exception:
         temp.unlink(missing_ok=True)

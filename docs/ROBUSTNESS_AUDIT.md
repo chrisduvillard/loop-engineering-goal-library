@@ -41,6 +41,10 @@ When path, size, trust, ordering, and approval constraints are removed, the syst
 
 The controls borrow from compiler design (parse then validate), database migrations (append-only history and atomic replacement), archive security (path normalization and collision checks), safety engineering (hazard analysis and fail-closed boundaries), and property testing (generate valid states, mutate one invariant, require rejection).
 
+## Second-pass findings
+
+An independent review found and closed additional gaps: local `node_modules` symlinks would have caused false CI failures; `.yaml` workflows could bypass a `.yml`-only check; write permissions needed an explicit prohibition; catalog text needed link-injection protection; locked package metadata needed structural validation; and execution leases needed concrete contract fields.
+
 ## Residual limits
 
 No finite test suite proves every future host, filesystem, or model behavior. Remaining field risks include host UI changes, model compaction, unavailable connected sources, compromised upstream registries, and repository branch protection not being configured. These are recorded rather than hidden; the test suite focuses on deterministic controls this repository can enforce.

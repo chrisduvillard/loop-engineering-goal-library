@@ -35,7 +35,7 @@ def copy_repo(temp: Path) -> Path:
     shutil.copytree(
         ROOT,
         destination,
-        ignore=shutil.ignore_patterns(".git", "dist", "__pycache__", "*.pyc"),
+        ignore=shutil.ignore_patterns(".git", "dist", "node_modules", "__pycache__", "*.pyc"),
     )
     return destination
 
@@ -177,6 +177,16 @@ class GeneratedDocsAttackTests(unittest.TestCase):
         result = sync_goal_docs.replace_readme_catalog(readme, r"\1 literal")
         self.assertIn(r"\1 literal", result)
 
+    def test_catalog_link_injection_is_rejected(self):
+        with tempfile.TemporaryDirectory() as raw:
+            repo = copy_repo(Path(raw))
+            catalog_path = repo / "goals" / "catalog.json"
+            catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+            catalog["goals"][0]["simple"] = "safe](https://attacker.example)"
+            catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+            result = run(repo, "scripts/sync_goal_docs.py", "--write")
+            self.assertNotEqual(result.returncode, 0)
+
     def test_malformed_catalog_fails_without_traceback(self):
         with tempfile.TemporaryDirectory() as raw:
             repo = copy_repo(Path(raw))
@@ -302,6 +312,50 @@ class RepositoryRedTeamTests(unittest.TestCase):
             result = run(repo, "scripts/validate_repository.py")
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("workflow", result.stdout.lower())
+
+    def test_repository_validator_rejects_yaml_workflow(self):
+        with tempfile.TemporaryDirectory() as raw:
+            repo = copy_repo(Path(raw))
+            evil = repo / ".github" / "workflows" / "evil.yaml"
+            evil.write_text("name: evil\non: push\njobs: {}\n", encoding="utf-8")
+            result = run(repo, "scripts/validate_repository.py")
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("workflow", result.stdout.lower())
+
+    def test_repository_validator_rejects_write_permission(self):
+        with tempfile.TemporaryDirectory() as raw:
+            repo = copy_repo(Path(raw))
+            workflow = repo / ".github" / "workflows" / "validate.yml"
+            workflow.write_text(workflow.read_text(encoding="utf-8").replace("contents: read", "contents: write"), encoding="utf-8")
+            result = run(repo, "scripts/validate_repository.py")
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("write permission", result.stdout.lower())
+
+    def test_repository_validator_ignores_local_node_modules(self):
+        with tempfile.TemporaryDirectory() as raw:
+            repo = copy_repo(Path(raw))
+            bin_dir = repo / "node_modules" / ".bin"
+            bin_dir.mkdir(parents=True)
+            target = repo / "node_modules" / "tool"
+            target.write_text("tool", encoding="utf-8")
+            link = bin_dir / "tool"
+            try:
+                os.symlink(target, link)
+            except OSError:
+                link.write_text("shim", encoding="utf-8")
+            result = run(repo, "scripts/validate_repository.py")
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_repository_validator_rejects_package_lock_drift(self):
+        with tempfile.TemporaryDirectory() as raw:
+            repo = copy_repo(Path(raw))
+            lock_path = repo / "package-lock.json"
+            lock = json.loads(lock_path.read_text(encoding="utf-8"))
+            lock["packages"]["node_modules/skills"]["version"] = "9.9.9"
+            lock_path.write_text(json.dumps(lock), encoding="utf-8")
+            result = run(repo, "scripts/validate_repository.py")
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("package-lock", result.stdout.lower())
 
     def test_repository_validator_rejects_symlink(self):
         if not hasattr(os, "symlink"):

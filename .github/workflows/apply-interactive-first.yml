@@ -32,8 +32,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python scripts/patch_interactive_validator.py
           python scripts/sync_goal_launchers.py --write
           python scripts/sync_goal_docs.py --write
+          rm -f scripts/patch_interactive_validator.py
           rm -f .github/workflows/apply-interactive-first.yml
           python scripts/sync_goal_launchers.py --check
           python scripts/sync_goal_docs.py --check

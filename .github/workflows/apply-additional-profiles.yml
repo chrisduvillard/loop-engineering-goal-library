@@ -37,6 +37,7 @@ jobs:
           python scripts/fix_profile_validator_version.py
           python scripts/sync_goal_launchers.py --write
           python scripts/sync_goal_docs.py --write
+          find docs/goals/2026-08-26-additional-profile-coverage -type f -name '*.md' -exec sed -i 's/[[:space:]]\+$//' {} +
           rm -f scripts/fix_additional_profile_apply.py
           rm -f scripts/fix_profile_validator_version.py
           rm -f scripts/apply_additional_profiles.py

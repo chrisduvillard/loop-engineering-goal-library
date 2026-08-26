@@ -16,7 +16,7 @@ Reusable Agent Skills and execution profiles for OpenAI Codex, Anthropic Claude 
 [![Codex](https://img.shields.io/badge/OpenAI%20Codex-compatible-111827?style=flat-square&logo=openai&logoColor=white)](https://learn.chatgpt.com/use-cases/follow-goals)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757?style=flat-square)](https://code.claude.com/docs/en/goal)
 [![Validation](https://img.shields.io/github/actions/workflow/status/chrisduvillard/loop-engineering-goal-library/validate.yml?branch=main&style=flat-square&label=validation)](https://github.com/chrisduvillard/loop-engineering-goal-library/actions/workflows/validate.yml)
-![Version](https://img.shields.io/badge/version-0.8.0-7C3AED?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.9.0-7C3AED?style=flat-square)
 ![Profiles](https://img.shields.io/badge/profiles-31-16A34A?style=flat-square)
 
 </div>
@@ -57,13 +57,17 @@ docs/goals/<goal-id>/SHAPING.md
 
 After each question, it ends the turn. Your next normal message is the answer—**no Steer message required**.
 
-Need more depth?
+> [!TIP]
+> **There is no target question count.** It may ask two questions or twenty. It stops only when the draft has one material interpretation, no hidden high-impact assumption, and verifiable completion evidence.
 
-| Claude Code | Codex CLI / IDE |
-|---|---|
-| `/shape-goal Deepen the current goal` | `$shape-goal Deepen the current goal` |
+Need more depth or a stronger challenge?
 
-Earlier answers stay intact. Each new round asks only materially new questions.
+| Need | Claude Code | Codex CLI / IDE |
+|---|---|---|
+| Explore new lenses | `/shape-goal Deepen the current goal` | `$shape-goal Deepen the current goal` |
+| Challenge ambiguity | `/shape-goal Stress-test the current goal` | `$shape-goal Stress-test the current goal` |
+
+Earlier answers stay intact. Deepening explores new decisions; stress-testing looks for ambiguous wording, hidden assumptions, weak proof, and alternate interpretations.
 
 ### 3. Approve, then execute
 

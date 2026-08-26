@@ -8,14 +8,16 @@
 **Completed rounds:** [COUNT / IDS]  
 **Latest round:** [ROUND ID]  
 **Approval round:** [ROUND ID OR NONE]  
+**Shaping depth:** Adaptive / Thorough / Exhaustive
+**Clarity gate:** Not run / Needs clarification / Pass
 **Repository visibility / information classification:** [PUBLIC / PRIVATE / RESTRICTED + POLICY]
 **Storage note:** Preserve every asked question and answer; redact personal, confidential business/customer, third-party restricted, secret, production, or exploit-enabling material and link approved secure evidence when necessary.
 
 ## Current decision index
 
-| Decision | Current answer | Source | Contract impact | Status |
-|---|---|---|---|---|
-| [DECISION] | [NORMALIZED ANSWER] | [R1-Q1] | [SECTIONS] | Current / Superseded / Deferred |
+| Decision | Current answer | Impact | Confidence | Assumption class | Source | Contract impact | Status |
+|---|---|---|---|---|---|---|---|
+| [DECISION] | [NORMALIZED ANSWER] | High / Medium / Low | Confirmed / Strong / Tentative / Unknown | Evidence / Owner / Safe default / Unresolved | [R1-Q1] | [SECTIONS] | Current / Superseded / Deferred |
 
 ## Round R1 — Initial shaping
 
@@ -28,6 +30,7 @@
 #### R1-Q1 — [DECISION TITLE]
 
 - **Status:** Answered / Deferred / Declined / Superseded
+- **Materiality:** High / Medium / Low; **uncertainty:** High / Medium / Low; **irreversibility:** High / Medium / Low
 - **Why this was asked:** [MATERIAL UNCERTAINTY]
 - **Evidence considered:** [REPOSITORY / RUNTIME / CONNECTED SOURCE]
 - **Recommendation:** [RECOMMENDED ANSWER AND REASON]
@@ -40,7 +43,10 @@
 
 > [VERBATIM ANSWER WHEN SAFE, OTHERWISE REDACTED SUMMARY + SECURE REFERENCE]
 
+- **Answer quality:** Clear / Clear with conditions / Partial / Ambiguous / Conflicting / Deferred / Blocked
+- **Interpretation confirmed:** [YES / NO / FOLLOW-UP QUESTION ID]
 - **Normalized decision:** [DECISION USED BY THE CONTRACT]
+- **Confidence / assumption class:** [CONFIDENCE + EVIDENCE / OWNER / SAFE DEFAULT / UNRESOLVED]
 - **Contract impact:** [TARGET / SCOPE / EVIDENCE / PROTECTION / AUTHORITY / EXIT / OTHER]
 - **Supersedes:** [QUESTION OR DECISION ID / NONE]
 
@@ -49,12 +55,25 @@
 - **New decisions:** [LIST]
 - **Contract revisions:** [LIST]
 - **Remaining uncertainty:** [LIST OR NONE]
-- **Readiness:** Ready for approval / Deeper shaping recommended / Blocked / Paused
+- **Readiness:** Ready for clarity stress test / Ready for approval / Deeper shaping recommended / Blocked / Paused
+- **Assumptions:** [REGISTER SUMMARY]
+- **Clarity findings:** [FRESH-READER / COUNTEREXAMPLE / SCENARIO / VERIFIER / CONTRADICTION / TRACEABILITY]
 - **Next step:** Approve / Run another round / Resolve blocker / Pause
 
 ## Round R2 — Deepening
 
 Copy the round structure above. Read all earlier rounds first, select an unexplored or weak lens, and ask only non-duplicate material questions one at a time.
+
+## Clarity audit
+
+| Check | Result | Evidence or follow-up |
+|---|---|---|
+| Universal clarity matrix | Pass / Needs clarification | [ROWS / QUESTION IDS] |
+| Assumption register | Pass / Needs clarification | [SUMMARY] |
+| Fresh-reader test | Pass / Needs clarification | [REVIEW] |
+| Counterexample test | Pass / Needs clarification | [LOOPHOLE OR NONE] |
+| Scenario and verifier test | Pass / Needs clarification | [HAPPY / FAILURE / REGRESSION] |
+| Plain-English teach-back | Confirmed / Corrected | [QUESTION ID] |
 
 ## Approval record
 

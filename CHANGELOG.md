@@ -8,6 +8,26 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.9.0] - 2026-08-26
+
+### Added
+
+- Adaptive shaping depth: question count is determined by material ambiguity and risk rather than a fixed minimum or maximum.
+- A universal clarity matrix covering outcome, users and journey, scope, evidence, protected behavior, failure cases, data/compatibility, quality obligations, authority, ownership, and profile-specific inputs.
+- An answer-quality gate that classifies replies as Clear, Clear with conditions, Partial, Ambiguous, Conflicting, or Deferred / Blocked.
+- A risk-weighted assumption register and explicit prohibition on hidden High-/Medium-impact assumptions at approval.
+- A clarity stress test with fresh-reader, counterexample, scenario, verifier, contradiction, traceability, and plain-English teach-back checks.
+- A `Stress-test the current goal` command for users who want another challenge pass without losing prior questions or answers.
+- Durable dogfood records under `docs/goals/2026-08-26-adaptive-question-clarity/`.
+
+### Changed
+
+- `shape-goal` now asks as few or as many atomic, non-duplicate questions as needed to produce one shared executable interpretation.
+- Partial, ambiguous, conditional, or conflicting answers are clarified rather than silently normalized into agent assumptions.
+- Goal Contracts and shaping histories now record shaping depth, materiality, confidence, assumption class, answer quality, interpretation confirmation, and clarity-review evidence.
+- `goal-engine` stops as Approval required when approved contract wording later admits multiple material interpretations.
+- README, quick reference, architecture, current implementation, roadmap, host metadata, validation, and packaged skills now describe and enforce the stronger clarity model.
+
 ## [0.8.0] - 2026-08-26
 
 ### Added

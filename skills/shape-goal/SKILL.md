@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[continue | new goal | deepen | profile | goal ID | changed need]"
 metadata:
   author: chrisduvillard
-  version: "0.8.0"
+  version: "0.9.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -29,6 +29,9 @@ project need → evidence search → one question → user answer → approved c
 - Search repository and connected authoritative evidence before asking the user.
 - Save every asked question and safe answer in append-only `SHAPING.md`; corrections append and supersede.
 - Ask one material owner decision at a time, then **end the turn immediately**.
+- Do not optimize for a small question count; ask until no material ambiguity remains.
+- Never convert an ambiguous, partial, conditional, or conflicting reply into a stronger decision than the user made.
+- No High- or Medium-impact assumption may survive approval unless it is evidence-backed or explicitly owner-approved.
 - After asking a question, do not call tools, continue research, start background work, ask another question, or keep pursuing an active goal until the user answers.
 - A dissatisfied user may request repeated deeper, non-duplicate shaping rounds.
 - Record approval as a shaping answer; do not infer approval from silence or partial agreement.
@@ -45,6 +48,7 @@ project need → evidence search → one question → user answer → approved c
 | Add a different goal | `/shape-goal New goal: describe the intent` | `$shape-goal New goal: describe the intent` |
 | Change the current goal | `/shape-goal Change current goal: describe the need` | `$shape-goal Change current goal: describe the need` |
 | Go deeper | `/shape-goal Deepen the current goal` | `$shape-goal Deepen the current goal` |
+| Stress-test clarity | `/shape-goal Stress-test the current goal` | `$shape-goal Stress-test the current goal` |
 | Resume saved shaping | `/shape-goal Resume goal-id` | `$shape-goal Resume goal-id` |
 | Review priorities | `/shape-goal Review the goal portfolio` | `$shape-goal Review the goal portfolio` |
 
@@ -101,6 +105,7 @@ Produce and persist, as applicable:
 10. Progress, archive, and history paths
 11. Exact copy-ready native `/goal` handoff
 12. Input ledger showing how every material field was resolved
+13. Assumption register, selected shaping depth, and final clarity-stress-test result
 
 ## 1. Orient before asking
 
@@ -140,7 +145,7 @@ The history is append-only. Earlier answers are never silently rewritten.
 
 ## 3. Resolve inputs exhaustively
 
-Use [references/input-resolution.md](references/input-resolution.md) and build an input ledger covering common contract fields plus the selected profile's fields from [references/profile-inputs.md](references/profile-inputs.md).
+Use [references/input-resolution.md](references/input-resolution.md), [references/question-quality.md](references/question-quality.md), and build an input ledger covering common contract fields plus the selected profile's fields from [references/profile-inputs.md](references/profile-inputs.md).
 
 Search all lawful authoritative sources before asking. Use a default only when it is reversible, low-risk, and consistent with repository conventions. Never default product direction, acceptance thresholds, risk acceptance, compatibility removal, destructive authority, or legal/compliance judgments.
 
@@ -149,21 +154,28 @@ When evidence cannot resolve one material choice:
 1. Show the relevant evidence.
 2. Offer at most three materially different options.
 3. Recommend one answer and explain the trade-off.
-4. Save the exact question before sending it.
-5. Ask only that question.
-6. End the turn immediately.
+4. State what materially changes based on the answer.
+5. Ensure the question is atomic rather than bundling independent choices.
+6. Save the exact question before sending it.
+7. Ask only that question.
+8. End the turn immediately.
 
 When the answer arrives:
 
 1. Save it verbatim when safe and useful.
 2. Redact secrets, credentials, private personal data, confidential business/customer information, third-party restricted material, raw production data, and exploit-enabling details; store a safe decision summary plus an approved secure reference instead.
-3. Normalize the answer into a contract decision.
-4. Record the contract sections affected and any superseded decision.
-5. Continue resolving the ledger.
+3. Run the answer quality gate: Clear, Clear with conditions, Partial, Ambiguous, Conflicting, or Deferred / Blocked.
+4. Normalize only the meaning the user actually supplied; ask a targeted follow-up when multiple material interpretations remain.
+5. Record the contract sections affected, confidence, assumptions, and any superseded decision.
+6. Continue resolving the ledger.
 
 Do not ask users to discover repository facts, commands, paths, or implementation details that tools can find.
 
-## 4. Run standard or deeper shaping rounds
+## 4. Run adaptive, standard, deeper, or stress-test shaping rounds
+
+### Adaptive depth — default
+
+There is no target question count. Score unresolved items by impact, uncertainty, irreversibility, and confidence; ask the highest-risk decision first and continue until the clarity gate in [references/question-quality.md](references/question-quality.md) passes. Escalate automatically to Thorough or Exhaustive depth for high-risk, subjective, cross-cutting, weakly verified, or irreversible goals.
 
 ### Standard round
 
@@ -182,7 +194,11 @@ Before the round:
 
 Useful lenses include outcome and value, users and journeys, scope and dependencies, acceptance and failure cases, codebase knowledge, AI evaluation, deprecation and adoption, localization, public discoverability, compatibility, UI/UX/accessibility, data/security/privacy, reliability/recovery, performance/cost, maintainability/ownership, and authority/risk.
 
-At round close, append new decisions, contract revisions, remaining uncertainty, readiness, and the recommended next step. Then ask one disposition question and end the turn:
+### Stress-test round
+
+Run when the user asks for zero ambiguity, requests a challenge pass, or the contract is high-risk or subjective. Apply the fresh-reader, counterexample, scenario, verifier, contradiction, traceability, assumption, and plain-English teach-back checks from [references/question-quality.md](references/question-quality.md). Turn each material ambiguity into one saved question; do not merely rewrite the contract from your own interpretation.
+
+At round close, append new decisions, contract revisions, remaining uncertainty, shaping depth, assumption status, clarity-test findings, readiness, and the recommended next step. Then ask one disposition question and end the turn:
 
 ```text
 Approve the current Goal Contract
@@ -267,6 +283,10 @@ Proceed to execution only when:
 
 - One outcome is clear
 - Every material input-ledger row is resolved
+- Every material answer passes the answer quality gate
+- No High- or Medium-impact assumption remains unresolved
+- Every applicable clarity-matrix row is resolved or marked Not applicable with a reason
+- A fresh-reader and counterexample review reveals no blocking alternate interpretation
 - Every asked question and answer is saved or safely redacted
 - Scope and exclusions are understandable to a fresh agent
 - Completion has observable proof
@@ -319,6 +339,8 @@ Contract:
 Shaping history:
 Completed / approval shaping rounds:
 Input ledger:
+Shaping depth / clarity review:
+Assumption register:
 Portfolio:
 Execution profile:
 Assurance overlays:

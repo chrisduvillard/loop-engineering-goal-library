@@ -17,6 +17,7 @@ Run `shape-goal` outside an active `/goal`:
 | Use a profile | `/shape-goal Use the profile-name profile` | `$shape-goal Use the profile-name profile` |
 | Add another goal | `/shape-goal New goal: describe the intent` | `$shape-goal New goal: describe the intent` |
 | Go deeper | `/shape-goal Deepen the current goal` | `$shape-goal Deepen the current goal` |
+| Stress-test clarity | `/shape-goal Stress-test the current goal` | `$shape-goal Stress-test the current goal` |
 | Resume | `/shape-goal Resume goal-id` | `$shape-goal Resume goal-id` |
 | Review priorities | `/shape-goal Review the goal portfolio` | `$shape-goal Review the goal portfolio` |
 
@@ -26,11 +27,13 @@ Run `shape-goal` outside an active `/goal`:
 1. shape-goal investigates the repository
 2. it asks one material question and ends the turn
 3. you reply normally; no Steer message is required
-4. it saves the answer and continues
-5. you approve or request a deeper round
-6. it returns the exact /goal command
-7. goal-engine executes autonomously
-8. evidence, closeout, and reusable learning are archived
+4. it saves the answer and checks whether it has one clear interpretation
+5. it asks as many non-duplicate questions as the risk and ambiguity require
+6. it stress-tests assumptions, scenarios, wording, and acceptance evidence
+7. you approve, deepen, stress-test, or pause
+8. it returns the exact /goal command
+9. goal-engine executes autonomously
+10. evidence, closeout, and reusable learning are archived
 ```
 
 ## Question rule
@@ -43,6 +46,12 @@ After asking a shaping question, the agent must:
 - Start no background work
 - Ask no second question
 - Save your next reply before continuing
+
+## How many questions?
+
+There is no fixed number. Two questions are enough when the repository already resolves everything else. Many more are correct when choices are high-impact, subjective, conflicting, or irreversible. Approval waits until no material ambiguity or hidden High-/Medium-impact assumption remains.
+
+An ambiguous or partial reply triggers one targeted clarification; the agent must not guess.
 
 ## If shaping is trapped inside `/goal`
 

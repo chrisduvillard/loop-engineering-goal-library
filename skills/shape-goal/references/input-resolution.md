@@ -2,7 +2,7 @@
 
 Use this protocol whenever the repository-specific target, scope, evidence, or boundaries are not already approved.
 
-Read [shaping-history.md](shaping-history.md) before asking any user question.
+Read [shaping-history.md](shaping-history.md) and [question-quality.md](question-quality.md) before asking any user question.
 
 > **Question barrier:** search first, save one question, ask it, and end the turn immediately. The user's next normal reply is the answer.
 
@@ -10,16 +10,20 @@ Read [shaping-history.md](shaping-history.md) before asking any user question.
 
 Create a concise ledger before asking questions:
 
-| Input | Status | Evidence, decision, or question source |
-|---|---|---|
-| Outcome | Unresolved / Evidence / Safe default / Owner decision | Source or `R1-Q1` |
-| Scope and exclusions | ... | ... |
-| Acceptance evidence | ... | ... |
-| Protected behavior | ... | ... |
-| Authority boundaries | ... | ... |
-| Profile-specific inputs | ... | ... |
+| Input | Status | Impact | Confidence | Assumption class | Evidence, decision, or question source |
+|---|---|---|---|---|---|
+| Outcome | Unresolved / Evidence / Safe default / Owner decision / N/A | High | Unknown | Unresolved | Source or `R1-Q1` |
+| Users and journey boundary | ... | ... | ... | ... | ... |
+| Scope and exclusions | ... | ... | ... | ... | ... |
+| Acceptance evidence | ... | ... | ... | ... | ... |
+| Protected behavior | ... | ... | ... | ... | ... |
+| Failure and edge cases | ... | ... | ... | ... | ... |
+| Data, compatibility, and dependencies | ... | ... | ... | ... | ... |
+| Authority boundaries | ... | ... | ... | ... | ... |
+| Ownership and reusable outputs | ... | ... | ... | ... | ... |
+| Profile-specific inputs | ... | ... | ... | ... | ... |
 
-Do not persist an approved contract while a material row remains unresolved. Link every owner-decision row to its saved question-and-answer ID.
+Do not persist an approved contract while a material row remains unresolved. Link every owner-decision row to its saved question-and-answer ID. Resolve every applicable lens from the universal clarity matrix in [question-quality.md](question-quality.md); `Not applicable` requires a reason.
 
 ## Create or resume shaping history
 
@@ -61,6 +65,8 @@ Before persisting a verbatim answer, determine repository visibility and whether
 
 Use a default without asking only when it is reversible, low-risk, consistent with repository conventions, and does not materially change product scope or authority. Record the default and why it is safe.
 
+Record every assumption as Evidence-backed, Owner-approved, Safe reversible default, or Unresolved. Surface safe defaults before approval; High- and Medium-impact unresolved assumptions block readiness.
+
 Never default:
 
 - Product outcome when several materially different outcomes are plausible
@@ -74,10 +80,10 @@ Never default:
 After searchable sources are exhausted:
 
 1. Assign the next stable question ID, such as `R1-Q2`.
-2. State the unresolved decision.
+2. State the unresolved atomic decision and its impact.
 3. Summarize the relevant evidence and conflict.
 4. Present no more than three materially different options.
-5. Recommend one option and explain the trade-off.
+5. Recommend one option, explain the trade-off, and state what changes based on the answer.
 6. Save the exact proposed question in `SHAPING.md`.
 7. Ask one direct question.
 8. **End the turn immediately.** Do not call tools, continue research, ask another question, or begin background work.
@@ -86,17 +92,19 @@ When the user replies:
 
 1. Treat the normal reply as the answer; never require a Steer message.
 2. Append the exact safe answer to `SHAPING.md` immediately.
-3. Record the normalized decision, contract impact, and any superseded answer.
-4. Update the input ledger and contract draft.
-5. Continue only after the answer is safely persisted.
+3. Classify answer quality as Clear, Clear with conditions, Partial, Ambiguous, Conflicting, or Deferred / Blocked.
+4. Record only the faithful normalized decision, contract impact, confidence, assumption class, and any superseded answer.
+5. When more than one material interpretation remains, save and ask one targeted clarification; never choose silently.
+6. Update the input ledger and contract draft.
+7. Continue only after the answer is safely persisted.
 
 Questions should be concrete and easy to answer. Do not ask users to discover file paths, commands, implementation details, or repository facts that the agent can inspect.
 
 For secrets, credentials, private personal data, confidential business/customer information, third-party restricted material, raw production data, or exploit-enabling detail, store a redacted decision summary and approved secure reference instead of the sensitive text.
 
-## Standard and deeper rounds
+## Adaptive, standard, deeper, and stress-test rounds
 
-The first round resolves the minimum material decisions required for readiness.
+There is no minimum or maximum question count. Use Adaptive depth by default and escalate to Thorough or Exhaustive when impact, uncertainty, irreversibility, subjective judgment, or weak evidence requires it. The first round resolves the material decisions required for readiness—not an arbitrary quota.
 
 When the user is not satisfied or requests another batch of questions, open a deepening round:
 
@@ -106,7 +114,7 @@ When the user is not satisfied or requests another batch of questions, open a de
 4. Ask one non-duplicate material question at a time through the question barrier.
 5. Close the round with new decisions, contract changes, remaining uncertainty, and a readiness recommendation.
 
-The user may request repeated rounds. Each round must add decision value; repeated questions without new evidence count as no progress.
+The user may request repeated rounds. Each round must add decision value; repeated questions without new evidence count as no progress. A **stress-test round** challenges the current draft with fresh-reader, counterexample, scenario, verifier, contradiction, traceability, assumption, and plain-English teach-back checks.
 
 ## Exhaustive, not circular
 
@@ -127,7 +135,8 @@ At the end of each round, surface:
 - Round ID and questions answered
 - Contract sections changed
 - Remaining uncertainty or deferred decisions
-- Recommended disposition
+- Selected shaping depth and recommended disposition
+- Assumption register and clarity-stress-test result
 
 Ask one disposition question and end the turn:
 
@@ -139,7 +148,7 @@ Pause shaping and preserve the current state
 
 Approval is itself a shaping answer. Persist the user's explicit response and the approved contract revision before changing lifecycle state.
 
-Before approval, surface a compact review of outcome, scope, exclusions, evidence, protected behavior, profile, overlays, authority, budget, stop conditions, state paths, and approval round.
+Before approval, surface a compact plain-English teach-back of outcome, scope, exclusions, evidence, protected behavior, profile, overlays, authority, budget, stop conditions, state paths, shaping depth, assumptions, clarity-test findings, and approval round.
 
 ## Execution handoff after approval
 

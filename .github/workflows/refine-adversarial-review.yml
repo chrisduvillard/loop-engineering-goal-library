@@ -1,0 +1,69 @@
+name: Refine adversarial review
+
+on:
+  push:
+    branches: [codex/adversarial-robustness-review]
+
+concurrency:
+  group: refine-adversarial-review
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out review branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: codex/adversarial-robustness-review
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: "22.20.0"
+          cache: npm
+
+      - name: Apply and verify refinement
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/refine_adversarial_review.py
+          rm -f scripts/refine_adversarial_review.py
+          rm -f .github/workflows/refine-adversarial-review.yml
+          python -m compileall -q scripts tests
+          python -m unittest discover -s tests -v
+          python scripts/sync_goal_launchers.py --check
+          python scripts/sync_goal_docs.py --check
+          python scripts/validate_shaping_history_diff.py --self-test --base-ref origin/main
+          npm ci --ignore-scripts
+          python scripts/validate_repository.py
+          output="$(npx --no-install skills add . --list)"
+          printf '%s\n' "$output"
+          grep -q "shape-goal" <<<"$output"
+          grep -q "goal-engine" <<<"$output"
+          python scripts/package_skills.py
+
+      - name: Commit reviewed refinement
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Close second-pass adversarial gaps"
+          git push origin HEAD:codex/adversarial-robustness-review

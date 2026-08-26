@@ -10,9 +10,35 @@ permissions:
   contents: read
 
 jobs:
+  adversarial-tests:
+    name: Tests (${{ matrix.os }}, Python ${{ matrix.python }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.9", "3.13"]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Compile and run adversarial tests
+        run: |
+          python -m compileall -q scripts tests
+          python -m unittest discover -s tests -v
+
   validate:
+    needs: adversarial-tests
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -23,6 +49,15 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: "22.20.0"
+          cache: npm
+
+      - name: Install locked Skills CLI
+        run: npm ci --ignore-scripts
 
       - name: Validate repository contract
         run: python scripts/validate_repository.py
@@ -41,7 +76,7 @@ jobs:
       - name: Verify Agent Skills CLI discovery
         shell: bash
         run: |
-          output="$(npx -y skills@1.5.23 add . --list)"
+          output="$(npx --no-install skills add . --list)"
           printf '%s\n' "$output"
           grep -q "shape-goal" <<<"$output"
           grep -q "goal-engine" <<<"$output"

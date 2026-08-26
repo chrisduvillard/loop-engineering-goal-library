@@ -2,16 +2,17 @@
 
 **Goal ID:** `2026-08-26-interactive-shaping-first`  
 **Contract revision:** 1  
-**State:** Active  
-**Branch:** `codex/interactive-shaping-first`  
+**State:** Closed — Achieved  
+**Final branch:** `main`  
 **Shaping history:** `SHAPING.md`  
-**Completed / approval shaping rounds:** R1 / R1
+**Completed / approval shaping rounds:** R1 / R1  
+**Result:** `RESULT.md`
 
 ## Verified baseline
 
 - Version `0.5.0` used a combined shape-and-execute native `/goal` as the recommended zero-friction path.
 - Live screenshots showed an owner question waiting while the native goal continued autonomously, requiring **Steer** to answer.
-- The repository had 24 profiles, two skills, generated catalogs, append-only shaping history, validation, packaging, and CI.
+- The repository already had 24 profiles, two skills, generated catalogs, append-only shaping history, validation, packaging, and CI.
 
 ## Acceptance ledger
 
@@ -20,26 +21,25 @@
 | Interactive `shape-goal` is the main entry point | Pass | README, `shape-goal`, host metadata, installation and quick reference |
 | One-question turn barrier | Pass | `shape-goal`, input-resolution protocol, shaping-history protocol, validator |
 | Autonomous execution never interviews the user | Pass | `goal-engine` interaction boundary and advanced-preflight stop clauses |
-| All 24 profiles updated | Pass | Launcher synchronizer wrote and verified every canonical profile |
-| Short polished README | Pass | Plain-English three-step flow with collapsed 24-profile catalog; validator enforces ≤230 lines |
-| Dogfood lifecycle on this repository | Pass | `SHAPING.md`, `CONTRACT.md`, this progress file, and `UAT.md` |
-| Repository validation and packages | Pass on generated branch | Validator, append-only self-test, skill discovery, and `0.6.0` packaging passed in the generation workflow |
-| Pull-request CI | Pending | Awaiting reviewed PR run |
-| Merge and branch cleanup | Pending | Awaiting PR merge and post-merge verification |
+| All 24 profiles updated | Pass | Launcher synchronizer and permanent CI |
+| Short polished README | Pass | Plain-English three-step flow with collapsed catalog; validator enforces ≤230 lines |
+| Dogfood lifecycle on this repository | Pass | `SHAPING.md`, `CONTRACT.md`, this progress file, `UAT.md`, and `RESULT.md` |
+| Repository validation and packages | Pass | Review-branch, pull-request, merged-main, and closeout workflows |
+| Pull-request review and merge | Pass | PR #6, merge `9d77e45949f6628bfd57bfb6ab66649c55c73a4d` |
+| Branch and workflow cleanup | Pass | Temporary workflows removed; GitHub reports only `main` |
 
-## Work completed
+## Delivered work
 
 - Reframed the architecture as **shape outside `/goal`; execute inside `/goal`**.
-- Updated `shape-goal` with a hard question barrier and active-goal rescue flow.
-- Updated `goal-engine` to stop as **Approval required** instead of asking inside autonomous execution.
-- Updated all 24 profiles with interactive start commands and safe advanced preflights.
-- Reworked installation, quick reference, architecture, source interpretation, roadmap, contributing guidance, validators, generated collections, and host metadata.
+- Added a hard question barrier to `shape-goal` and an active-goal rescue flow.
+- Made `goal-engine` stop as **Approval required** instead of asking inside autonomous execution.
+- Updated all 24 profiles with interactive starts and safe advanced preflights.
+- Updated installation, quick reference, architecture, sources, roadmap, contributing guidance, validators, generated collections, and host metadata.
 - Replaced the README with a compact interactive-first guide and collapsible catalog.
 - Advanced the library to version `0.6.0`.
-- Created this repository's dogfood shaping record, approved Goal Contract, and UAT record.
-- Removed the temporary generation workflow and one-time patch script.
+- Dogfooded the complete shaping, contract, progress, UAT, verification, closeout, merge, and cleanup lifecycle on this repository.
 
-## Verification completed
+## Verification
 
 ```text
 python scripts/sync_goal_launchers.py --check
@@ -50,8 +50,8 @@ python scripts/package_skills.py
 npx -y skills@1.5.23 add . --list
 ```
 
-All passed in the generation workflow before the synchronized files were committed.
+All passed. Packaged ZIP checksums and archive integrity were independently verified.
 
 ## Next action
 
-Open and review the pull request, require the permanent validation workflow to pass, merge to `main`, write the final result and history entry, run final `main` validation, and remove the review branch.
+None. This goal is achieved and closed. External Codex/Claude client UI field testing remains a separate pre-`1.0.0` roadmap item.

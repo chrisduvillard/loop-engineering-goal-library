@@ -34,6 +34,7 @@ jobs:
           set -euo pipefail
           python scripts/sync_goal_launchers.py --write
           python scripts/sync_goal_docs.py --write
+          rm -f .github/workflows/apply-interactive-first.yml
           python scripts/sync_goal_launchers.py --check
           python scripts/sync_goal_docs.py --check
           python scripts/validate_shaping_history_diff.py --self-test --base-ref origin/main

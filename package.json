@@ -1,0 +1,10 @@
+{
+  "name": "loop-engineering-goal-library",
+  "private": true,
+  "devDependencies": {
+    "skills": "1.5.23"
+  },
+  "scripts": {
+    "test": "python -m unittest discover -s tests -v"
+  }
+}

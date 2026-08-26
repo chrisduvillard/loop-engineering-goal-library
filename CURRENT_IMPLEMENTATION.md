@@ -2,7 +2,7 @@
 
 [`FULL_REPORT.md`](FULL_REPORT.md) is the historical research foundation. The live implementation is an interactive-first workflow for shaping and then autonomously executing software goals.
 
-## Version `0.9.0`
+## Version `0.10.0`
 
 ```text
 shape-goal                    main interactive entry point
@@ -84,6 +84,10 @@ Custom Contract-Driven remains the fallback for unusual loops.
 - Autonomous execution never interviews the user, chooses among ambiguous interpretations, or expands authority.
 - Profiles and overlays cannot weaken the contract.
 - Reusable knowledge is promoted into tests, ADRs, documentation, runbooks, fixtures, evals, locale/crawl matrices, architecture maps, scripts, benchmarks, design references, and the Project Harness.
+
+## Adversarial robustness
+
+The repository now includes cross-platform unit, mutation, property, archive, path, history, workflow, and malformed-input tests. Generators and packagers fail closed, use atomic replacement, and reject symlinks, path escapes, hidden command counts, and destructive output choices. See [`docs/ROBUSTNESS_AUDIT.md`](docs/ROBUSTNESS_AUDIT.md).
 
 ## Verification
 

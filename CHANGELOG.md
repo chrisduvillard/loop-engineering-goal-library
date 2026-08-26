@@ -8,6 +8,22 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.10.0] - 2026-08-26
+
+### Added
+
+- A cross-platform adversarial and mutation test suite covering destructive paths, symlinks, case/Unicode archive collisions, malformed catalogs, Markdown corruption, shaping-history attacks, workflow injection, NUL text, and fail-closed CLI behavior.
+- `docs/ROBUSTNESS_AUDIT.md`, mapping pre-mortem, first principles, inversion, red-team/blue-team, Socratic, constraint-removal, stakeholder, and analogical reasoning to executable controls.
+- A lockfile-pinned Skills CLI development dependency and CI test matrix for Python 3.9 and 3.13 on Linux, macOS, and Windows.
+
+### Changed
+
+- Packaging now validates semantic versions, refuses dangerous or non-generated output directories, rejects symlinks and special files, prevents case/Unicode extraction collisions, validates ZIP manifests and modes, and publishes atomically.
+- Goal generators now validate catalog schema and safe paths, require exactly two advanced commands, reject Markdown injection, replace generated sections literally, and write atomically.
+- Shaping-history validation now checks new files even without a base ref, ignores fenced-code decoys, rejects duplicate/out-of-order/reordered IDs and approval rows, and retains allowed status/supersession updates.
+- Repository validation now rejects symlinks, NUL text, unexpected workflows, malformed catalog crashes, and missing adversarial tests.
+- Both skills now treat repository/external content as untrusted evidence, resist prompt injection, validate state paths, and stop on stale contract state or an ambiguous execution interpretation.
+
 ## [0.9.0] - 2026-08-26
 
 ### Added

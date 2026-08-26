@@ -5,28 +5,56 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 GOALS_DIR = ROOT / "goals"
 MAX_GOAL_CHARS = 4000
-
+GOAL_FILE = re.compile(r"\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.md")
+COMMAND = re.compile(r"```text\n(/goal .*?)\n```", flags=re.DOTALL)
 INTERACTIVE_HEADING = "## Recommended — interactive shaping"
 ADVANCED_HEADING = "## Advanced — autonomous preflight"
 FALLBACK_HEADING = "## Advanced — self-contained preflight"
 
 
+def atomic_write(path: Path, content: str) -> None:
+    if path.exists() and path.is_symlink():
+        raise ValueError(f"refusing to replace symlink: {path}")
+    handle, temp_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    temp = Path(temp_name)
+    try:
+        with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as stream:
+            stream.write(content)
+        os.replace(temp, path)
+    except Exception:
+        temp.unlink(missing_ok=True)
+        raise
+
+
 def canonical_goal_paths() -> list[Path]:
-    return sorted(path for path in GOALS_DIR.glob("[0-9][0-9]-*.md") if path.is_file())
+    paths = sorted(path for path in GOALS_DIR.glob("[0-9][0-9]-*.md") if path.is_file())
+    for path in paths:
+        if path.is_symlink() or not GOAL_FILE.fullmatch(path.name):
+            raise ValueError(f"unsafe canonical goal path: {path}")
+    return paths
 
 
 def goal_title(text: str) -> str:
-    first = text.splitlines()[0]
-    if not first.startswith("# "):
-        raise ValueError("goal file must begin with an H1")
-    return first[2:].strip()
+    lines = text.splitlines()
+    if not lines or not lines[0].startswith("# ") or not lines[0][2:].strip():
+        raise ValueError("goal file must begin with one non-empty H1")
+    if len(re.findall(r"^# ", text, flags=re.MULTILINE)) != 1:
+        raise ValueError("goal file must contain exactly one H1")
+    title = lines[0][2:].strip()
+    if any(ord(char) < 32 or ord(char) == 127 for char in title):
+        raise ValueError("goal title contains a control character")
+    if any(char in title for char in ("|", "<", ">", "`")):
+        raise ValueError(f"goal title contains unsafe Markdown/HTML punctuation: {title!r}")
+    return title
 
 
 def interactive_block(title: str) -> str:
@@ -44,13 +72,15 @@ def interactive_block(title: str) -> str:
 
 
 def insert_interactive_block(text: str, title: str) -> str:
-    if INTERACTIVE_HEADING in text:
+    count = text.count(INTERACTIVE_HEADING)
+    if count > 1:
+        raise ValueError("interactive heading appears more than once")
+    if count == 1:
         return text
     match = re.search(r"^\*\*In simple terms:\*\* .+$", text, flags=re.MULTILINE)
     if not match:
         raise ValueError("In simple terms line was not found")
-    insertion = "\n\n" + interactive_block(title).rstrip()
-    return text[: match.end()] + insertion + text[match.end() :]
+    return text[: match.end()] + "\n\n" + interactive_block(title).rstrip() + text[match.end():]
 
 
 def relabel_sections(text: str) -> str:
@@ -60,63 +90,54 @@ def relabel_sections(text: str) -> str:
         "Use this only when an approved contract or authoritative artifact already resolves every owner decision. It must stop and return control instead of asking questions inside the active `/goal`.",
     )
     updated = updated.replace("## Run unchanged — self-contained fallback", FALLBACK_HEADING)
-    updated = updated.replace(
+    return updated.replace(
         "Use this command when the skills are unavailable. It reproduces the same shape-then-execute gate without requiring placeholders.",
         "Use this only when the skills are unavailable and no owner interaction is expected. If a decision is missing, it must save one proposed question and stop instead of looping.",
     )
-    return updated
 
 
 def replace_commands(text: str) -> str:
-    commands = re.findall(r"```text\n(/goal .*?)\n```", text, flags=re.DOTALL)
-    if len(commands) != 2:
-        raise ValueError(f"expected exactly two /goal commands, found {len(commands)}")
-
+    matches = list(COMMAND.finditer(text))
+    if len(matches) != 2:
+        raise ValueError(f"expected exactly two /goal commands, found {len(matches)}")
+    commands = [match.group(1) for match in matches]
     recommended, fallback = commands
 
-    recommended = re.sub(
-        r"Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract\. .*? Then hand off",
-        "Resolve every material input from evidence where possible. Continue inside this `/goal` only when an already-approved Goal Contract or authoritative artifact resolves every owner decision. Otherwise create or resume `SHAPING.md`, save the unresolved decision and one recommended question, stop as Approval required, and tell the user to resume `shape-goal` outside `/goal`; do not ask the question or take another autonomous turn, and do not make production changes before approval. Then hand off",
-        recommended,
-        count=1,
-        flags=re.DOTALL,
-    )
+    required_recommended = ("SHAPING.md", "Approval required", "outside `/goal`", "do not ask the question", "do not make production changes")
+    if not all(fragment in recommended for fragment in required_recommended):
+        recommended, count = re.subn(
+            r"Resolve every material input from evidence where possible; ask only unresolved owner decisions, one at a time with a recommended answer, and do not make production changes until the user approves a Goal Contract\. .*? Then hand off",
+            "Resolve every material input from evidence where possible. Continue inside this `/goal` only when an already-approved Goal Contract or authoritative artifact resolves every owner decision. Otherwise create or resume `SHAPING.md`, save the unresolved decision and one recommended question, stop as Approval required, and tell the user to resume `shape-goal` outside `/goal`; do not ask the question or take another autonomous turn, and do not make production changes before approval. Then hand off",
+            recommended, count=1, flags=re.DOTALL,
+        )
+        if count != 1:
+            raise ValueError("could not safely install the autonomous preflight stop clause")
 
-    fallback = re.sub(
-        r"Search before asking; when a material decision cannot be derived, ask the user one question at a time, include the evidence and a recommended answer, .*? Do not edit production before approval,",
-        "Search before asking. Continue inside this `/goal` only when an existing approved artifact resolves every owner decision. Otherwise create or resume `SHAPING.md`, save the unresolved decision and one recommended question, stop as Approval required, and tell the user to reply outside `/goal` and continue shaping from the saved state; do not ask the question or take another autonomous turn. Do not edit production before approval,",
-        fallback,
-        count=1,
-        flags=re.DOTALL,
-    )
+    required_fallback = ("SHAPING.md", "Approval required", "outside `/goal`", "do not ask the question", "Do not edit production before approval")
+    if not all(fragment in fallback for fragment in required_fallback):
+        fallback, count = re.subn(
+            r"Search before asking; when a material decision cannot be derived, ask the user one question at a time, include the evidence and a recommended answer, .*? Do not edit production before approval,",
+            "Search before asking. Continue inside this `/goal` only when an existing approved artifact resolves every owner decision. Otherwise create or resume `SHAPING.md`, save the unresolved decision and one recommended question, stop as Approval required, and tell the user to reply outside `/goal` and continue shaping from the saved state; do not ask the question or take another autonomous turn. Do not edit production before approval,",
+            fallback, count=1, flags=re.DOTALL,
+        )
+        if count != 1:
+            raise ValueError("could not safely install the self-contained preflight stop clause")
 
-    if "Approval required" not in recommended or "Approval required" not in fallback:
-        raise ValueError("could not install interactive stop clauses")
-
-    iterator = iter((recommended, fallback))
-    return re.sub(
-        r"```text\n/goal .*?\n```",
-        lambda _: "```text\n" + next(iterator) + "\n```",
-        text,
-        count=2,
-        flags=re.DOTALL,
-    )
+    replacements = iter((recommended, fallback))
+    return COMMAND.sub(lambda _: "```text\n" + next(replacements) + "\n```", text, count=2)
 
 
 def normalize_sensitive_guards(text: str) -> str:
-    updated = text.replace(
+    return text.replace(
         "containing CONTRACT.md, final PROGRESS.md, and RESULT.md",
         "containing SHAPING.md, CONTRACT.md, final PROGRESS.md, and RESULT.md",
-    )
-    updated = updated.replace(
+    ).replace(
         "never archive secrets, private data, production dumps",
         "never archive secrets or private data, including personal, customer, or confidential business information, production dumps",
-    )
-    updated = updated.replace(
+    ).replace(
         "exclude secrets, private data, raw production dumps",
         "exclude secrets or private data, including personal, customer, or confidential business information, raw production dumps",
     )
-    return updated
 
 
 def transform(text: str) -> str:
@@ -139,22 +160,17 @@ def validate_goal(path: Path, text: str) -> None:
     ):
         if fragment not in text:
             raise ValueError(f"{path.name}: missing {fragment!r}")
-
-    commands = re.findall(r"```text\n(/goal .*?)\n```", text, flags=re.DOTALL)
+    commands = COMMAND.findall(text)
     if len(commands) != 2:
         raise ValueError(f"{path.name}: expected two /goal commands")
     for index, command in enumerate(commands, start=1):
         if len(command) > MAX_GOAL_CHARS:
-            raise ValueError(
-                f"{path.name}: command {index} is {len(command)} characters; maximum is {MAX_GOAL_CHARS}"
-            )
-        for fragment in (
-            "SHAPING.md",
-            "Approval required",
-            "outside `/goal`",
-            "do not ask the question",
+            raise ValueError(f"{path.name}: command {index} is {len(command)} characters; maximum is {MAX_GOAL_CHARS}")
+        required = (
+            "SHAPING.md", "Approval required", "outside `/goal`", "do not ask the question",
             "do not make production changes" if index == 1 else "Do not edit production before approval",
-        ):
+        )
+        for fragment in required:
             if fragment not in command:
                 raise ValueError(f"{path.name}: command {index} is missing {fragment!r}")
 
@@ -177,20 +193,17 @@ def check(documents: dict[Path, str]) -> int:
             continue
         failed = True
         print(f"OUT OF DATE: {path.relative_to(ROOT)}", file=sys.stderr)
-        diff = difflib.unified_diff(
-            actual.splitlines(),
-            expected.splitlines(),
+        print("\n".join(difflib.unified_diff(
+            actual.splitlines(), expected.splitlines(),
             fromfile=str(path.relative_to(ROOT)),
-            tofile=f"{path.relative_to(ROOT)} (synchronized)",
-            lineterm="",
-        )
-        print("\n".join(diff), file=sys.stderr)
+            tofile=f"{path.relative_to(ROOT)} (synchronized)", lineterm="",
+        )), file=sys.stderr)
     return 1 if failed else 0
 
 
 def write(documents: dict[Path, str]) -> int:
     for path, content in documents.items():
-        path.write_text(content, encoding="utf-8")
+        atomic_write(path, content)
         print(f"Wrote {path.relative_to(ROOT)}")
     return 0
 
@@ -204,7 +217,7 @@ def main() -> int:
     try:
         documents = render()
         return check(documents) if args.check else write(documents)
-    except (OSError, ValueError) as error:
+    except (OSError, ValueError, IndexError) as error:
         print(f"Launcher synchronization failed: {error}", file=sys.stderr)
         return 1
 

@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from pathlib import PurePath
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -421,6 +422,14 @@ def validate_state_and_docs() -> None:
         "scripts/sync_goal_launchers.py",
         "scripts/validate_shaping_history_diff.py",
         "scripts/validate_repository.py",
+        "tests/test_adversarial_robustness.py",
+        "docs/ROBUSTNESS_AUDIT.md",
+        "package.json",
+        "package-lock.json",
+        "docs/goals/2026-08-26-adversarial-robustness/SHAPING.md",
+        "docs/goals/2026-08-26-adversarial-robustness/CONTRACT.md",
+        "docs/goals/2026-08-26-adversarial-robustness/PROGRESS.md",
+        "docs/goals/2026-08-26-adversarial-robustness/UAT.md",
         ".github/dependabot.yml",
         ".github/workflows/validate.yml",
         "examples/complete-brownfield-cycle/README.md",
@@ -472,7 +481,7 @@ def validate_state_and_docs() -> None:
     require_fragments(
         require("CURRENT_IMPLEMENTATION.md"),
         (
-            "Version `0.9.0`",
+            "Version `0.10.0`",
             "shape-goal                    main interactive entry point",
             "question barrier",
             "Advanced preflight",
@@ -693,13 +702,39 @@ def validate_markdown_links() -> None:
                 fail(f"{path.relative_to(ROOT)}: broken local link: {raw_target}")
 
 
+def validate_tree_hygiene() -> None:
+    text_suffixes = {".md", ".py", ".json", ".yml", ".yaml", ".txt", ".toml"}
+    for path in ROOT.rglob("*"):
+        if ".git" in path.parts or "dist" in path.parts or "__pycache__" in path.parts:
+            continue
+        if path.is_symlink():
+            fail(f"{path.relative_to(ROOT)}: repository symlinks are not allowed")
+            continue
+        if not path.is_file():
+            continue
+        if path.stat().st_size > 2 * 1024 * 1024 and any(part in {"skills", "scripts", "goals", "tests"} for part in path.parts):
+            fail(f"{path.relative_to(ROOT)}: unexpectedly large source file")
+        if path.suffix.lower() in text_suffixes:
+            try:
+                content = path.read_text(encoding="utf-8")
+            except UnicodeDecodeError as error:
+                fail(f"{path.relative_to(ROOT)}: invalid UTF-8: {error}")
+                continue
+            if "\x00" in content:
+                fail(f"{path.relative_to(ROOT)}: NUL byte in text file")
+
+
 def validate_scripts_and_ci() -> None:
-    for path in sorted((ROOT / "scripts").glob("*.py")):
+    for path in sorted(list((ROOT / "scripts").glob("*.py")) + list((ROOT / "tests").glob("*.py"))):
         try:
             compile(path.read_text(encoding="utf-8"), str(path), "exec")
         except SyntaxError as error:
             fail(f"{path.relative_to(ROOT)}: syntax error: {error}")
 
+    workflow_dir = require(".github/workflows")
+    workflows = sorted(workflow_dir.glob("*.yml")) if workflow_dir.exists() else []
+    if [path.name for path in workflows] != ["validate.yml"]:
+        fail(f"Only the permanent read-only validate.yml workflow may be committed: {[path.name for path in workflows]}")
     workflow = require(".github/workflows/validate.yml")
     if not workflow.exists():
         return
@@ -714,12 +749,16 @@ def validate_scripts_and_ci() -> None:
             )
     for fragment in (
         "fetch-depth: 0",
-        "skills@1.5.23",
+        "npm ci --ignore-scripts",
+        "npx --no-install skills",
         "scripts/sync_goal_launchers.py --check",
         "scripts/sync_goal_docs.py --check",
         "scripts/validate_shaping_history_diff.py --self-test",
         "scripts/package_skills.py",
         "scripts/validate_repository.py",
+        "python -m unittest discover -s tests -v",
+        "npm ci --ignore-scripts",
+        "npx --no-install skills",
     ):
         if fragment not in source:
             fail(f".github/workflows/validate.yml: missing {fragment!r}")
@@ -727,13 +766,18 @@ def validate_scripts_and_ci() -> None:
 
 def main() -> int:
     version = validate_version()
-    catalog = load_catalog()
-    goals = validate_catalog(catalog)
+    try:
+        catalog = load_catalog()
+        goals = validate_catalog(catalog)
+    except Exception as error:  # noqa: BLE001
+        fail(f"Catalog validation crashed safely: {error}")
+        goals = []
     validate_goal_files(goals)
     validate_skills(version)
     validate_state_and_docs()
     validate_generated_docs()
     validate_markdown_links()
+    validate_tree_hygiene()
     validate_scripts_and_ci()
 
     if ERRORS:
@@ -757,6 +801,7 @@ def main() -> int:
     print("- synchronized launchers and generated catalogs")
     print("- GitHub Actions pinned to immutable commits")
     print("- local Markdown links resolve")
+    print("- adversarial mutation tests and repository hygiene are enforced")
     return 0
 
 

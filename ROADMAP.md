@@ -2,7 +2,7 @@
 
 Add abstractions only when they remove more field friction than they create.
 
-## Implemented through `0.9.0`
+## Implemented through `0.10.0`
 
 - `shape-goal` as the main interactive entry point.
 - A strict question barrier: save one question, ask it, and return control immediately.

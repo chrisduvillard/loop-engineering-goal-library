@@ -8,6 +8,27 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.6.0] - 2026-08-26
+
+### Changed
+
+- `shape-goal` is now the explicit main entry point and runs interactively outside native `/goal`.
+- Shaping and autonomous execution are separate phases: the user answers questions normally, approves the Goal Contract, and then starts the generated `/goal` command.
+- `shape-goal` now enforces a question barrier: save one question, ask it, and end the turn immediately with no further tools or background work.
+- `goal-engine` never interviews the user while autonomous execution is active. Material drift stops as Approval required and returns to interactive shaping.
+- Every profile file now begins with host-specific `shape-goal` commands and demotes combined `/goal` launchers to advanced autonomous preflights.
+- Advanced preflights stop at the first unresolved owner decision rather than asking and continuing inside `/goal`.
+- README and generated profile collections are shorter, clearer, and centered on the interactive-first workflow.
+
+### Added
+
+- Active-goal rescue instructions for Codex and Claude Code.
+- Validation for interactive start commands, question-stop behavior, and advanced preflight boundaries.
+
+### Compatibility
+
+Existing approved Goal Contracts remain valid. Users who previously started shaping through a combined `/goal` should pause or clear that goal, resume with `shape-goal`, approve the contract, and then start a new execution `/goal`.
+
 ## [0.5.0] - 2026-08-26
 
 ### Added

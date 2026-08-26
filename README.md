@@ -9,9 +9,9 @@ Portable Agent Skills and zero-friction `/goal` launchers for OpenAI Codex, Anth
 [![OpenAI Codex](https://img.shields.io/badge/OpenAI%20Codex-compatible-111827?style=flat-square&logo=openai&logoColor=white)](https://developers.openai.com/codex/use-cases/follow-goals/)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757?style=flat-square)](https://code.claude.com/docs/en/goal)
 [![Validation](https://img.shields.io/github/actions/workflow/status/chrisduvillard/loop-engineering-goal-library/validate.yml?branch=main&style=flat-square&label=validation)](https://github.com/chrisduvillard/loop-engineering-goal-library/actions/workflows/validate.yml)
-![Version](https://img.shields.io/badge/version-0.4.0-7C3AED?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.5.0-7C3AED?style=flat-square)
 ![Brownfield first](https://img.shields.io/badge/focus-brownfield--first-2563EB?style=flat-square)
-![Goals](https://img.shields.io/badge/zero--friction%20goals-22-16A34A?style=flat-square)
+![Goals](https://img.shields.io/badge/zero--friction%20goals-24-16A34A?style=flat-square)
 
 ```text
 Choose profile → Search evidence → Ask + save decisions → Approve contract
@@ -78,7 +78,7 @@ The launcher builds an input ledger and searches, in order:
 
 Only unresolved **owner decisions** are asked. Questions are one at a time and include the evidence, options, recommendation, and trade-off.
 
-Every question and answer is saved immediately under the stable Goal ID:
+Every question and answer is saved immediately under the stable Goal ID. Before storing a verbatim answer, the skill checks repository visibility and information classification; confidential strategy, customer commitments, restricted third-party material, secrets, and private data are redacted and linked to approved secure evidence:
 
 ```text
 docs/goals/<goal-id>/SHAPING.md
@@ -211,6 +211,8 @@ Copy the first `/goal` command from any linked file **without changing it**. The
 | [**Developer Experience / Tooling**](goals/20-developer-experience-tooling.md) | Make the common developer path work from clean state with clear commands and actionable failures. | Local setup, build, test, debug, CI, or contribution workflows must become faster, clearer, and reproducible. |
 | [**Data Quality / Pipeline Assurance**](goals/21-data-quality-pipeline-assurance.md) | Define data invariants, test the real pipeline, correct root causes, and make quality continuously observable. | A data pipeline or dataset must satisfy defined freshness, completeness, validity, consistency, lineage, and reconciliation expectations. |
 | [**Compliance / Audit Readiness**](goals/22-compliance-audit-readiness.md) | Map controls to implementation and evidence, close technical gaps, and leave an auditable package for qualified human review. | A repository or system must produce implementation evidence for an approved control set without falsely self-certifying legal or regulatory compliance. |
+| [**Test Suite / CI Health**](goals/23-test-suite-ci-health.md) | Find flaky, misleading, slow, skipped, or environment-dependent checks and turn the test pipeline into reliable evidence. | Automated tests and CI must become trustworthy, deterministic, appropriately fast, and consistent with local development. |
+| [**Infrastructure / Deployment Readiness**](goals/24-infrastructure-deployment-readiness.md) | Verify that the system can be provisioned and deployed consistently, diagnosed after rollout, and safely rolled back before a human authorizes production change. | Infrastructure, environment configuration, deployment automation, smoke checks, and rollback must be proven ready without silently changing production. |
 
 ### When no preset fits
 
@@ -257,6 +259,8 @@ CI verifies that:
 - Every recommended launcher contains no unresolved placeholders
 - Every launcher invokes both `shape-goal` and `goal-engine`
 - All profile-specific required inputs exist in the shaping skill
+- Every native `/goal` command stays within the portable 4,000-character condition limit
+- Previously committed shaping questions and answers cannot be deleted or rewritten in a PR
 - Durable shaping-history references and templates are packaged
 - The contract, progress, result, and history schemas link shaping rounds
 - The worked example preserves questions and answers across multiple rounds

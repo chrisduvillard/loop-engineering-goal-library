@@ -33,6 +33,9 @@ The first `/goal` command in every canonical goal file must:
 - Name both `shape-goal` and `goal-engine`
 - Require repository and connected-source search before user questions
 - Ask only unresolved material owner decisions
+- Preserve exact safe questions and answers in append-only `SHAPING.md`, with deeper rounds and superseding corrections
+- Classify repository visibility and redact or securely reference confidential/restricted answers
+- Stay within the portable 4,000-character native-goal condition limit
 - Forbid production edits before contract approval
 - State that shaping is not completion
 - Require passing acceptance evidence and reusable closeout
@@ -89,6 +92,8 @@ Do not add a license, tag, release, or permanent published artifact without owne
 ## Validate locally
 
 ```bash
+python3 scripts/sync_goal_launchers.py --write
+python3 scripts/sync_goal_launchers.py --check
 python3 scripts/sync_goal_docs.py --write
 python3 scripts/sync_goal_docs.py --check
 python3 scripts/validate_repository.py

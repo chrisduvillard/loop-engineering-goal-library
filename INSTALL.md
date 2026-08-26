@@ -5,6 +5,18 @@ The library contains two portable Agent Skills:
 - `shape-goal` — discovers missing goal inputs, asks only material decisions, and approves a Goal Contract.
 - `goal-engine` — executes the approved contract inside native `/goal`.
 
+## Prerequisites
+
+- Node.js **22.20.0 or newer** for the pinned `skills` CLI used by this repository.
+- Python **3.9 or newer** only when running repository validation or package scripts; CI uses Python 3.12.
+- A current Codex and/or Claude Code installation with Agent Skills support.
+
+Check Node before installation:
+
+```bash
+node --version
+```
+
 ## Recommended: global Codex + Claude Code install
 
 ```bash
@@ -39,6 +51,29 @@ Then open a repository and verify one direct invocation:
 | Codex CLI / IDE | `$shape-goal Continue this project` |
 
 To test zero-friction routing, open any file under [`goals/`](goals/) and paste its first `/goal` command unchanged. It should enter shaping before production execution.
+
+## Discovery troubleshooting
+
+If `skills list` shows both skills but one host cannot invoke them:
+
+1. Verify the host-specific locations exist:
+
+   ```text
+   Codex:       ~/.agents/skills/shape-goal and ~/.agents/skills/goal-engine
+   Claude Code: ~/.claude/skills/shape-goal and ~/.claude/skills/goal-engine
+   ```
+
+2. Rerun the install with `--copy` when symlinks are unsupported or not followed:
+
+   ```bash
+   npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
+     --skill '*' --global --agent codex --agent claude-code --copy --yes
+   ```
+
+3. Restart the host and run the direct invocation test again.
+4. Inspect `CLAUDE_CONFIG_DIR` or `CODEX_HOME` when a custom configuration directory is used.
+
+Do not maintain divergent manual copies unless necessary; record the installed library version in each Goal Contract.
 
 ## Project-local install
 

@@ -46,7 +46,16 @@ Record immediately after the answer:
 - Status: Answered, Deferred, Declined, or Superseded
 - Any prior question or decision superseded
 
-If an answer contains secrets, credentials, private personal data, raw production data, or exploit-enabling detail, store a redacted decision summary and an approved secure reference rather than the sensitive text.
+If an answer contains secrets, credentials, private personal data, confidential business/customer strategy, third-party restricted material, raw production data, or exploit-enabling detail, store a redacted decision summary and an approved secure reference rather than the sensitive text.
+
+## Repository visibility and data classification
+
+Before committing a verbatim answer, determine whether the repository and shaping path are public, private, or externally shared. Public visibility is not consent to publish confidential decisions.
+
+- Store verbatim answers only when their classification permits repository storage.
+- For confidential product strategy, customer commitments, unreleased roadmap, private commercial terms, or third-party restricted material, store a normalized redacted decision plus an approved secure reference.
+- Record who can access the secure source and whether the reference is sufficient for a future authorized agent.
+- Never reduce the decision to a misleading summary merely to avoid secure storage; mark the contract Blocked when essential evidence cannot be referenced safely.
 
 ## Standard and deepening rounds
 

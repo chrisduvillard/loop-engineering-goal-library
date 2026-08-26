@@ -51,6 +51,10 @@ Search in this order, using every lawful source available to the host:
 
 Triangulate important claims. A stale plan, checkbox, code presence, or one reviewer opinion is not sufficient evidence by itself.
 
+## Visibility and information classification
+
+Before persisting a verbatim answer, determine repository visibility and whether the answer contains confidential business strategy, customer commitments, unreleased roadmap, commercial terms, or third-party restricted material. Store a redacted normalized decision plus an approved secure reference when repository storage is not appropriate.
+
 ## Safe defaults
 
 Use a default without asking only when it is reversible, low-risk, consistent with repository conventions, and does not materially change product scope or authority. Record the default and why it is safe.
@@ -80,7 +84,7 @@ After searchable sources are exhausted:
 
 Questions should be concrete and easy to answer. Do not ask users to discover file paths, commands, implementation details, or repository facts that the agent can inspect.
 
-Preserve the answer verbatim when safe and useful. For secrets, credentials, private personal data, raw production data, or exploit-enabling detail, store a redacted decision summary and an approved secure reference instead.
+Preserve the answer verbatim when safe and useful. For secrets, credentials, private personal data, confidential business/customer information, third-party restricted material, raw production data, or exploit-enabling detail, store a redacted decision summary and an approved secure reference instead.
 
 ## Standard and deeper rounds
 

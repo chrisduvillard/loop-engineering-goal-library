@@ -8,6 +8,26 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.5.0] - 2026-08-26
+
+### Added
+
+- **Test Suite / CI Health** for flakiness, hidden skips, false confidence, isolation, runtime, diagnostics, and local/CI parity.
+- **Infrastructure / Deployment Readiness** for infrastructure-as-code, environment parity, artifacts, deployment stages, health checks, observability, and rollback without unauthorized production mutation.
+- Shared launcher synchronization with a portable 4,000-character native-goal limit.
+- Append-only shaping-history diff validation across pull requests and direct pushes.
+- Repository-visibility and information-classification rules for confidential shaping answers.
+- Current Node/Python prerequisites and host-specific discovery troubleshooting.
+
+### Changed
+
+- All self-contained fallbacks now preserve `SHAPING.md`, exact safe questions and answers, recommendations, normalized decisions, corrections, and repeatable deeper rounds.
+- Compaction-critical safety and handoff invariants now appear near the top of both skills.
+- `shape-goal` renders the actual persisted contract reference instead of always assuming `GOAL.md`.
+- The shaping template now includes Blocked state and a durable approval-question record.
+- The historical research report is clearly separated from the live implementation.
+- The library now contains 24 zero-friction goal profiles: 7 core, 6 specialist, and 11 product/quality profiles.
+
 ## [0.4.0] - 2026-08-25
 
 ### Added

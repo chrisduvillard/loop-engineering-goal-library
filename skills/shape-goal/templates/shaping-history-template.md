@@ -2,13 +2,14 @@
 
 **Goal ID:** [GOAL ID]  
 **Contract:** [PATH OR ISSUE]  
-**Lifecycle state:** Candidate / Ready / Active / Paused / Closed  
+**Lifecycle state:** Candidate / Ready / Active / Paused / Blocked / Closed  
 **Created:** [DATE]  
 **Last updated:** [DATE]  
 **Completed rounds:** [COUNT / IDS]  
 **Latest round:** [ROUND ID]  
 **Approval round:** [ROUND ID OR NONE]  
-**Storage note:** Preserve every asked question and answer; redact sensitive material and link approved secure evidence when necessary.
+**Repository visibility / information classification:** [PUBLIC / PRIVATE / RESTRICTED + POLICY]
+**Storage note:** Preserve every asked question and answer; redact personal, confidential business/customer, third-party restricted, secret, production, or exploit-enabling material and link approved secure evidence when necessary.
 
 ## Current decision index
 
@@ -54,6 +55,14 @@
 ## Round R2 — Deepening
 
 Copy the round structure above. Read all earlier rounds first, select an unexplored or weak lens, and ask only non-duplicate material questions one at a time.
+
+## Approval record
+
+| Round | Approval question | User answer | Approved contract revision | Date / actor |
+|---|---|---|---:|---|
+| [R1] | [EXACT APPROVAL QUESTION] | [VERBATIM WHEN SAFE OR REDACTED SUMMARY] | [REVISION] | [DATE / OWNER] |
+
+Approval is itself a shaping question and must be recorded. A later deeper round supersedes the earlier execution approval until the revised contract is approved again.
 
 ## Corrections and supersessions
 

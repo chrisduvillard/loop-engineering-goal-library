@@ -20,6 +20,8 @@ Use the dedicated profile when the concern is the primary outcome. Use the overl
 | Operational visibility and supportability | Observability / Operability | Operability & Observability |
 | Developer setup and tooling | Developer Experience / Tooling | Documentation, compatibility, or performance overlays |
 | Dataset or pipeline quality | Data Quality / Pipeline Assurance | Data Integrity & Governance |
+| Automated test and CI trust | Test Suite / CI Health | Reliability, documentation, or performance overlays |
+| Infrastructure and deployment readiness | Infrastructure / Deployment Readiness | Reliability, operability, security, or compatibility overlays |
 | Technical audit evidence | Compliance / Audit Readiness | Compliance & Auditability |
 
 ## Security & Privacy

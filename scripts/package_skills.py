@@ -44,7 +44,7 @@ def is_relative_to(path: Path, parent: Path) -> bool:
 def read_version() -> str:
     version = VERSION_FILE.read_text(encoding="utf-8").strip()
     if not SEMVER.fullmatch(version):
-        raise ValueError(f"VERSION is not a safe semantic version: {version!r}")
+        raise ValueError(f"VERSION is not semantic; expected a safe semantic version: {version!r}")
     return version
 
 
@@ -68,7 +68,7 @@ def validate_unique_names(names: list[str]) -> None:
         previous = seen.get(key)
         if previous is not None:
             raise ValueError(
-                f"archive contains case-insensitive or Unicode-colliding paths: {previous!r} and {name!r}"
+                f"archive paths collide after case-folding or Unicode normalization: {previous!r} and {name!r}"
             )
         seen[key] = name
 

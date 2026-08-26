@@ -18,6 +18,11 @@ import sync_goal_launchers  # noqa: E402
 ERRORS: list[str] = []
 PLACEHOLDER = re.compile(r"\[[A-Z][A-Z0-9 _/.,:+-]{2,}\]")
 ACTION_PIN = re.compile(r"uses:\s+[^@\s]+@([0-9a-f]{40})(?:\s+#.*)?$")
+SEMVER = re.compile(
+    r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)"
+    r"(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?"
+    r"(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?"
+)
 ASSURANCE_OVERLAYS = {
     "Security & Privacy",
     "Reliability & Recovery",
@@ -74,26 +79,39 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, str], dict[str, str]]:
 
     top: dict[str, str] = {}
     metadata: dict[str, str] = {}
+    seen_top: set[str] = set()
+    seen_metadata: set[str] = set()
     in_metadata = False
     for raw_line in parts[1].splitlines():
         if not raw_line.strip() or raw_line.lstrip().startswith("#"):
             continue
+        if "\t" in raw_line[: len(raw_line) - len(raw_line.lstrip())]:
+            fail(f"{path.relative_to(ROOT)}: tabs are not allowed in skill frontmatter")
         if raw_line.startswith(("  ", "\t")):
-            if in_metadata and ":" in raw_line:
-                key, value = raw_line.strip().split(":", 1)
-                metadata[key.strip()] = unquote_yaml(value)
+            if not in_metadata or ":" not in raw_line:
+                fail(f"{path.relative_to(ROOT)}: unsupported nested frontmatter line {raw_line!r}")
+                continue
+            key, value = raw_line.strip().split(":", 1)
+            key = key.strip()
+            if key in seen_metadata:
+                fail(f"{path.relative_to(ROOT)}: duplicate metadata key {key!r}")
+            seen_metadata.add(key)
+            metadata[key] = unquote_yaml(value)
             continue
         in_metadata = False
         if ":" not in raw_line:
+            fail(f"{path.relative_to(ROOT)}: malformed frontmatter line {raw_line!r}")
             continue
         key, value = raw_line.split(":", 1)
         key = key.strip()
+        if key in seen_top:
+            fail(f"{path.relative_to(ROOT)}: duplicate frontmatter key {key!r}")
+        seen_top.add(key)
         if key == "metadata":
             in_metadata = True
         else:
             top[key] = unquote_yaml(value)
     return top, metadata
-
 
 def require_fragments(path: Path, fragments: tuple[str, ...]) -> None:
     if not path.exists():
@@ -106,7 +124,7 @@ def require_fragments(path: Path, fragments: tuple[str, ...]) -> None:
 
 def validate_version() -> str:
     version = text("VERSION").strip()
-    if not re.fullmatch(r"\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?", version):
+    if not SEMVER.fullmatch(version):
         fail(f"VERSION is not semantic: {version!r}")
     changelog = text("CHANGELOG.md")
     if version and f"## [{version}]" not in changelog:
@@ -313,6 +331,10 @@ def validate_skills(version: str) -> None:
         for key in ("user-invocable", "disable-model-invocation"):
             if key not in top:
                 fail(f"{rel}: missing {key}")
+        if top.get("user-invocable") != "true":
+            fail(f"{rel}: user-invocable must be true")
+        if top.get("disable-model-invocation") != "false":
+            fail(f"{rel}: disable-model-invocation must be false")
         name = top.get("name", "")
         names.add(name)
         if name != path.parent.name:
@@ -426,6 +448,7 @@ def validate_state_and_docs() -> None:
         "scripts/validate_shaping_history_diff.py",
         "scripts/validate_repository.py",
         "tests/test_adversarial_robustness.py",
+        "tests/test_adversarial_second_pass.py",
         "docs/ROBUSTNESS_AUDIT.md",
         "package.json",
         "package-lock.json",
@@ -738,17 +761,24 @@ def validate_package_manifest() -> None:
     except (json.JSONDecodeError, TypeError) as error:
         fail(f"npm package metadata is invalid: {error}")
         return
+    if not isinstance(package, dict) or not isinstance(lock, dict):
+        fail("npm package metadata must use JSON objects")
+        return
+
     expected = "1.5.23"
     if package.get("name") != "loop-engineering-goal-library" or package.get("private") is not True:
         fail("package.json must remain the private loop-engineering-goal-library package")
     if package.get("devDependencies", {}).get("skills") != expected:
         fail(f"package.json must pin skills exactly to {expected}")
+    if package.get("scripts") != {"test": "python -m unittest discover -s tests -v"}:
+        fail("package.json may contain only the reviewed test script")
     if lock.get("lockfileVersion") != 3:
         fail("package-lock.json must use lockfileVersion 3")
     packages = lock.get("packages")
     if not isinstance(packages, dict):
         fail("package-lock.json packages must be an object")
         return
+
     root_package = packages.get("", {})
     skills_package = packages.get("node_modules/skills", {})
     if root_package.get("devDependencies", {}).get("skills") != expected:
@@ -756,6 +786,25 @@ def validate_package_manifest() -> None:
     if skills_package.get("version") != expected or not skills_package.get("integrity"):
         fail("package-lock.json must pin skills 1.5.23 with an integrity hash")
 
+    for package_path, entry in packages.items():
+        if package_path == "":
+            continue
+        if not isinstance(entry, dict):
+            fail(f"package-lock.json entry {package_path!r} must be an object")
+            continue
+        version = entry.get("version")
+        resolved = entry.get("resolved")
+        integrity = entry.get("integrity")
+        if not isinstance(version, str) or not version:
+            fail(f"package-lock.json entry {package_path!r} has no version")
+        if not isinstance(resolved, str) or not resolved.startswith("https://registry.npmjs.org/"):
+            fail(f"package-lock.json entry {package_path!r} must resolve from the npm registry over HTTPS")
+        if not isinstance(integrity, str) or not integrity.startswith("sha512-"):
+            fail(f"package-lock.json entry {package_path!r} must have a sha512 integrity hash")
+        if entry.get("dev") is not True:
+            fail(f"package-lock.json entry {package_path!r} must remain development-only")
+        if entry.get("hasInstallScript") is True:
+            fail(f"package-lock.json entry {package_path!r} may not declare an install script")
 
 def validate_scripts_and_ci() -> None:
     for path in sorted(list((ROOT / "scripts").glob("*.py")) + list((ROOT / "tests").glob("*.py"))):
@@ -774,8 +823,10 @@ def validate_scripts_and_ci() -> None:
     source = workflow.read_text(encoding="utf-8")
     if "contents: read" not in source:
         fail(".github/workflows/validate.yml: contents permission must remain read-only")
-    if re.search(r"^\s*[A-Za-z-]+:\s*write\s*$", source, flags=re.MULTILINE):
+    if re.search(r"^\s*[A-Za-z-]+:\s*write(?:-all)?\s*$", source, flags=re.MULTILINE):
         fail(".github/workflows/validate.yml: write permission is forbidden")
+    if re.search(r"^\s*permissions:\s*\{[^}]*\bwrite(?:-all)?\b", source, flags=re.MULTILINE):
+        fail(".github/workflows/validate.yml: inline write permission is forbidden")
     for line in source.splitlines():
         if "uses:" not in line:
             continue
@@ -838,6 +889,7 @@ def main() -> int:
     print("- GitHub Actions pinned to immutable commits")
     print("- local Markdown links resolve")
     print("- adversarial mutation tests and repository hygiene are enforced")
+    print("- locked transitive dependencies, strict frontmatter, and archive-source parity are enforced")
     return 0
 
 

@@ -296,7 +296,7 @@ class ShapingHistoryAttackTests(unittest.TestCase):
                     f"#### R1-Q{index} — D{index}\n\n- **Status:** Answered\n- **Exact question:** Q{index}?\n- **User answer:** A{index}.\n- **Normalized decision:** D{index}.\n"
                 )
             before = "# History\n\n## Round R1\n\n" + "\n".join(blocks)
-            appended = before + f"\n## Round R2\n\n#### R2-Q1 — Next\n\n- **Status:** Proposed\n"
+            appended = before + f"\n## Round R2\n\n#### R2-Q1 — Next\n\n- **Status:** Proposed\n- **Exact question:** Next?\n"
             self.assertFalse(shaping.validate_document(before, appended, "fuzz"))
             victim = random.randint(1, count)
             mutated = before.replace(f"- **User answer:** A{victim}.", f"- **User answer:** CHANGED{victim}.")

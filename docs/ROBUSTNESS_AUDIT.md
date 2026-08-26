@@ -48,3 +48,6 @@ An independent review found and closed additional gaps: local `node_modules` sym
 ## Residual limits
 
 No finite test suite proves every future host, filesystem, or model behavior. Remaining field risks include host UI changes, model compaction, unavailable connected sources, compromised upstream registries, and repository branch protection not being configured. These are recorded rather than hidden; the test suite focuses on deterministic controls this repository can enforce.
+## Third-pass findings
+
+A final inversion pass closed quieter failure modes that often appear only after a project matures: loose semantic-version parsing, ZIP manifests that were self-consistent but not compared with source bytes, decomposed Unicode archive names, generated dependency directories being mistaken for project shaping history, zero-based decision IDs, duplicate approval sections, `write-all` workflow permissions, ambiguous duplicate skill frontmatter, and unverified transitive lockfile entries.

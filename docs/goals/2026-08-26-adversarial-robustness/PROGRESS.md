@@ -20,3 +20,6 @@
 ## Next action
 
 Run the complete adversarial suite, fix any remaining failures, review the diff, open a pull request, merge after CI, archive the result, and clean the branch.
+## Third-pass review
+
+The final review strengthened semantic versions, archive/source parity, Unicode normalization, shaping-history discovery, approval structure, workflow permission parsing, skill frontmatter, and the full npm lock graph. The adversarial suite now includes the corresponding regression cases.

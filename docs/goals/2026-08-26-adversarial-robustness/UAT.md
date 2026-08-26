@@ -38,3 +38,11 @@
 - Catalog text attempts Markdown link injection.
 - Package-lock metadata drifts from the pinned Skills CLI.
 - Two writers attempt to use the same Goal Contract or shared resource without a valid lease.
+## Final inversion cases
+
+- Reject leading-zero or incomplete semantic versions.
+- Reject a ZIP whose member bytes no longer match the declared source manifest.
+- Reject decomposed Unicode archive names that can normalize differently across filesystems.
+- Ignore generated dependency directories when discovering project shaping histories.
+- Reject zero-based question IDs and duplicate approval sections.
+- Reject workflow `write-all`, duplicate skill frontmatter, noncanonical invocation booleans, and any transitive lock entry without HTTPS resolution and sha512 integrity.

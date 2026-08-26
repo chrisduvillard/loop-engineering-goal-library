@@ -19,13 +19,27 @@
 | Item | Status |
 |---|---|
 | Preserve current main and existing 29 profiles | Pass |
-| Add profiles 30–31 | In progress |
-| Add overlays and references | In progress |
-| README update command and visual refresh | In progress |
-| Generated docs and package metadata | Pending |
-| Full validation and PR review | Pending |
-| Merge, final-main validation, and cleanup | Pending |
+| Add profiles 30–31 | Pass |
+| Add AI, localization, and search overlays | Pass |
+| README update command and visual refresh | Pass |
+| Generated docs and package metadata | Pass |
+| Branch validation, Skills CLI discovery, and package inspection | Pass |
+| Pull-request review and CI | In progress |
+| Merge, final-main validation, closeout, and cleanup | Pending |
+
+## Verification completed on the review branch
+
+```text
+python scripts/sync_goal_launchers.py --check
+python scripts/sync_goal_docs.py --check
+python scripts/validate_shaping_history_diff.py --self-test --base-ref origin/main
+python scripts/validate_repository.py
+python scripts/package_skills.py
+npx -y skills@1.5.23 add . --list
+```
+
+The generated `0.8.0` packages passed checksum and ZIP-integrity inspection. Both packaged skills report version `0.8.0`, and their references contain profiles 30–31 plus the three new assurance overlays.
 
 ## Next action
 
-Apply the approved changes, regenerate all outputs, run the complete validation and package suite, inspect the diff and artifact, merge after CI, close the goal record, and clean every non-main branch.
+Complete pull-request CI and final diff review, merge to `main`, preserve the result and history entry, rerun validation on the final head, and remove every non-main branch.

@@ -33,6 +33,29 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/apply_adaptive_question_clarity.py
+          python - <<'PY'
+          from pathlib import Path
+
+          for path in Path("docs/goals/2026-08-26-adaptive-question-clarity").glob("*.md"):
+              lines = path.read_text(encoding="utf-8").splitlines()
+              path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
+
+          replacements = {
+              Path("skills/shape-goal/goal-contract-template.md"): (
+                  ("**Shaping depth:** Adaptive / Thorough / Exhaustive  \n", "**Shaping depth:** Adaptive / Thorough / Exhaustive\n"),
+                  ("**Clarity gate:** Not run / Needs clarification / Pass  \n", "**Clarity gate:** Not run / Needs clarification / Pass\n"),
+              ),
+              Path("skills/shape-goal/templates/shaping-history-template.md"): (
+                  ("**Shaping depth:** Adaptive / Thorough / Exhaustive  \n", "**Shaping depth:** Adaptive / Thorough / Exhaustive\n"),
+                  ("**Clarity gate:** Not run / Needs clarification / Pass  \n", "**Clarity gate:** Not run / Needs clarification / Pass\n"),
+              ),
+          }
+          for path, pairs in replacements.items():
+              source = path.read_text(encoding="utf-8")
+              for old, new in pairs:
+                  source = source.replace(old, new)
+              path.write_text(source, encoding="utf-8")
+          PY
           rm -f scripts/apply_adaptive_question_clarity.py
           rm -f .github/workflows/apply-adaptive-question-clarity.yml
           python scripts/sync_goal_launchers.py --check

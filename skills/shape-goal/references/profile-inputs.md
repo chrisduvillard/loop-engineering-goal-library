@@ -15,6 +15,8 @@ Resolve and record:
 - Budget, blocker, approval, stall, and goal-drift exits
 - Goal ID, revision, priority, dependencies, state, portfolio, archive, and history paths
 - Primary profile, assurance overlays, and project-harness sources
+- Adaptive shaping depth, universal clarity-matrix coverage, answer-quality status, and assumption register
+- Fresh-reader, counterexample, scenario, verifier, contradiction, traceability, and plain-English teach-back results before approval
 
 Do not ask the user for facts that repository evidence or connected authoritative sources can answer. Ask only material owner decisions, one at a time, after the evidence search is exhausted.
 

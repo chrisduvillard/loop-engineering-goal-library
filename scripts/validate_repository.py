@@ -355,6 +355,9 @@ def validate_skills(version: str) -> None:
             "do not execute it automatically",
             "references/profile-inputs.md",
             "references/input-resolution.md",
+            "references/question-quality.md",
+            "no material ambiguity",
+            "answer quality gate",
             "references/shaping-history.md",
             "templates/shaping-history-template.md",
         ):
@@ -399,6 +402,7 @@ def validate_state_and_docs() -> None:
         "skills/shape-goal/SKILL.md",
         "skills/shape-goal/goal-contract-template.md",
         "skills/shape-goal/references/input-resolution.md",
+        "skills/shape-goal/references/question-quality.md",
         "skills/shape-goal/references/profile-inputs.md",
         "skills/shape-goal/references/shaping-history.md",
         "skills/shape-goal/templates/shaping-history-template.md",
@@ -434,6 +438,10 @@ def validate_state_and_docs() -> None:
         "docs/goals/2026-08-26-final-review-readme-onboarding/CONTRACT.md",
         "docs/goals/2026-08-26-final-review-readme-onboarding/PROGRESS.md",
         "docs/goals/2026-08-26-final-review-readme-onboarding/UAT.md",
+        "docs/goals/2026-08-26-adaptive-question-clarity/SHAPING.md",
+        "docs/goals/2026-08-26-adaptive-question-clarity/CONTRACT.md",
+        "docs/goals/2026-08-26-adaptive-question-clarity/PROGRESS.md",
+        "docs/goals/2026-08-26-adaptive-question-clarity/UAT.md",
     )
     for path in required_paths:
         require(path)
@@ -448,9 +456,23 @@ def validate_state_and_docs() -> None:
         require_absent(path)
 
     require_fragments(
+        require("skills/shape-goal/references/question-quality.md"),
+        (
+            "No fixed question count",
+            "Answer quality gate",
+            "Assumption register",
+            "Fresh-reader test",
+            "Counterexample test",
+            "Plain-English teach-back",
+            "Delegated judgment",
+            "Must / hard gate",
+            "If this takes two questions",
+        ),
+    )
+    require_fragments(
         require("CURRENT_IMPLEMENTATION.md"),
         (
-            "Version `0.8.0`",
+            "Version `0.9.0`",
             "shape-goal                    main interactive entry point",
             "question barrier",
             "Advanced preflight",
@@ -466,6 +488,8 @@ def validate_state_and_docs() -> None:
             "img.shields.io/badge/1-Shape-7C3AED",
             "## 🧭 Why two phases?",
             "no Steer message required",
+            "There is no target question count",
+            "Stress-test the current goal",
             "Pursuing goal",
             "## ⚙️ Advanced modes",
             "<!-- goal-catalog:start -->",
@@ -591,6 +615,22 @@ def validate_state_and_docs() -> None:
         ),
     )
 
+    require_fragments(
+        require("skills/shape-goal/goal-contract-template.md"),
+        (
+            "Assumptions and interpretation register",
+            "Clarity stress test",
+            "Pre-approval clarity gate",
+        ),
+    )
+    require_fragments(
+        require("skills/shape-goal/templates/shaping-history-template.md"),
+        (
+            "Answer quality",
+            "Clarity audit",
+            "Assumption class",
+        ),
+    )
     readme = require("README.md")
     if readme.exists() and len(readme.read_text(encoding="utf-8").splitlines()) > 235:
         fail("README.md is too long; keep the generated landing page at 235 lines or fewer")

@@ -6,6 +6,8 @@ The library separates **interactive decisions** from **autonomous execution**.
 shape-goal outside /goal
   - searches evidence
   - asks one owner decision
+  - adapts question depth to risk
+  - validates the answer's meaning
   - saves the answer
   - ends each question turn
   - supports deeper rounds
@@ -60,10 +62,11 @@ Native /goal works until done is proven.
 `shape-goal` loads:
 
 - [`input-resolution.md`](skills/shape-goal/references/input-resolution.md)
+- [`question-quality.md`](skills/shape-goal/references/question-quality.md)
 - [`profile-inputs.md`](skills/shape-goal/references/profile-inputs.md)
 - [`shaping-history.md`](skills/shape-goal/references/shaping-history.md)
 
-It creates an input ledger, searches authoritative evidence, applies only safe reversible defaults, classifies repository visibility, and asks one unresolved material decision at a time with a recommendation.
+It creates a risk-weighted input ledger and assumption register, searches authoritative evidence, applies only safe reversible defaults, classifies repository visibility, and asks one unresolved material decision at a time with a recommendation. The number of questions is adaptive: the skill stops only after its answer-quality and clarity gates pass.
 
 The question barrier is strict:
 
@@ -72,7 +75,7 @@ prepare → save question → ask → end turn
 user replies → save answer → continue
 ```
 
-No tool calls or background activity occur after a shaping question is asked.
+No tool calls or background activity occur after a shaping question is asked. Before approval, the draft receives fresh-reader, counterexample, scenario, verifier, contradiction, traceability, and plain-English teach-back checks.
 
 ## Durable shaping rounds
 

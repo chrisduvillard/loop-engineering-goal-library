@@ -2,10 +2,11 @@
 
 Add abstractions only when they remove more field friction than they create.
 
-## Implemented through `0.8.0`
+## Implemented through `0.9.0`
 
 - `shape-goal` as the main interactive entry point.
 - A strict question barrier: save one question, ask it, and return control immediately.
+- Adaptive question depth with no fixed quota, an answer-quality gate, a risk-weighted assumption register, and a pre-approval clarity stress test.
 - Separate interactive shaping and autonomous `/goal` execution.
 - Thirty-one profiles with host-specific `shape-goal` start commands.
 - Dedicated loops for AI/LLM evaluation, legacy retirement, internationalization/localization, backup and disaster recovery, trustworthy product analytics/experimentation, codebase onboarding, and search/SEO/web discoverability.
@@ -23,6 +24,8 @@ Add abstractions only when they remove more field friction than they create.
   4. start the generated `/goal`
   5. complete and archive the result
 - Run the comparable flow through Claude Code.
+- Field-test adaptive questioning with a two-question low-risk goal and a many-question high-risk goal; verify that ambiguous answers trigger clarification rather than inference.
+- Field-test the fresh-reader, counterexample, scenario, and plain-English teach-back gates with a subjective UI goal and an irreversible migration goal.
 - Verify active-goal rescue from a deliberately misused autonomous preflight.
 - Compare skill retention, compaction, evidence visibility, pause/resume, and handoff quality.
 - Field-test Frontend UI / UX / Accessibility and Documentation Synchronization on mature projects.

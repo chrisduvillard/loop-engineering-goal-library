@@ -45,15 +45,17 @@ After asking, do not call tools, keep researching, start background work, ask an
 Record:
 
 - Round and question ID
-- Decision lens and unresolved issue
+- Decision lens, materiality, uncertainty, irreversibility, and unresolved issue
 - Why the question was necessary
 - Repository or connected evidence considered
 - Recommended answer and trade-off
 - Exact question asked
 - User answer, verbatim when safe and useful
+- Answer-quality classification and interpretation confirmation
 - Normalized decision used by the contract
+- Confidence and assumption classification
 - Contract sections affected
-- Status: Proposed, Answered, Deferred, Declined, or Superseded
+- Status: Proposed, Answered, Needs clarification, Conflicting, Deferred, Declined, or Superseded
 - Any prior question or decision superseded
 
 A proposed question is saved before the turn ends; the answer is appended on the next turn.
@@ -69,7 +71,7 @@ Before committing a verbatim answer, determine whether the repository and shapin
 - Record who can access the secure source and whether it is sufficient for a future authorized agent.
 - Mark the contract Blocked when essential evidence cannot be referenced safely.
 
-## Standard and deepening rounds
+## Adaptive, standard, deepening, and stress-test rounds
 
 ### Standard round
 
@@ -100,7 +102,11 @@ Useful lenses include:
 - Maintainability, ownership, and long-term support
 - Authority, irreversible actions, and risk acceptance
 
-A round is a sequence of one-question interactive turns, not a large questionnaire or a background loop.
+A round is a sequence of one-question interactive turns, not a large questionnaire or a background loop. There is no target question count: the round continues until its material clarity gaps are resolved or explicitly blocked.
+
+### Stress-test round
+
+Use a stress-test round when the user requests zero ambiguity or the contract is high-risk, subjective, or easy to misread. Record fresh-reader, counterexample, scenario, verifier, contradiction, traceability, assumption, and plain-English teach-back findings. Every material finding becomes a new saved question rather than an agent-invented correction.
 
 ## Repeatable deepening
 
@@ -120,7 +126,7 @@ Run another deeper shaping round
 Pause shaping and preserve the current state
 ```
 
-Approval is itself recorded as a question and answer. Do not begin production execution until the contract references the approval round.
+Approval is itself recorded as a question and answer. Do not begin production execution until the contract references the approval round and the clarity gate records no blocking ambiguity or unresolved High-/Medium-impact assumption.
 
 ## Contract and closeout linkage
 

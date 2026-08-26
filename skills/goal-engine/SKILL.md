@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[approved Goal Contract path or issue]"
 metadata:
   author: chrisduvillard
-  version: "0.8.0"
+  version: "0.9.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -26,6 +26,7 @@ Execute one approved outcome without losing brownfield safety, changing the goal
 - Surface evaluator-visible evidence, protect corrected failures, and keep only changes that preserve or improve the verified state.
 - Never ask a material owner question while autonomous `/goal` execution is active.
 - Material goal drift stops execution as **Approval required** and returns to interactive `shape-goal`; prior decisions remain immutable.
+- If contract wording admits more than one material interpretation during execution, stop as **Approval required** rather than choosing the easiest interpretation.
 - Autonomous continuation never expands deployment, destructive, credential, billing, security-testing, legal, or production authority.
 
 ## Approved-contract handoff

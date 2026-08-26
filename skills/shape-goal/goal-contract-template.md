@@ -14,6 +14,8 @@
 **Completed shaping rounds:** [COUNT / IDS]  
 **Last shaping round:** [ROUND ID]  
 **Approval shaping round:** [ROUND ID OR NONE]  
+**Shaping depth:** Adaptive / Thorough / Exhaustive
+**Clarity gate:** Not run / Needs clarification / Pass
 **Branch / worktree / SHA:** [OPTIONAL]  
 **Primary profile:** [ONE OF THE CATALOG PROFILES OR CUSTOM CONTRACT-DRIVEN]  
 **Assurance overlays:** [LIST OR NONE]  
@@ -45,16 +47,28 @@ The detailed questions, answers, evidence, recommendations, and corrections live
 
 ## Input resolution record
 
-| Input | Resolution | Evidence or approved decision source |
-|---|---|---|
-| Outcome | Evidence / Safe default / Owner decision | [SOURCE OR QUESTION ID] |
-| Scope and exclusions | ... | ... |
-| Acceptance evidence | ... | ... |
-| Protected behavior | ... | ... |
-| Authority boundaries | ... | ... |
-| Profile-specific inputs | ... | ... |
+| Input | Resolution | Impact | Confidence | Assumption class | Evidence or approved decision source |
+|---|---|---|---|---|---|
+| Outcome | Evidence / Safe default / Owner decision / N/A | High | Confirmed / Strong / Tentative / Unknown | Evidence / Owner / Safe default / Unresolved | [SOURCE OR QUESTION ID] |
+| Users and journey boundary | ... | ... | ... | ... | ... |
+| Scope and exclusions | ... | ... | ... | ... | ... |
+| Acceptance evidence | ... | ... | ... | ... | ... |
+| Protected behavior | ... | ... | ... | ... | ... |
+| Failure and edge cases | ... | ... | ... | ... | ... |
+| Data, compatibility, and dependencies | ... | ... | ... | ... | ... |
+| Authority boundaries | ... | ... | ... | ... | ... |
+| Ownership and reusable outputs | ... | ... | ... | ... | ... |
+| Profile-specific inputs | ... | ... | ... | ... | ... |
 
-Every material row must be resolved before approval. Searchable repository facts are not user questions.
+Every material row must be resolved before approval. Searchable repository facts are not user questions. Every applicable universal clarity lens must be resolved or marked Not applicable with a reason.
+
+## Assumptions and interpretation register
+
+| ID | Assumption or term | Requirement strength | Class | Impact | Evidence / approval | Treatment |
+|---|---|---|---|---|---|---|
+| AS1 | [ASSUMPTION OR AMBIGUOUS TERM] | Must / Should / Preference / Optional / Non-goal | Evidence-backed / Owner-approved / Delegated / Safe default / Unresolved | High / Medium / Low | [SOURCE OR QUESTION ID] | Keep / Clarify / Exclude / Block |
+
+No High- or Medium-impact unresolved assumption may remain. Operationally define subjective terms and surface every safe default before approval.
 
 ## In scope
 
@@ -73,6 +87,17 @@ Every material row must be resolved before approval. Searchable repository facts
 | A3 | Important changes reviewed | [REVIEW EVIDENCE] | Not run |
 
 An item becomes **Pass** only after its stated evidence is produced under the required conditions.
+
+## Clarity stress test
+
+| Check | Result | Evidence or decision source |
+|---|---|---|
+| Fresh-reader review | Pass / Needs clarification | [REVIEW / QUESTION IDS] |
+| Counterexample loophole | Closed / Open | [RESULT] |
+| Happy, failure, and regression scenarios | Pass / N/A / Needs clarification | [SCENARIOS] |
+| Verifier executability | Pass / Needs clarification | [COMMANDS / ARTIFACTS] |
+| Contradiction and traceability review | Pass / Needs clarification | [SOURCES] |
+| Plain-English teach-back | Confirmed / Corrected | [QUESTION ID] |
 
 ## Protected behavior
 
@@ -183,6 +208,16 @@ Strict two-step mode:
 ```text
 /goal Follow the installed goal-engine skill to complete the approved Goal Contract in GOAL.md. Use its selected execution profile, assurance overlays, project harness, and shaping decision record. Continue until every acceptance item passes with surfaced evidence and no protected behavior regresses. At checkpoints, detect material goal drift instead of silently expanding scope. Stop only for a contract-defined blocker, approval boundary, budget, or two consecutive no-progress cycles; preserve reusable state and leave a restartable handoff.
 ```
+
+## Pre-approval clarity gate
+
+- [ ] No High- or Medium-impact input or assumption is unresolved.
+- [ ] Every answer has one material interpretation or a saved clarification, and its requirement strength is preserved.
+- [ ] Every delegated judgment has explicit criteria and boundaries.
+- [ ] Every subjective term has a verifier, rubric, example, reference, or qualified reviewer.
+- [ ] Fresh-reader and counterexample checks reveal no blocking ambiguity.
+- [ ] Safe defaults and residual low-impact assumptions are visible in the teach-back.
+- [ ] The user explicitly approved the plain-English interpretation.
 
 ## Revision and approval record
 

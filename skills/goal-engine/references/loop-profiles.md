@@ -282,6 +282,7 @@ Choose one primary profile when it matches the dominant execution shape. Use a d
 - Verify status codes, redirects, canonical URLs, robots, sitemaps, metadata, structured data, internal links, locale signals, performance, accessibility, and content discoverability together.
 - Fix root causes and rerun the same crawler, rendered-HTML, schema, link, and page-quality gates across representative routes.
 - Finish at evidence-backed technical readiness; never claim or promise search ranking from repository checks alone.
+
 ## Boundary checks for profiles 25–31
 
 Choose these profiles only when their distinctive verifier controls the loop: repeated AI evals, staged legacy retirement, per-locale evidence, clean-room restore drills, trustworthy product/experiment measurement, verified maintainer readiness, or rendered crawl-and-discovery evidence. When the concern is secondary, keep the existing primary profile and add the appropriate assurance overlay.

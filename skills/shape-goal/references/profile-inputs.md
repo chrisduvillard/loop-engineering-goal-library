@@ -611,7 +611,7 @@ Do not ask the user for facts that repository evidence or connected authoritativ
 
 **Execution emphasis**
 
-- map the real architecture and ownership, trace representative user and data flows through code and runtime evidence, verify setup/run/reset/debug/test paths from clean state, reconcile stale or contradictory knowledge, and leave a reviewed Project Harness, architecture map, vocabulary, risk register, and handoff that a fresh maintainer can use without rediscovery.
+- Map the real architecture and ownership, trace representative user and data flows through code and runtime evidence, verify setup/run/reset/debug/test paths from clean state, reconcile stale or contradictory knowledge, and leave a reviewed Project Harness, architecture map, vocabulary, risk register, and handoff that a fresh maintainer can use without rediscovery.
 - Finish only when a fresh maintainer can reproduce the approved setup, critical journeys, verification commands, and architecture decisions from the durable artifacts; every important claim is linked to code or runtime evidence; unresolved uncertainty is explicitly recorded; and protected behavior has not regressed.
 
 ## 31. Search / SEO / Web Discoverability
@@ -629,8 +629,9 @@ Do not ask the user for facts that repository evidence or connected authoritativ
 
 **Execution emphasis**
 
-- inventory the public surface and search intent, crawl representative routes, verify rendered HTML and status behavior, correct canonical, robots, sitemap, metadata, structured-data, internal-link, redirect, locale, performance, accessibility, and content-discoverability defects, and rerun the same crawler and page-quality gates across the approved route matrix.
+- Inventory the public surface and search intent, crawl representative routes, verify rendered HTML and status behavior, correct canonical, robots, sitemap, metadata, structured-data, internal-link, redirect, locale, performance, accessibility, and content-discoverability defects, and rerun the same crawler and page-quality gates across the approved route matrix.
 - Finish only when every approved public route is reachable and returns the intended status; canonical, robots, sitemap, metadata, structured-data, locale, internal-link, performance, accessibility, and content gates pass; broken or misleading discovery paths are resolved; and the result is stated as technical readiness rather than an unsupported ranking guarantee.
+
 ## Routing distinctions for profiles 25–31
 
 - Use **AI / LLM Evaluation & Improvement** instead of Measured Optimization when outputs are stochastic and the loop must manage eval sets, graders, leakage, safety, grounding, latency, and cost together.

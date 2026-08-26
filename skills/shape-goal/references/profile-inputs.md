@@ -507,7 +507,7 @@ Do not ask the user for facts that repository evidence or connected authoritativ
 - Graders, rubrics, human-review boundaries, stochastic repetition, and calibration rules
 - Baseline and target metrics plus grounding, safety, latency, cost, and reliability floors
 
-**Suggested overlays:** Security & Privacy, Performance & Cost, Data Integrity & Governance
+**Suggested overlays:** AI Quality & Safety, Security & Privacy, Performance & Cost, Data Integrity & Governance
 
 **Execution emphasis**
 
@@ -547,7 +547,7 @@ Do not ask the user for facts that repository evidence or connected authoritativ
 - Dates, numbers, currency, units, time zones, pluralization, collation, names, and address rules
 - RTL, text expansion, fonts, routing or SEO, accessibility, pseudo-localization, and per-locale UAT evidence
 
-**Suggested overlays:** UX & Accessibility, Compatibility & Portability, Documentation & Knowledge Transfer
+**Suggested overlays:** Internationalization & Localization, UX & Accessibility, Compatibility & Portability, Documentation & Knowledge Transfer
 
 **Execution emphasis**
 
@@ -596,13 +596,51 @@ Do not ask the user for facts that repository evidence or connected authoritativ
 - Validate experiment assignment, exposure, persistence, sample ratios, guardrails, and analysis windows.
 - Separate reproducible measurement evidence from product or causal judgment that still belongs to qualified owners.
 
-## Routing distinctions for profiles 25–29
+## 30. Codebase Onboarding / Knowledge Recovery
+
+**Use for:** A mature, inherited, or poorly documented codebase must become understandable, runnable, and safe to change before major delivery work begins.
+
+**Required profile inputs**
+
+- Target maintainer or agent audience and the decisions they must be able to make
+- Critical product journeys, runtime entry points, architecture boundaries, dependencies, and ownership
+- Supported setup, run, reset, debug, and repository-native verification paths
+- Required architecture map, Project Harness, vocabulary, risk register, freshness triggers, and maintainer-readiness evidence
+
+**Suggested overlays:** Documentation & Knowledge Transfer, Compatibility & Portability
+
+**Execution emphasis**
+
+- Map the real architecture and ownership, trace representative user and data flows through code and runtime evidence, verify setup/run/reset/debug/test paths from clean state, reconcile stale or contradictory knowledge, and leave a reviewed Project Harness, architecture map, vocabulary, risk register, and handoff that a fresh maintainer can use without rediscovery.
+- Finish only when a fresh maintainer can reproduce the approved setup, critical journeys, verification commands, and architecture decisions from the durable artifacts; every important claim is linked to code or runtime evidence; unresolved uncertainty is explicitly recorded; and protected behavior has not regressed.
+
+## 31. Search / SEO / Web Discoverability
+
+**Use for:** A public website or web application must improve its technical search readiness, rendered metadata, structured data, crawl paths, internal links, and discoverable content quality.
+
+**Required profile inputs**
+
+- Target audiences, search intent, public routes, content types, and supported environments
+- Canonical URL, redirect, robots, sitemap, pagination, duplicate-content, and crawl-budget rules
+- Rendered titles, descriptions, social metadata, structured data, headings, internal links, and content-quality rubric
+- Locale or hreflang matrix, performance and accessibility budgets, crawler or validation tools, and ranking-claim boundaries
+
+**Suggested overlays:** Search & Discoverability, Performance & Cost, UX & Accessibility, Internationalization & Localization
+
+**Execution emphasis**
+
+- Inventory the public surface and search intent, crawl representative routes, verify rendered HTML and status behavior, correct canonical, robots, sitemap, metadata, structured-data, internal-link, redirect, locale, performance, accessibility, and content-discoverability defects, and rerun the same crawler and page-quality gates across the approved route matrix.
+- Finish only when every approved public route is reachable and returns the intended status; canonical, robots, sitemap, metadata, structured-data, locale, internal-link, performance, accessibility, and content gates pass; broken or misleading discovery paths are resolved; and the result is stated as technical readiness rather than an unsupported ranking guarantee.
+
+## Routing distinctions for profiles 25–31
 
 - Use **AI / LLM Evaluation & Improvement** instead of Measured Optimization when outputs are stochastic and the loop must manage eval sets, graders, leakage, safety, grounding, latency, and cost together.
 - Use **Deprecation / Legacy Sunset** instead of Safe Refactor or API Compatibility when the primary outcome is staged retirement and consumer migration, not continued compatibility.
 - Use **Internationalization / Localization Readiness** instead of Frontend UI / UX / Accessibility when locale semantics, translation ownership, local formats, directionality, and per-locale evidence drive completion.
 - Use **Backup / Restore / Disaster Recovery** instead of Reliability or Infrastructure Readiness when clean-room restoration and measured recovery objectives are the primary verifier.
 - Use **Product Analytics / Experimentation Integrity** instead of Data Quality or Observability when trusted product decisions, event semantics, experiment assignment, exposure, and causal-interpretation boundaries are the main outcome.
+- Use **Codebase Onboarding / Knowledge Recovery** instead of Documentation or Developer Experience when verified maintainer understanding, architecture tracing, and a runnable Project Harness are the primary deliverable.
+- Use **Search / SEO / Web Discoverability** instead of Frontend or Documentation when rendered crawl paths, canonicalization, structured data, internal linking, and technical discovery evidence drive completion.
 
 ## Custom Contract-Driven
 

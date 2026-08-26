@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[approved Goal Contract path or issue]"
 metadata:
   author: chrisduvillard
-  version: "0.7.0"
+  version: "0.8.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -238,7 +238,9 @@ Move verified recurring knowledge to the correct maintained home:
 - Operational procedure → runbook
 - Setup/run/verify knowledge → Project Harness or canonical script
 - Reusable data or visual specimen → maintained fixture/reference
-- Stable evaluation → benchmark or test
+- Stable evaluation → benchmark, versioned AI eval, crawl matrix, or test
+- Repository knowledge → reviewed architecture map and Project Harness
+- Locale-sensitive behavior → pseudo-localization and locale fixtures
 - Important limitation → residual-risk documentation
 
 The shaping history remains the durable decision trail. Promote only stable decisions that belong in maintained artifacts; do not duplicate the entire interview elsewhere.

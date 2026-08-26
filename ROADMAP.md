@@ -2,13 +2,13 @@
 
 Add abstractions only when they remove more field friction than they create.
 
-## Implemented through `0.7.0`
+## Implemented through `0.8.0`
 
 - `shape-goal` as the main interactive entry point.
 - A strict question barrier: save one question, ask it, and return control immediately.
 - Separate interactive shaping and autonomous `/goal` execution.
-- Twenty-nine profiles with host-specific `shape-goal` start commands.
-- Dedicated loops for AI/LLM evaluation, legacy retirement, internationalization/localization, backup and disaster recovery, and trustworthy product analytics/experimentation.
+- Thirty-one profiles with host-specific `shape-goal` start commands.
+- Dedicated loops for AI/LLM evaluation, legacy retirement, internationalization/localization, backup and disaster recovery, trustworthy product analytics/experimentation, codebase onboarding, and search/SEO/web discoverability.
 - Advanced autonomous preflights that stop as Approval required instead of interviewing inside `/goal`.
 - Append-only shaping history, repeatable deeper rounds, explicit approval records, and information-classification rules.
 - `goal-engine` brownfield execution with native verification, regression protection, drift detection, reusable closeout, and authority boundaries.
@@ -26,7 +26,7 @@ Add abstractions only when they remove more field friction than they create.
 - Verify active-goal rescue from a deliberately misused autonomous preflight.
 - Compare skill retention, compaction, evidence visibility, pause/resume, and handoff quality.
 - Field-test Frontend UI / UX / Accessibility and Documentation Synchronization on mature projects.
-- Field-test the five `0.7.0` profiles on representative projects and promote no additional global profile without repeated evidence.
+- Field-test the seven `0.7.0`–`0.8.0` profiles on representative projects and promote no additional global profile without repeated evidence.
 - Test a priority change and supersession in a multi-goal portfolio.
 - Test two isolated parallel goals in separate worktrees.
 - Test global install, update, reinstall, ZIP upload, and host metadata on macOS.

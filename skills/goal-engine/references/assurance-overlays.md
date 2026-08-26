@@ -23,6 +23,9 @@ Use the dedicated profile when the concern is the primary outcome. Use the overl
 | Automated test and CI trust | Test Suite / CI Health | Reliability, documentation, or performance overlays |
 | Infrastructure and deployment readiness | Infrastructure / Deployment Readiness | Reliability, operability, security, or compatibility overlays |
 | Technical audit evidence | Compliance / Audit Readiness | Compliance & Auditability |
+| AI behavior and evaluation quality | AI / LLM Evaluation & Improvement | AI Quality & Safety |
+| Language and locale support | Internationalization / Localization Readiness | Internationalization & Localization |
+| Public web discovery | Search / SEO / Web Discoverability | Search & Discoverability |
 
 ## Security & Privacy
 
@@ -134,6 +137,42 @@ Add evidence for:
 - Qualified human review for legal, regulatory, or policy conclusions
 
 The agent must never self-certify compliance.
+
+## AI Quality & Safety
+
+**Apply when:** Prompts, models, retrieval, agents, graders, or tool use are affected but AI evaluation is not the primary outcome.
+
+Add evidence for:
+
+- Versioned prompts, models, retrieval sources, tools, eval data, graders, and sampling settings
+- Representative, adversarial, and production-like cases with leakage controls
+- Repeated trials and stochastic-variation reporting
+- Human or domain-expert calibration of model-based graders
+- Grounding, refusal, privacy, tool-safety, latency, and cost gates
+
+## Internationalization & Localization
+
+**Apply when:** A change affects language, region, script, time zone, direction, or locale-sensitive data but localization is not the primary outcome.
+
+Add evidence for:
+
+- Supported locale and fallback matrix
+- Pseudo-localization, text expansion, and missing-translation behavior
+- Date, time-zone, number, currency, unit, plural, and collation behavior
+- Encoding, input, keyboard, font, and right-to-left support
+- Localized layout, routing, and accessibility checks
+
+## Search & Discoverability
+
+**Apply when:** A change affects public web pages, crawl paths, metadata, structured data, internal links, or discoverable content but search readiness is not the primary outcome.
+
+Add evidence for:
+
+- Public-route, canonical, redirect, robots, and sitemap behavior
+- Rendered titles, descriptions, social metadata, headings, and structured data
+- Internal links, broken links, duplicate-content rules, and locale signals
+- Representative crawl, performance, accessibility, and rendered-page checks
+- Honest separation between technical readiness and ranking claims
 
 ## Project-specific overlay
 

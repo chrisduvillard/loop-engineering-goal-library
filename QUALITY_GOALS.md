@@ -5,7 +5,7 @@
 
 Start with `shape-goal` outside an active `/goal`. It asks one question at a time and returns the exact execution `/goal` after approval.
 
-Fourteen focused loops for frontend, documentation, security, reliability, APIs, operations, developer experience, data quality, test/CI health, infrastructure/deployment, audit readiness, internationalization, disaster recovery, and product analytics.
+Focused loops for interface quality, documentation, search, localization, security, reliability, APIs, operations, developer experience, data, CI, infrastructure, recovery, analytics, and audit readiness.
 
 ---
 
@@ -230,3 +230,19 @@ Fourteen focused loops for frontend, documentation, security, reliability, APIs,
 **Why it works:** Analytics can be technically present yet decision-dangerous. This loop ties every metric to a decision, verifies the full event and experiment path, and blocks conclusions when assignment, telemetry, identity, or interpretation evidence is not trustworthy.
 
 **Advanced autonomous preflight and self-contained fallback:** [Open `goals/29-product-analytics-experimentation-integrity.md`](goals/29-product-analytics-experimentation-integrity.md).
+
+---
+
+## [Search / SEO / Web Discoverability](goals/31-search-seo-web-discoverability.md)
+
+**In simple terms:** Make public web content crawlable, understandable, fast, and internally connected without promising rankings.
+
+**Use when:** A public website or web application must improve its technical search readiness, rendered metadata, structured data, crawl paths, internal links, and discoverable content quality.
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Search / SEO / Web Discoverability profile` | `$shape-goal Use the Search / SEO / Web Discoverability profile` |
+
+**Why it works:** It uses a repeatable crawl-and-render evidence loop, fixes the full discovery path rather than isolated tags, and explicitly separates technical readiness from search-ranking promises that the repository cannot prove.
+
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/31-search-seo-web-discoverability.md`](goals/31-search-seo-web-discoverability.md).

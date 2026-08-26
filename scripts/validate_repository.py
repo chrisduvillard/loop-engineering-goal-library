@@ -28,6 +28,9 @@ ASSURANCE_OVERLAYS = {
     "Operability & Observability",
     "Documentation & Knowledge Transfer",
     "Compliance & Auditability",
+    "AI Quality & Safety",
+    "Internationalization & Localization",
+    "Search & Discoverability",
 }
 
 
@@ -129,7 +132,7 @@ def validate_catalog(catalog: dict) -> list[dict]:
     if category_keys != ["core", "specialist", "quality"]:
         fail(f"Unexpected category order: {category_keys}")
 
-    expected_counts = {"core": 7, "specialist": 8, "quality": 14}
+    expected_counts = {"core": 7, "specialist": 9, "quality": 15}
     counts = {key: 0 for key in expected_counts}
     goals = catalog.get("goals", [])
     seen_ids: set[str] = set()
@@ -153,8 +156,8 @@ def validate_catalog(catalog: dict) -> list[dict]:
             if not item.get(field):
                 fail(f"Catalog goal {filename}: missing {field}")
 
-    if len(goals) != 29:
-        fail(f"Expected 29 goals, found {len(goals)}")
+    if len(goals) != 31:
+        fail(f"Expected 31 goals, found {len(goals)}")
     if counts != expected_counts:
         fail(f"Unexpected category counts: {counts}")
 
@@ -427,6 +430,10 @@ def validate_state_and_docs() -> None:
         "docs/goals/2026-08-26-interactive-shaping-first/CONTRACT.md",
         "docs/goals/2026-08-26-interactive-shaping-first/PROGRESS.md",
         "docs/goals/2026-08-26-interactive-shaping-first/UAT.md",
+        "docs/goals/2026-08-26-final-review-readme-onboarding/SHAPING.md",
+        "docs/goals/2026-08-26-final-review-readme-onboarding/CONTRACT.md",
+        "docs/goals/2026-08-26-final-review-readme-onboarding/PROGRESS.md",
+        "docs/goals/2026-08-26-final-review-readme-onboarding/UAT.md",
     )
     for path in required_paths:
         require(path)
@@ -443,7 +450,7 @@ def validate_state_and_docs() -> None:
     require_fragments(
         require("CURRENT_IMPLEMENTATION.md"),
         (
-            "Version `0.7.0`",
+            "Version `0.8.0`",
             "shape-goal                    main interactive entry point",
             "question barrier",
             "Advanced preflight",
@@ -454,11 +461,13 @@ def validate_state_and_docs() -> None:
         require("README.md"),
         (
             "**`shape-goal` is the main command.**",
-            "## Quick start",
-            "## Why shaping and execution are separate",
+            "## 🚀 Start in three steps",
+            "skills@latest update shape-goal goal-engine --global --yes",
+            "img.shields.io/badge/1-Shape-7C3AED",
+            "## 🧭 Why two phases?",
             "no Steer message required",
             "Pursuing goal",
-            "## Advanced modes",
+            "## ⚙️ Advanced modes",
             "<!-- goal-catalog:start -->",
             "<!-- goal-catalog:end -->",
         ),
@@ -563,10 +572,28 @@ def validate_state_and_docs() -> None:
             "Honest boundary",
         ),
     )
+    require_fragments(
+        require("docs/goals/2026-08-26-final-review-readme-onboarding/CONTRACT.md"),
+        (
+            "31 execution profiles",
+            "visible update command",
+            "Codebase Onboarding / Knowledge Recovery",
+            "Search / SEO / Web Discoverability",
+        ),
+    )
+    require_fragments(
+        require("docs/goals/2026-08-26-final-review-readme-onboarding/UAT.md"),
+        (
+            "README presentation",
+            "Profile differentiation",
+            "Update command",
+            "Honest boundary",
+        ),
+    )
 
     readme = require("README.md")
-    if readme.exists() and len(readme.read_text(encoding="utf-8").splitlines()) > 230:
-        fail("README.md is too long; keep the generated landing page at 230 lines or fewer")
+    if readme.exists() and len(readme.read_text(encoding="utf-8").splitlines()) > 235:
+        fail("README.md is too long; keep the generated landing page at 235 lines or fewer")
 
 
 def validate_generated_docs() -> None:
@@ -679,11 +706,12 @@ def main() -> int:
     print(f"- version {version}")
     print("- shape-goal is the interactive main entry point")
     print("- 2 portable skills with host metadata")
-    print("- 29 interactive profile start commands")
-    print("- 29 advanced autonomous preflights")
-    print("- 29 advanced self-contained preflights")
+    print("- 31 interactive profile start commands")
+    print("- 31 advanced autonomous preflights")
+    print("- 31 advanced self-contained preflights")
     print("- question barrier and normal-reply workflow enforced")
-    print("- 7 core, 8 specialist, and 14 quality profiles")
+    print("- 7 core, 9 specialist, and 15 quality profiles")
+    print("- 12 assurance overlays")
     print("- append-only shaping history and explicit approval")
     print("- multi-goal portfolio, project harness, and reusable closeout")
     print("- synchronized launchers and generated catalogs")

@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[continue | new goal | deepen | profile | goal ID | changed need]"
 metadata:
   author: chrisduvillard
-  version: "0.7.0"
+  version: "0.8.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -180,7 +180,7 @@ Before the round:
 3. Select the highest-value unexplored lens.
 4. Avoid duplicate questions.
 
-Useful lenses include outcome and value, users and journeys, scope and dependencies, acceptance and failure cases, compatibility, UI/UX/accessibility, data/security/privacy, reliability/recovery, performance/cost, maintainability/ownership, and authority/risk.
+Useful lenses include outcome and value, users and journeys, scope and dependencies, acceptance and failure cases, codebase knowledge, AI evaluation, deprecation and adoption, localization, public discoverability, compatibility, UI/UX/accessibility, data/security/privacy, reliability/recovery, performance/cost, maintainability/ownership, and authority/risk.
 
 At round close, append new decisions, contract revisions, remaining uncertainty, readiness, and the recommended next step. Then ask one disposition question and end the turn:
 

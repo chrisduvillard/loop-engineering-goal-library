@@ -5,19 +5,19 @@
       "key": "core",
       "title": "Core goals",
       "collection": "GOAL_LIBRARY.md",
-      "intro": "Seven default control loops for most long-running brownfield work."
+      "intro": "Default control loops for most long-running work in established repositories."
     },
     {
       "key": "specialist",
       "title": "Specialist goals",
       "collection": "SPECIALIST_LOOPS.md",
-      "intro": "Eight distinct loops for incidents, upgrades, migrations, branch recovery, optimization, feasibility, AI/LLM evaluation, and legacy retirement."
+      "intro": "Distinct loops for unfamiliar codebases, incidents, upgrades, migrations, branch recovery, optimization, feasibility, AI evaluation, and legacy retirement."
     },
     {
       "key": "quality",
       "title": "Product and quality goals",
       "collection": "QUALITY_GOALS.md",
-      "intro": "Fourteen focused loops for frontend, documentation, security, reliability, APIs, operations, developer experience, data quality, test/CI health, infrastructure/deployment, audit readiness, internationalization, disaster recovery, and product analytics."
+      "intro": "Focused loops for interface quality, documentation, search, localization, security, reliability, APIs, operations, developer experience, data, CI, infrastructure, recovery, analytics, and audit readiness."
     }
   ],
   "goals": [
@@ -252,6 +252,22 @@
       "category": "quality",
       "simple": "Define the events and metrics, verify collection end to end, test experiment assignment, and prove the numbers mean what the team thinks they mean.",
       "use_when": "Product events, funnels, metrics, dashboards, or controlled experiments must become trustworthy enough to support decisions without misleading attribution."
+    },
+    {
+      "id": "30",
+      "file": "30-codebase-onboarding-knowledge-recovery.md",
+      "title": "Codebase Onboarding / Knowledge Recovery",
+      "category": "specialist",
+      "simple": "Turn an unfamiliar repository into a verified map that a new maintainer or agent can safely use.",
+      "use_when": "A mature, inherited, or poorly documented codebase must become understandable, runnable, and safe to change before major delivery work begins."
+    },
+    {
+      "id": "31",
+      "file": "31-search-seo-web-discoverability.md",
+      "title": "Search / SEO / Web Discoverability",
+      "category": "quality",
+      "simple": "Make public web content crawlable, understandable, fast, and internally connected without promising rankings.",
+      "use_when": "A public website or web application must improve its technical search readiness, rendered metadata, structured data, crawl paths, internal links, and discoverable content quality."
     }
   ]
 }

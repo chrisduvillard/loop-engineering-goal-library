@@ -98,7 +98,9 @@ npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
 npx -y skills@latest update shape-goal goal-engine --global --yes
 ```
 
-Verify again afterward.
+Restart Codex or Claude Code, then verify again afterward.
+
+If the update command fails or does not repair a changed local install, rerun the global install command above. Reinstalling fetches the current repository version and is the safest repair path.
 
 ## Use without installing
 

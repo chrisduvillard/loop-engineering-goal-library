@@ -33,5 +33,7 @@ Interactive-first profiles. Start with `shape-goal`; each linked file also conta
 | 27 | [Internationalization / Localization Readiness](27-internationalization-localization-readiness.md) | Product and quality goals | Find hard-coded locale assumptions, build a locale matrix, test translated and right-to-left experiences, and prove every supported locale works. |
 | 28 | [Backup / Restore / Disaster Recovery](28-backup-restore-disaster-recovery.md) | Product and quality goals | Define what must survive, create trustworthy backups, restore them in a clean environment, and prove recovery meets the agreed targets. |
 | 29 | [Product Analytics / Experimentation Integrity](29-product-analytics-experimentation-integrity.md) | Product and quality goals | Define the events and metrics, verify collection end to end, test experiment assignment, and prove the numbers mean what the team thinks they mean. |
+| 30 | [Codebase Onboarding / Knowledge Recovery](30-codebase-onboarding-knowledge-recovery.md) | Specialist goals | Turn an unfamiliar repository into a verified map that a new maintainer or agent can safely use. |
+| 31 | [Search / SEO / Web Discoverability](31-search-seo-web-discoverability.md) | Product and quality goals | Make public web content crawlable, understandable, fast, and internally connected without promising rankings. |
 
 The machine-readable source is [`catalog.json`](catalog.json).

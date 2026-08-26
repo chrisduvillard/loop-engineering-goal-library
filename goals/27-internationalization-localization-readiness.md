@@ -30,7 +30,7 @@ Use this only when an approved contract or authoritative artifact already resolv
 - Dates, numbers, currency, units, time zones, pluralization, collation, names, and address rules
 - RTL, text expansion, fonts, routing or SEO, accessibility, pseudo-localization, and per-locale UAT evidence
 
-**Suggested assurance overlays:** UX & Accessibility, Compatibility & Portability, Documentation & Knowledge Transfer
+**Suggested assurance overlays:** Internationalization & Localization, UX & Accessibility, Compatibility & Portability, Documentation & Knowledge Transfer
 
 `shape-goal` must search the repository and connected authoritative sources before asking. It asks only material unresolved decisions, one at a time with a recommendation. Execution starts only after explicit contract approval.
 

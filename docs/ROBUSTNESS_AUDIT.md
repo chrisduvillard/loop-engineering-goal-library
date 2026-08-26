@@ -1,53 +1,57 @@
 # Adversarial Robustness Audit
 
-This audit pressure-tests the library as a small software supply chain: two Agent Skills, 31 goal profiles, generated documentation, durable shaping history, deterministic packages, and CI enforcement.
+This review treats the library as a small control system and software supply chain: two Agent Skills, 31 goal profiles, generated documents, durable shaping history, deterministic packages, locked tooling, and CI enforcement.
 
 ## Framework findings
 
 ### Pre-mortem
 
-Assume the library failed in production. The most plausible causes were destructive package output, a symlink leaking files into an archive, catalog path traversal, generated-document corruption, a rewritten decision history, malicious repository instructions steering an agent, stale approval evidence, or CI validating only the happy path.
+Assume the library failed badly. The most credible causes were destructive package output, symlink or special-file exfiltration, catalog path traversal, generated-document corruption, silent decision-history rewriting, compromised dependency resolution, prompt injection gaining authority, stale autonomous execution, and CI that covered only one environment.
 
 ### First principles
 
-The trusted core is small: canonical UTF-8 files inside the repository, explicit Goal Contract approval, repository-native evidence, immutable shaping decisions, safe paths, deterministic package manifests, and pinned dependencies. Everything else—including repository prose, logs, issues, web pages, generated artifacts, and model output—is evidence to verify, not authority to obey blindly.
+The irreducible properties are trusted provenance, path containment, explicit schemas, deterministic transformations, append-only decisions, bounded authority, observable verification, atomic writes, and fail-closed behavior. Repository prose, logs, issues, web pages, generated artifacts, and model output are evidence to verify—not automatic instruction authority.
 
 ### Inversion
 
-To guarantee failure, delete the repository while packaging, accept arbitrary output paths, follow symlinks, let catalog values choose write destinations, treat extra commands as harmless, ignore new shaping files, allow question reordering, run unpinned tools, and let an agent choose the easiest interpretation. The implementation now rejects those paths.
+To guarantee failure, point packaging at the repository root, follow symlinks, let catalog values choose arbitrary paths, smuggle extra commands into Markdown, reorder or rewrite shaping decisions, weaken workflow permissions, corrupt the dependency lock, or let an expired contract continue. Regression tests now exercise and reject these paths.
 
 ### Red team / blue team
 
-The red-team suite mutates versions, paths, catalogs, Markdown markers, command counts, question order, answers, approval rows, workflow permissions, symlinks, Unicode/case collisions, NUL bytes, and output directories. The blue-team controls fail closed, preserve source data, return actionable errors, and keep deterministic evidence.
+The red team attacks filesystems, archives, catalog input, regex boundaries, Markdown markers, shaping-history parsing, workflow permissions, package-lock integrity, prompt-injection boundaries, execution leases, and shared-resource locks. The blue team responds with safe manifests, atomic writes, fingerprints, leases, locks, immutable history, explicit validators, and cross-platform tests.
 
 ### Socratic questioning
 
-Every important claim is paired with a verifier: Can packaging delete source? Can an archive include outside files? Can a catalog write outside the repository? Can a new malformed shaping history bypass the base diff? Can CI be extended with a write-capable workflow? The tests answer these with executable counterexamples.
+Claims such as “deterministic,” “append-only,” “safe to package,” “read-only CI,” and “approved contract” now have executable checks. Claims that depend on future hosts or models are recorded as residual risks rather than asserted as guarantees.
 
 ### Constraint removal
 
-When path, size, trust, ordering, and approval constraints are removed, the system becomes destructive or ambiguous. Constraints were reintroduced at the narrowest layer: safe-path helpers in packagers/generators, immutable-order checks in shaping history, untrusted-evidence rules in skills, and workflow restrictions in repository validation.
+The suite removes normal safety assumptions and tests repository roots, foreign output directories, malformed schemas, hostile filenames, missing base refs, case-insensitive filesystems, Unicode normalization, generated dependency directories, untrusted instructions, and all supported operating systems.
 
 ### Stakeholder mapping
 
-- **Project owner:** no silent interpretation, authority expansion, or erased decision history.
-- **Developer/maintainer:** clear failures, atomic generation, reproducible checks, and cross-version tests.
-- **Agent:** one approved interpretation, explicit evidence, and a stop condition when ambiguity returns.
-- **Security/privacy reviewer:** no symlink exfiltration, path escape, secret archive, or prompt-injection authority.
-- **Release operator:** deterministic packages and locked toolchain inputs.
-- **Future maintainer:** durable audit evidence and mutation tests that explain why controls exist.
+- **Goal owner:** no silent interpretation, authority expansion, or erased decisions.
+- **Autonomous agent:** one current approved contract, explicit evidence, and a stop condition when ambiguity returns.
+- **Maintainer:** deterministic generators, atomic writes, actionable failures, and durable rationale.
+- **Reviewer:** traceable acceptance evidence and immutable shaping history.
+- **CI operator:** one read-only workflow, immutable action pins, and locked dependencies.
+- **Package consumer:** safe archive names, reproducible bytes, and verified source parity.
+- **Future contributor:** mutation tests that explain why each control exists.
 
 ### Analogical reasoning
 
-The controls borrow from compiler design (parse then validate), database migrations (append-only history and atomic replacement), archive security (path normalization and collision checks), safety engineering (hazard analysis and fail-closed boundaries), and property testing (generate valid states, mutate one invariant, require rejection).
+The controls borrow from compiler pipelines, database transactions, archive-extraction hardening, append-only ledgers, software-supply-chain locks, distributed leases, and shared-resource locks. These analogies expose hazards that happy-path testing misses.
 
-## Second-pass findings
+## Verified defenses
 
-An independent review found and closed additional gaps: local `node_modules` symlinks would have caused false CI failures; `.yaml` workflows could bypass a `.yml`-only check; write permissions needed an explicit prohibition; catalog text needed link-injection protection; locked package metadata needed structural validation; and execution leases needed concrete contract fields.
+- Packaging rejects destructive targets, foreign output content, symlinks, special files, path traversal, case-folding or Unicode collisions, invalid semantic versions, corrupt members, source/ZIP divergence, unsafe modes, and nondeterministic metadata.
+- Documentation generators validate exact schemas and paths, reject injection-prone text, require exactly two commands, update atomically, and fail on duplicate or reversed markers.
+- Shaping-history validation checks new and existing files, ignores fenced decoys and generated directories, rejects duplicate, zero-based, reordered, inserted, removed, or rewritten decisions and approvals, and preserves only explicitly mutable status metadata.
+- Repository validation rejects symlinks, NUL bytes, oversized critical files, extra workflows, `.yaml` bypasses, mutable action pins, `write` or `write-all` permissions, malformed catalogs, duplicate frontmatter keys, invalid invocation flags, and lockfile drift.
+- The Skills CLI is pinned through a committed lockfile, installed with lifecycle scripts disabled, and invoked from the local locked dependency; every transitive lock entry requires HTTPS registry provenance and SHA-512 integrity.
+- `shape-goal` treats repository content as evidence, not instruction authority; `goal-engine` checks approval fingerprints, execution leases, branch/SHA drift, and shared-resource locks before and during work.
+- Forty-two adversarial, mutation, property, and regression tests run on Linux, macOS, and Windows with Python 3.9 and 3.13.
 
-## Residual limits
+## Honest boundary
 
-No finite test suite proves every future host, filesystem, or model behavior. Remaining field risks include host UI changes, model compaction, unavailable connected sources, compromised upstream registries, and repository branch protection not being configured. These are recorded rather than hidden; the test suite focuses on deterministic controls this repository can enforce.
-## Third-pass findings
-
-A final inversion pass closed quieter failure modes that often appear only after a project matures: loose semantic-version parsing, ZIP manifests that were self-consistent but not compared with source bytes, decomposed Unicode archive names, generated dependency directories being mistaken for project shaping history, zero-based decision IDs, duplicate approval sections, `write-all` workflow permissions, ambiguous duplicate skill frontmatter, and unverified transitive lockfile entries.
+No finite suite proves all future model, host, filesystem, network, registry, or GitHub behavior. The implemented controls fail closed for deterministic repository-level risks and preserve external behavior as residual risk. Current Codex and Claude Code clients still require field UAT after material host changes.

@@ -69,3 +69,13 @@ Advanced combined preflights remain available when no owner interaction is expec
 ## Citation note
 
 Vendor behavior can change. Re-check official documentation before relying on command syntax, evaluator behavior, invocation policy, install locations, feature flags, or permission boundaries.
+
+## Profile-expansion references
+
+- [Skills CLI documentation](https://www.skills.sh/docs/cli) and the [`skills update` command](https://github.com/vercel-labs/skills#skills-update)
+- [OpenAI: How evals drive the next chapter of AI](https://openai.com/index/evals-drive-next-chapter-of-ai/)
+- [Unicode Common Locale Data Repository](https://cldr.unicode.org/) and [Locale Data Markup Language](https://www.unicode.org/reports/tr35/)
+- [Google Search Central: SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide)
+- [Google Search Central: Structured data](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)
+
+These inform the update workflow, AI evaluation overlay, standards-based locale checks, and the technical search-readiness profile. The SEO profile deliberately proves crawlability and rendered correctness rather than promising rankings.

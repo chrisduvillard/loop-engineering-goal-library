@@ -5,7 +5,7 @@
 
 Start with `shape-goal` outside an active `/goal`. It asks one question at a time and returns the exact execution `/goal` after approval.
 
-Seven default control loops for most long-running brownfield work.
+Default control loops for most long-running work in established repositories.
 
 ---
 

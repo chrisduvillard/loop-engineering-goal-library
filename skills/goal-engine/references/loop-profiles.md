@@ -265,9 +265,26 @@ Choose one primary profile when it matches the dominant execution shape. Use a d
 - Validate experiment randomization, assignment persistence, exposure, sample ratios, guardrails, and analysis windows.
 - Finish only when the measurement path is reproducible and qualified owners can interpret results without unsupported causal claims.
 
-## Boundary checks for profiles 25–29
+## 30. Codebase Onboarding / Knowledge Recovery
 
-Choose these profiles only when their distinctive verifier controls the loop: repeated AI evals, staged legacy retirement, per-locale evidence, clean-room restore drills, or trustworthy product/experiment measurement. When the concern is secondary, keep the existing primary profile and add the appropriate assurance overlay.
+**Use for:** A mature, inherited, or poorly documented codebase must become understandable, runnable, and safe to change before major delivery work begins.
+
+- Inventory authoritative sources, runtime entry points, architecture boundaries, critical journeys, dependencies, ownership, and supported environments.
+- Trace representative user, API, data, and operational flows through code and runtime evidence; verify setup, run, reset, debug, and check commands from clean state.
+- Create or update a reviewed Project Harness, architecture map, vocabulary, risk register, and freshness triggers instead of copying stale descriptions.
+- Finish when a fresh maintainer can reproduce the critical paths and make safe change decisions without relying on chat history.
+
+## 31. Search / SEO / Web Discoverability
+
+**Use for:** A public website or web application must improve its technical search readiness, rendered metadata, structured data, crawl paths, internal links, and discoverable content quality.
+
+- Build an approved public-route and search-intent matrix, then crawl rendered pages rather than judging source templates alone.
+- Verify status codes, redirects, canonical URLs, robots, sitemaps, metadata, structured data, internal links, locale signals, performance, accessibility, and content discoverability together.
+- Fix root causes and rerun the same crawler, rendered-HTML, schema, link, and page-quality gates across representative routes.
+- Finish at evidence-backed technical readiness; never claim or promise search ranking from repository checks alone.
+## Boundary checks for profiles 25–31
+
+Choose these profiles only when their distinctive verifier controls the loop: repeated AI evals, staged legacy retirement, per-locale evidence, clean-room restore drills, trustworthy product/experiment measurement, verified maintainer readiness, or rendered crawl-and-discovery evidence. When the concern is secondary, keep the existing primary profile and add the appropriate assurance overlay.
 
 ## Custom Contract-Driven
 

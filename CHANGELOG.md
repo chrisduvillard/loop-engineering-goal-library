@@ -8,6 +8,22 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.8.0] - 2026-08-26
+
+### Added
+
+- **Codebase Onboarding / Knowledge Recovery** for verified architecture tracing, clean-state setup, maintainer readiness, Project Harness creation, and durable knowledge recovery.
+- **Search / SEO / Web Discoverability** for rendered crawling, canonicalization, robots and sitemaps, metadata, structured data, internal links, locale signals, performance, and accessibility without unsupported ranking claims.
+- **AI Quality & Safety**, **Internationalization & Localization**, and **Search & Discoverability** assurance overlays.
+- A prominent README command for updating both installed skills to the latest repository version.
+
+### Changed
+
+- The catalog now contains 31 profiles: 7 core, 9 specialist, and 15 product/quality profiles.
+- The README uses color-coded workflow badges, emoji section markers, callouts, code blocks, tables, and collapsed catalogs while remaining short and plain.
+- Installation guidance documents restart and safe reinstall behavior after updates.
+- Validation covers the expanded catalog, 12 overlay names, README update path, and this repository's final review record.
+
 ## [0.7.0] - 2026-08-26
 
 ### Added

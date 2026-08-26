@@ -109,6 +109,8 @@ A deepening round reads all earlier decisions and asks only materially new quest
 | Prepare multiple languages and regions | Internationalization / Localization Readiness |
 | Prove backups and disaster recovery | Backup / Restore / Disaster Recovery |
 | Make analytics and experiments trustworthy | Product Analytics / Experimentation Integrity |
+| Understand an inherited codebase | Codebase Onboarding / Knowledge Recovery |
+| Improve public crawlability and discovery | Search / SEO / Web Discoverability |
 | None fits | Custom Contract-Driven |
 
 ## State and archive
@@ -139,8 +141,10 @@ Use only when secondary to the primary profile:
 - Documentation & Knowledge Transfer
 - Compliance & Auditability
 
-## Update
+## Update to the latest version
 
 ```bash
 npx -y skills@latest update shape-goal goal-engine --global --yes
 ```
+
+Restart Codex or Claude Code after updating.

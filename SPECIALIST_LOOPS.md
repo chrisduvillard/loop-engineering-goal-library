@@ -5,7 +5,7 @@
 
 Start with `shape-goal` outside an active `/goal`. It asks one question at a time and returns the exact execution `/goal` after approval.
 
-Eight distinct loops for incidents, upgrades, migrations, branch recovery, optimization, feasibility, AI/LLM evaluation, and legacy retirement.
+Distinct loops for unfamiliar codebases, incidents, upgrades, migrations, branch recovery, optimization, feasibility, AI evaluation, and legacy retirement.
 
 ---
 
@@ -134,3 +134,19 @@ Eight distinct loops for incidents, upgrades, migrations, branch recovery, optim
 **Why it works:** Retiring a legacy path is not a normal refactor: success depends on consumer discovery, migration adoption, staged warnings, compatibility windows, and evidence-backed removal rather than merely deleting old code.
 
 **Advanced autonomous preflight and self-contained fallback:** [Open `goals/26-deprecation-legacy-sunset.md`](goals/26-deprecation-legacy-sunset.md).
+
+---
+
+## [Codebase Onboarding / Knowledge Recovery](goals/30-codebase-onboarding-knowledge-recovery.md)
+
+**In simple terms:** Turn an unfamiliar repository into a verified map that a new maintainer or agent can safely use.
+
+**Use when:** A mature, inherited, or poorly documented codebase must become understandable, runnable, and safe to change before major delivery work begins.
+
+| Claude Code | Codex CLI / IDE |
+|---|---|
+| `/shape-goal Use the Codebase Onboarding / Knowledge Recovery profile` | `$shape-goal Use the Codebase Onboarding / Knowledge Recovery profile` |
+
+**Why it works:** It makes understanding a testable deliverable. Repository claims must be traced to code or runtime evidence, and the result becomes durable project infrastructure instead of another disposable audit note.
+
+**Advanced autonomous preflight and self-contained fallback:** [Open `goals/30-codebase-onboarding-knowledge-recovery.md`](goals/30-codebase-onboarding-knowledge-recovery.md).

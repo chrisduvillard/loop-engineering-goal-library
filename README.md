@@ -2,33 +2,46 @@
 
 # Loop Engineering
 
-### Shape first. Execute second. Prove it is done.
+### Give AI coding agents a clear finish line—and a safe way to reach it.
 
-A reusable workflow for long-running AI coding work in mature repositories.
+Reusable Agent Skills and execution profiles for OpenAI Codex, Anthropic Claude Code, and established software projects.
+
+<p>
+  <img alt="1 Shape" src="https://img.shields.io/badge/1-Shape-7C3AED?style=for-the-badge">
+  <img alt="2 Approve" src="https://img.shields.io/badge/2-Approve-0284C7?style=for-the-badge">
+  <img alt="3 Execute" src="https://img.shields.io/badge/3-Execute-16A34A?style=for-the-badge">
+  <img alt="4 Reuse" src="https://img.shields.io/badge/4-Reuse-F59E0B?style=for-the-badge">
+</p>
 
 [![Codex](https://img.shields.io/badge/OpenAI%20Codex-compatible-111827?style=flat-square&logo=openai&logoColor=white)](https://learn.chatgpt.com/use-cases/follow-goals)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757?style=flat-square)](https://code.claude.com/docs/en/goal)
 [![Validation](https://img.shields.io/github/actions/workflow/status/chrisduvillard/loop-engineering-goal-library/validate.yml?branch=main&style=flat-square&label=validation)](https://github.com/chrisduvillard/loop-engineering-goal-library/actions/workflows/validate.yml)
-![Version](https://img.shields.io/badge/version-0.7.0-7C3AED?style=flat-square)
-![Profiles](https://img.shields.io/badge/profiles-29-16A34A?style=flat-square)
-
-```text
-shape-goal → answer → approve → /goal + goal-engine → verify → archive → reuse
-```
+![Version](https://img.shields.io/badge/version-0.8.0-7C3AED?style=flat-square)
+![Profiles](https://img.shields.io/badge/profiles-31-16A34A?style=flat-square)
 
 </div>
 
 > [!IMPORTANT]
-> **`shape-goal` is the main command.** Run it outside an active `/goal`. It asks one question, saves it, and stops so you can reply normally. Autonomous work starts only after you approve the Goal Contract.
+> **`shape-goal` is the main command.** Run it outside an active `/goal`. It asks one question, saves it, and stops so you can reply normally. Autonomous work starts only after you approve what “done” means.
 
-## Quick start
+## 🚀 Start in three steps
 
-### 1. Install once
+### 1. Install—or update
+
+**Install once**
 
 ```bash
 npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
   --skill '*' --global --agent codex --agent claude-code --yes
 ```
+
+**Get the latest version later**
+
+```bash
+npx -y skills@latest update shape-goal goal-engine --global --yes
+```
+
+Restart Codex or Claude Code after updating. See [`INSTALL.md`](INSTALL.md) for verification and a safe reinstall fallback.
 
 ### 2. Shape the next goal
 
@@ -36,13 +49,13 @@ npx -y skills@latest add chrisduvillard/loop-engineering-goal-library \
 |---|---|
 | `/shape-goal Continue this project` | `$shape-goal Continue this project` |
 
-`shape-goal` reads the repository, resolves facts itself, and asks only decisions that belong to you. Each question and answer is saved in:
+`shape-goal` reads the repository, resolves facts itself, and asks only decisions that belong to you. Every question and answer is saved in:
 
 ```text
 docs/goals/<goal-id>/SHAPING.md
 ```
 
-After each question it ends the turn. Your next normal message is the answer—**no Steer message required**.
+After each question, it ends the turn. Your next normal message is the answer—**no Steer message required**.
 
 Need more depth?
 
@@ -50,22 +63,22 @@ Need more depth?
 |---|---|
 | `/shape-goal Deepen the current goal` | `$shape-goal Deepen the current goal` |
 
-Earlier answers stay intact. A new round asks only materially new questions.
+Earlier answers stay intact. Each new round asks only materially new questions.
 
 ### 3. Approve, then execute
 
-Review the proposed outcome, proof, protected behavior, and authority boundaries. After approval, `shape-goal` returns the exact `/goal` command for `goal-engine`.
+Review four things: **outcome, proof, protected behavior, and authority**.
 
-Paste it once. The agent can then work autonomously:
+After approval, `shape-goal` returns the exact `/goal` command for `goal-engine`. Paste it once; the agent can then work autonomously:
 
 ```text
 Orient → Reconcile → Select → Verify → Change
        → Check → Review → Record → Repeat
 ```
 
-## Why shaping and execution are separate
+## 🧭 Why two phases?
 
-Native `/goal` loops automatically start another turn until their condition is met. That is excellent for implementation—but awkward when the agent must wait for your answer.
+A native `/goal` automatically starts another turn until its condition is met. That is excellent for implementation, but awkward when the agent must wait for your answer.
 
 | Interactive shaping | Autonomous execution |
 |---|---|
@@ -78,26 +91,14 @@ If you see **Pursuing goal…** while a shaping question is waiting:
 - **Codex:** `/goal pause` or `/goal clear`, then `$shape-goal Resume goal-id`
 - **Claude Code:** `/goal clear`, then `/shape-goal Resume goal-id`
 
-## Start with a specific profile
-
-Let `shape-goal` choose, or name the type of work:
-
-| Need | Codex example |
-|---|---|
-| Finish existing work | `$shape-goal Use the Brownfield Continue / Finish profile` |
-| Improve UI and UX | `$shape-goal Use the Frontend UI / UX / Accessibility profile` |
-| Fix documentation | `$shape-goal Use the Documentation Synchronization / Knowledge Transfer profile` |
-| Repair tests and CI | `$shape-goal Use the Test Suite / CI Health profile` |
-| Prepare deployment safely | `$shape-goal Use the Infrastructure / Deployment Readiness profile` |
-
 <!-- goal-catalog:start -->
 
 ## Goal profiles
 
 You usually do not need to choose one: `shape-goal` can select the best profile from repository evidence. Choose directly only when the type of work is already clear.
 
-<details>
-<summary><strong>Core goals (7)</strong></summary>
+<details open>
+<summary><strong>🟣 Core goals (7)</strong></summary>
 
 | Profile | Best for |
 |---|---|
@@ -112,7 +113,7 @@ You usually do not need to choose one: `shape-goal` can select the best profile 
 </details>
 
 <details>
-<summary><strong>Specialist goals (8)</strong></summary>
+<summary><strong>🔵 Specialist goals (9)</strong></summary>
 
 | Profile | Best for |
 |---|---|
@@ -124,11 +125,12 @@ You usually do not need to choose one: `shape-goal` can select the best profile 
 | [**Technical Spike / Feasibility**](goals/13-technical-spike-feasibility.md) | Run an isolated experiment and return a Go, Conditional Go, or No-Go decision. |
 | [**AI / LLM Evaluation & Improvement**](goals/25-ai-llm-evaluation-improvement.md) | Build a trustworthy eval set, classify failures, test one change at a time, and keep only improvements that survive repeated runs. |
 | [**Deprecation / Legacy Sunset**](goals/26-deprecation-legacy-sunset.md) | Find who still depends on the old path, provide a safe migration, prove adoption, then remove it in controlled stages. |
+| [**Codebase Onboarding / Knowledge Recovery**](goals/30-codebase-onboarding-knowledge-recovery.md) | Turn an unfamiliar repository into a verified map that a new maintainer or agent can safely use. |
 
 </details>
 
 <details>
-<summary><strong>Product and quality goals (14)</strong></summary>
+<summary><strong>🟢 Product and quality goals (15)</strong></summary>
 
 | Profile | Best for |
 |---|---|
@@ -146,6 +148,7 @@ You usually do not need to choose one: `shape-goal` can select the best profile 
 | [**Internationalization / Localization Readiness**](goals/27-internationalization-localization-readiness.md) | Find hard-coded locale assumptions, build a locale matrix, test translated and right-to-left experiences, and prove every supported locale works. |
 | [**Backup / Restore / Disaster Recovery**](goals/28-backup-restore-disaster-recovery.md) | Define what must survive, create trustworthy backups, restore them in a clean environment, and prove recovery meets the agreed targets. |
 | [**Product Analytics / Experimentation Integrity**](goals/29-product-analytics-experimentation-integrity.md) | Define the events and metrics, verify collection end to end, test experiment assignment, and prove the numbers mean what the team thinks they mean. |
+| [**Search / SEO / Web Discoverability**](goals/31-search-seo-web-discoverability.md) | Make public web content crawlable, understandable, fast, and internally connected without promising rankings. |
 
 </details>
 
@@ -153,7 +156,7 @@ When no preset fits, use the [**Custom Contract-Driven fallback**](skills/shape-
 
 <!-- goal-catalog:end -->
 
-## Everything is saved for reuse
+## 💾 Everything is saved for reuse
 
 ```text
 GOAL.md                         approved active contract
@@ -166,21 +169,21 @@ docs/goals/<goal-id>/
 └── RESULT.md                   result, lessons, residual risk
 ```
 
-Stable knowledge is promoted into tests, ADRs, documentation, runbooks, fixtures, scripts, benchmarks, design references, or the reusable Project Harness. Sensitive answers are redacted when the repository is not a safe place to store them.
+Stable knowledge is promoted into tests, ADRs, documentation, runbooks, fixtures, evals, locale and crawl matrices, scripts, benchmarks, design references, or the reusable Project Harness. Sensitive answers are redacted when the repository is not a safe place to store them.
 
-When priorities change, run `shape-goal` again. It can amend, pause, resume, reprioritize, split, supersede, or create a separate follow-on goal without erasing the old decision trail.
+When priorities change, run `shape-goal` again. It can amend, pause, resume, reprioritize, split, supersede, or create a follow-on goal without erasing the old decision trail.
 
-## Advanced modes
+## ⚙️ Advanced modes
 
 <details>
-<summary><strong>Autonomous and no-skill fallbacks</strong></summary>
+<summary><strong>Autonomous and no-skill preflights</strong></summary>
 
 Each profile file also contains two advanced `/goal` prompts:
 
 - **Autonomous preflight** — use only when an approved artifact already answers every owner decision.
 - **Self-contained preflight** — use when the skills are unavailable.
 
-Both stop as **Approval required** when a human decision is missing. They must not ask a question and keep looping inside `/goal`.
+Both stop as **Approval required** when a human decision is missing. They never ask a question and keep looping inside `/goal`.
 
 </details>
 

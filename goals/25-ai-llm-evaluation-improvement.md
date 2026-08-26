@@ -30,7 +30,7 @@ Use this only when an approved contract or authoritative artifact already resolv
 - Graders, rubrics, human-review boundaries, stochastic repetition, and calibration rules
 - Baseline and target metrics plus grounding, safety, latency, cost, and reliability floors
 
-**Suggested assurance overlays:** Security & Privacy, Performance & Cost, Data Integrity & Governance
+**Suggested assurance overlays:** AI Quality & Safety, Security & Privacy, Performance & Cost, Data Integrity & Governance
 
 `shape-goal` must search the repository and connected authoritative sources before asking. It asks only material unresolved decisions, one at a time with a recommendation. Execution starts only after explicit contract approval.
 

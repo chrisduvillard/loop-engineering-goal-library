@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = ROOT / "goals" / "catalog.json"
 README_START = "<!-- goal-catalog:start -->"
 README_END = "<!-- goal-catalog:end -->"
+CATEGORY_ICONS = {"core": "🟣", "specialist": "🔵", "quality": "🟢"}
+PROFILE_BADGE = re.compile(r"!\[Profiles\]\(https://img\.shields\.io/badge/profiles-\d+-16A34A\?style=flat-square\)")
 
 
 def load_catalog() -> dict:
@@ -142,11 +144,12 @@ def render_readme_catalog(catalog: dict, parsed: list[tuple[dict, dict[str, str]
         "You usually do not need to choose one: `shape-goal` can select the best profile from repository evidence. "
         "Choose directly only when the type of work is already clear.",
     ]
-    for category in catalog["categories"]:
+    for index, category in enumerate(catalog["categories"]):
+        details_tag = "<details open>" if index == 0 else "<details>"
         lines.extend([
             "",
-            "<details>",
-            f"<summary><strong>{category['title']} ({len(by_category.get(category['key'], []))})</strong></summary>",
+            details_tag,
+            f"<summary><strong>{CATEGORY_ICONS[category['key']]} {category['title']} ({len(by_category.get(category['key'], []))})</strong></summary>",
             "",
             "| Profile | Best for |",
             "|---|---|",
@@ -182,6 +185,10 @@ def render_documents() -> dict[Path, str]:
 
     readme_path = ROOT / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
+    readme = PROFILE_BADGE.sub(
+        f"![Profiles](https://img.shields.io/badge/profiles-{len(parsed)}-16A34A?style=flat-square)",
+        readme,
+    )
     documents[readme_path] = replace_readme_catalog(readme, render_readme_catalog(catalog, parsed))
 
     goal_index_lines = [

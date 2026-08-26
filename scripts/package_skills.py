@@ -233,11 +233,10 @@ def build(output_dir: Path) -> list[Path]:
         artifact_names.append(bundle_name)
 
         sums = temporary / "SHA256SUMS"
-        sums.write_text(
-            "".join(f"{sha256(temporary / name)}  {name}\n" for name in artifact_names),
-            encoding="utf-8",
-            newline="\n",
-        )
+        with sums.open("w", encoding="utf-8", newline="\n") as handle:
+            handle.write(
+                "".join(f"{sha256(temporary / name)}  {name}\n" for name in artifact_names)
+            )
         artifact_names.append("SHA256SUMS")
 
         if output_dir.exists():

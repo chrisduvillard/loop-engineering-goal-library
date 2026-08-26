@@ -20,7 +20,7 @@ Copy this command exactly. It uses `shape-goal` to discover and approve the miss
 - Local/CI parity, retry policy, parallelism, diagnostics, coverage expectations, and completion evidence
 - Common contract inputs: outcome, scope, exclusions, acceptance evidence, protected behavior, authority boundaries, budget, goal relationships, state paths, and closeout paths
 
-**Suggested assurance overlays:** Reliability & Recovery, Developer Experience & Tooling, Performance & Cost
+**Suggested assurance overlays:** Reliability & Recovery, Documentation & Knowledge Transfer, Performance & Cost
 
 `shape-goal` must search the repository and connected authoritative sources before asking. It asks only material unresolved decisions, one at a time with a recommendation. The active `/goal` is not complete when the contract is shaped; execution and passing evidence are still required.
 

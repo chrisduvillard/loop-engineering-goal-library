@@ -17,6 +17,17 @@ import sync_goal_docs  # noqa: E402
 ERRORS: list[str] = []
 PLACEHOLDER = re.compile(r"\[[A-Z][A-Z0-9 _/.,:+-]{2,}\]")
 ACTION_PIN = re.compile(r"uses:\s+[^@\s]+@([0-9a-f]{40})(?:\s+#.*)?$")
+ASSURANCE_OVERLAYS = {
+    "Security & Privacy",
+    "Reliability & Recovery",
+    "Performance & Cost",
+    "UX & Accessibility",
+    "Data Integrity & Governance",
+    "Compatibility & Portability",
+    "Operability & Observability",
+    "Documentation & Knowledge Transfer",
+    "Compliance & Auditability",
+}
 
 
 def fail(message: str) -> None:
@@ -158,6 +169,19 @@ def validate_goal_files(catalog_goals: list[dict]) -> None:
             continue
         text = path.read_text(encoding="utf-8")
         lower = text.lower()
+        suggested = re.search(
+            r"^\*\*Suggested assurance overlays:\*\*\s*(.+)$",
+            text,
+            flags=re.MULTILINE,
+        )
+        if not suggested:
+            fail(f"goals/{item['file']}: missing suggested assurance overlays")
+        else:
+            raw_overlays = suggested.group(1).strip()
+            if not raw_overlays.lower().startswith(("none by default", "select only")):
+                for overlay in (part.strip() for part in raw_overlays.split(",")):
+                    if overlay not in ASSURANCE_OVERLAYS:
+                        fail(f"goals/{item['file']}: unknown assurance overlay {overlay!r}")
         if not text.startswith(f"# {item['title']}\n"):
             fail(f"goals/{item['file']}: title differs from catalog")
         for field, marker in (("use_when", "**Use when:**"), ("simple", "**In simple terms:**")):

@@ -40,9 +40,10 @@ jobs:
           python scripts/fix_apply_script.py
           python scripts/apply_adversarial_robustness.py
           npm install --package-lock-only --ignore-scripts
-          rm -f scripts/fix_apply_script.py
-          rm -f scripts/apply_adversarial_robustness.py
-          rm -f .github/workflows/apply-adversarial-robustness.yml
+          grep -qxF 'node_modules/' .gitignore || printf '\nnode_modules/\n' >> .gitignore
+          rm -rf node_modules
+          rm -f scripts/fix_apply_script.py scripts/apply_adversarial_robustness.py
+          mv .github/workflows/apply-adversarial-robustness.yml /tmp/apply-adversarial-robustness.yml
           python -m compileall -q scripts tests
           python -m unittest discover -s tests -v
           python scripts/sync_goal_launchers.py --check
@@ -55,8 +56,11 @@ jobs:
           grep -q "shape-goal" <<<"$output"
           grep -q "goal-engine" <<<"$output"
           python scripts/package_skills.py
+          rm -rf node_modules
+          mv /tmp/apply-adversarial-robustness.yml .github/workflows/apply-adversarial-robustness.yml
+          git checkout origin/main -- .github/workflows/validate.yml
 
-      - name: Commit reviewed changes
+      - name: Commit reviewed non-workflow changes
         shell: bash
         run: |
           set -euo pipefail

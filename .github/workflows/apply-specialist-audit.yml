@@ -38,12 +38,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p /tmp/original-workflows
+          cp .github/workflows/*.yml /tmp/original-workflows/
+
           python scripts/apply_specialist_audit.py
           python scripts/finalize_specialist_audit.py
           rm -f scripts/apply_specialist_audit.py
           rm -f scripts/finalize_specialist_audit.py
           rm -f .github/workflows/apply-specialist-audit.yml
           rm -f .github/workflows/export-specialist-audit-snapshot.yml
+
           python scripts/sync_goal_docs.py --write
           python -m compileall -q scripts tests
           python -m unittest discover -s tests -v
@@ -61,7 +65,11 @@ jobs:
           grep -q "goal-engine" <<<"$output"
           python scripts/package_skills.py
 
-      - name: Commit verified audit changes
+          rm -rf .github/workflows
+          mkdir -p .github/workflows
+          cp /tmp/original-workflows/*.yml .github/workflows/
+
+      - name: Commit verified non-workflow changes
         shell: bash
         run: |
           set -euo pipefail

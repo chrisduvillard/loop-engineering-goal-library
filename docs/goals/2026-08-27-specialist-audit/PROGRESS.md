@@ -1,8 +1,11 @@
 # Goal Progress: Specialist codebase audit
 
 **Goal ID:** `2026-08-27-specialist-audit`
-**State:** Ready for merge
-**Branch:** `codex/specialist-audit`
+**State:** Closed
+**Outcome:** Achieved
+**Branch:** `main`
+**Merged PR:** #11
+**Merge commit:** `aa494be4d94fc93b9d8c477cc6e796f07b19c3bf`
 
 ## Reviewer lanes
 
@@ -29,7 +32,16 @@
 - npm and GitHub Actions updates are covered by Dependabot.
 - The six-role reviewer protocol is reusable and linked from `goal-engine`.
 - Question-state, goal-archive, and tooling-contract validators are integrated into CI and aggregate validation.
+- The reviewed `actions/setup-node` v7 update is pinned to its immutable commit SHA.
+- PR #11 is merged and all temporary/superseded branches and workflows are removed.
+
+## Final evidence
+
+- 51 adversarial and regression tests passed in the pull-request matrix on all six supported OS/Python combinations.
+- The permanent validation job passed repository, generated-document, append-only history, question-state, archive, tooling, Skills CLI discovery, and package gates.
+- Only `main` remains in the branch list.
+- Only `.github/workflows/validate.yml` remains in the workflow directory.
 
 ## Next action
 
-Obtain a green pull-request matrix, independently review the final diff, merge to `main`, write `RESULT.md`, update the goal index, and remove the audit branch.
+None. Later audits create a new goal and link this closeout.

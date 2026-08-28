@@ -1,19 +1,29 @@
 # Specialist Codebase Audit
 
-This audit is intentionally split into independent review tracks so each one can challenge the repository from a different angle.
+Broad audits use **six independent review tracks** so one general reviewer does not become the only source of truth.
 
-## Review tracks
+| Track | Primary concern |
+|---|---|
+| Contract & State-Machine | lifecycle, approval, revisions, portfolios, leases, locks, and closeout |
+| Agent-Control & Interaction | question barriers, prompt injection, evaluator evidence, drift, and authority |
+| Security & Supply Chain | workflows, dependencies, archives, paths, symlinks, permissions, and publishing |
+| Tooling & Portability | Python versions, operating systems, filesystems, encodings, and deterministic output |
+| Verification & Mutation | false-green tests, missing oracles, failure injection, generated files, and CI gates |
+| Documentation & Adoption | installation, updates, terminology, examples, generated docs, and contributor friction |
 
-1. **Decision-state integrity** — shaping questions, answers, approvals, lifecycle transitions, and resume behavior.
-2. **Agent-control semantics** — interaction boundaries, approved-contract handoff, goal drift, authority, and concurrency.
-3. **Security and path safety** — prompt injection, filesystem boundaries, packaging, generated files, and supply-chain controls.
-4. **CI and portability** — supported Python versions, operating systems, deterministic checks, dependency updates, and failure diagnostics.
-5. **Documentation and maintainability** — user friction, duplicated sources, goal catalog routing, archive completeness, and future contributor safety.
+Reviewers start from the same approved contract and repository state, but not from each other's conclusions. Reviews are read-only by default. **Findings remain hypotheses until reproduced** or independently supported; the lead consolidates them by root cause, adds regression protection, and asks a fresh reviewer to independently re-check important fixes.
 
-## Review method
+## Deterministic validators
 
-Each track reviews the same repository state independently, records hypotheses before accepting findings, and requires executable evidence for any remediation. Findings are consolidated only after the specialist checks disagree or agree for explicit reasons.
+The repository separates prose review from machine-checkable contracts:
 
-## Status
+```text
+validate_question_state.py   question sequence, status, and answer transitions
+validate_goal_archives.py    closed-goal packets and history-index consistency
+validate_tooling_contract.py locked dependencies, Dependabot, and CI controls
+validate_repository.py       aggregate repository contract
+```
 
-Audit in progress on `codex/specialist-audit`. Final findings, fixes, verification evidence, residual risks, and reusable outputs will be recorded here before merge.
+The reusable protocol lives in [`skills/goal-engine/references/specialist-reviewers.md`](../skills/goal-engine/references/specialist-reviewers.md). The 2026-08-27 audit reports are preserved under [`docs/audits/2026-08-27-specialist-review/`](audits/2026-08-27-specialist-review/).
+
+No finite review proves the absence of every future defect. The enforceable promise is narrower: confirmed findings require evidence, important fixes require regression checks and independent re-review, and unresolved risk is recorded instead of hidden.

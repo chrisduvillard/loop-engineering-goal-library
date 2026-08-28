@@ -9,11 +9,13 @@ What is the smallest coherent change?
 ## Evidence
 
 - [ ] Repository validation passes
+- [ ] Question-state, goal-archive, and tooling-contract validators pass
 - [ ] Generated README/catalog and goal libraries are synchronized
 - [ ] All recommended launchers run unchanged with no placeholders
 - [ ] Profile inputs and execution rules are aligned
 - [ ] Agent Skills CLI discovers both skills
-- [ ] Reusable ZIP packages build
+- [ ] Reusable ZIP packages build deterministically
+- [ ] Important specialist findings receive independent re-review
 - [ ] New or changed behavior has a worked example or verifier
 
 ## Compatibility

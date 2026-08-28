@@ -53,7 +53,7 @@ The lead reviewer must:
 3. Rank confirmed findings by severity, likelihood, blast radius, and repair cost.
 4. Fix the highest-risk verified issue first with the smallest reversible change.
 5. Add regression protection before marking a finding fixed.
-6. Ask a fresh reviewer to re-check important remediations without the implementer's persuasive narrative.
+6. Ask a fresh reviewer to independently re-check important fixes without the implementer's persuasive narrative.
 7. Record residual risks and untested areas instead of claiming exhaustive proof.
 
 ## Stop condition

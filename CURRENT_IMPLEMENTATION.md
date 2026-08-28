@@ -2,7 +2,7 @@
 
 [`FULL_REPORT.md`](FULL_REPORT.md) is the historical research foundation. The live implementation is an interactive-first workflow for shaping and then autonomously executing software goals.
 
-## Version `0.10.0`
+## Version `0.11.0`
 
 ```text
 shape-goal                    main interactive entry point
@@ -14,6 +14,7 @@ clarity stress test           fresh-reader, counterexample, scenario, and verifi
 assumption register           evidence, owner approval, safe defaults, or unresolved
 31 execution profiles         reusable loop shapes
 12 assurance overlays         extra proof when a concern is secondary
+specialist reviewer team      six isolated audit roles with evidence-based consolidation
 goal-engine                   autonomous brownfield execution
 SHAPING.md                    durable questions and answers
 Goal Contract                 approved definition of done
@@ -89,6 +90,10 @@ Custom Contract-Driven remains the fallback for unusual loops.
 
 The repository now includes cross-platform unit, mutation, property, archive, path, history, workflow, and malformed-input tests. Generators and packagers fail closed, use atomic replacement, and reject symlinks, path escapes, hidden command counts, and destructive output choices. See [`docs/ROBUSTNESS_AUDIT.md`](docs/ROBUSTNESS_AUDIT.md).
 
+## Specialist review
+
+High-impact audits can use six isolated reviewer roles covering contract/state, agent control, security/supply chain, portability, verification, and documentation/adoption. Findings use one evidence schema, remain hypotheses until reproduced, and important fixes receive independent re-review. See [`skills/goal-engine/references/specialist-reviewers.md`](skills/goal-engine/references/specialist-reviewers.md).
+
 ## Verification
 
-CI validates the 31-profile catalog, 12 recognized overlays, interactive starts, advanced preflight stop behavior, the 4,000-character native-goal limit, profile input coverage, adaptive-questioning references, shaping-history rules, generated docs, README guidance, skill metadata, links, package discovery, and deterministic ZIP builds.
+CI validates the canonical profile catalog, recognized overlays, interactive starts, advanced preflight stop behavior, the 4,000-character native-goal limit, profile input coverage, adaptive questioning, append-only history, question-state transitions, closed-goal archives, locked tooling, generated docs, skill metadata, links, discovery, and deterministic ZIP builds across Linux, macOS, and Windows.

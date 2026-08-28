@@ -68,8 +68,13 @@ def validate() -> list[str]:
         skills_entry = packages.get("node_modules/skills", {})
         if root_entry.get("devDependencies", {}).get("skills") != expected:
             errors.append("package-lock root dependency differs from package.json")
+        expected_tarball = f"https://registry.npmjs.org/skills/-/skills-{expected}.tgz"
         if skills_entry.get("version") != expected:
             errors.append("locked Skills CLI version differs from package.json")
+        if skills_entry.get("resolved") != expected_tarball:
+            errors.append("locked Skills CLI tarball provenance differs from package.json")
+        if not isinstance(skills_entry.get("integrity"), str) or not skills_entry["integrity"].startswith("sha512-"):
+            errors.append("locked Skills CLI lacks SHA-512 integrity")
         for path, entry in packages.items():
             if path == "":
                 continue

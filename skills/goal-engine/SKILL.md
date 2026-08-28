@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[approved Goal Contract path or issue]"
 metadata:
   author: chrisduvillard
-  version: "0.10.0"
+  version: "0.11.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -203,9 +203,9 @@ The evaluator may not inspect files or run commands independently. “Implemente
 
 ## 10. Independent review
 
-Use fresh review or isolated subagents for high-blast-radius, security, authorization, migration, concurrency, reliability, architecture, compliance, accessibility, or subjective visual changes when practical.
+Use fresh review or isolated subagents for high-blast-radius, security, authorization, migration, concurrency, reliability, architecture, compliance, accessibility, or subjective visual changes when practical. For broad audits, apply the six-role protocol in [references/specialist-reviewers.md](references/specialist-reviewers.md).
 
-Provide the reviewer the contract, relevant shaping decisions, diff, evidence, and overlays—not the implementer's persuasive narrative. Treat findings as hypotheses until verified.
+Provide each reviewer the contract, relevant shaping decisions, diff, evidence, and overlays—not the implementer's persuasive narrative or another reviewer's conclusions. Treat findings as hypotheses until verified, consolidate by root cause, and independently re-check important fixes.
 
 ## 11. Stall detection
 

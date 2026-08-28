@@ -19,6 +19,13 @@
 - Findings require evidence, reproduction, impact, remediation, and a verifier.
 - Important fixes receive independent re-review.
 
+## Deterministic state and archive contracts
+
+- Question IDs are contiguous, at most one question is Proposed, and invalid status transitions fail.
+- Answered questions require one saved answer and one normalized decision.
+- Closed goal directories contain the required packet and appear exactly once in `docs/goals/INDEX.md`.
+- The locked Skills CLI, npm provenance, Dependabot coverage, read-only workflow, immutable Action pins, and superseded-run cancellation are verified.
+
 ## Full regression
 
 - Python compilation and all unit tests pass.

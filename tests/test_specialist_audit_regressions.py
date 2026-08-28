@@ -108,5 +108,27 @@ class CatalogMaintainabilityTests(unittest.TestCase):
         self.assertNotIn('expected_counts = {"core": 7, "specialist": 9, "quality": 15}', source)
 
 
+class DeterministicContractIntegrationTests(unittest.TestCase):
+    def test_permanent_workflow_runs_specialist_validators(self):
+        workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        self.assertIn("concurrency:", workflow)
+        self.assertIn("cancel-in-progress: true", workflow)
+        for command in (
+            "python scripts/validate_question_state.py --self-test",
+            "python scripts/validate_goal_archives.py --self-test",
+            "python scripts/validate_tooling_contract.py --self-test",
+        ):
+            self.assertIn(command, workflow)
+
+    def test_specialist_validators_accept_repository_state(self):
+        for command in (
+            ("scripts/validate_question_state.py", "--self-test"),
+            ("scripts/validate_goal_archives.py", "--self-test"),
+            ("scripts/validate_tooling_contract.py", "--self-test"),
+        ):
+            result = run(ROOT, *command)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

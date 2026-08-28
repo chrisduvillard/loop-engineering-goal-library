@@ -7,7 +7,7 @@ disable-model-invocation: false
 argument-hint: "[continue | new goal | deepen | profile | goal ID | changed need]"
 metadata:
   author: chrisduvillard
-  version: "0.10.0"
+  version: "0.11.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 

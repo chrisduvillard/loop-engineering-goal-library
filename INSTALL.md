@@ -151,7 +151,12 @@ SHA256SUMS
 ```bash
 python3 scripts/sync_goal_launchers.py --check
 python3 scripts/sync_goal_docs.py --check
+python3 scripts/validate_shaping_history_diff.py --self-test
+python3 scripts/validate_question_state.py --self-test
+python3 scripts/validate_goal_archives.py --self-test
+python3 scripts/validate_tooling_contract.py --self-test
 python3 scripts/validate_repository.py
 python3 scripts/package_skills.py
-npx -y skills@1.5.23 add . --list
+npm ci --ignore-scripts
+npx --no-install skills add . --list
 ```

@@ -2,7 +2,7 @@
 
 Add abstractions only when they remove more field friction than they create.
 
-## Implemented through `0.10.0`
+## Implemented through `0.11.0`
 
 - `shape-goal` as the main interactive entry point.
 - A strict question barrier: save one question, ask it, and return control immediately.
@@ -14,6 +14,7 @@ Add abstractions only when they remove more field friction than they create.
 - Append-only shaping history, repeatable deeper rounds, explicit approval records, and information-classification rules.
 - `goal-engine` brownfield execution with native verification, regression protection, drift detection, reusable closeout, and authority boundaries.
 - Multi-goal portfolio, Project Harness, assurance overlays, generated catalogs, validation, and deterministic packaging.
+- Six-role specialist reviewer team plus deterministic question-state, goal-archive, and tooling-contract validators.
 
 ## Before `1.0.0`
 

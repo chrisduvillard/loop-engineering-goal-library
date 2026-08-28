@@ -14,6 +14,9 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import sync_goal_docs  # noqa: E402
 import sync_goal_launchers  # noqa: E402
+import validate_goal_archives  # noqa: E402
+import validate_question_state  # noqa: E402
+import validate_tooling_contract  # noqa: E402
 
 ERRORS: list[str] = []
 PLACEHOLDER = re.compile(r"\[[A-Z][A-Z0-9 _/.,:+-]{2,}\]")
@@ -129,8 +132,16 @@ def validate_version() -> str:
     changelog = text("CHANGELOG.md")
     if version and f"## [{version}]" not in changelog:
         fail(f"CHANGELOG.md has no section for VERSION {version}")
+    readme = text("README.md")
+    expected_badge = (
+        f"![Version](https://img.shields.io/badge/version-{version}-7C3AED?style=flat-square)"
+    )
+    if version and expected_badge not in readme:
+        fail(f"README.md version badge does not match VERSION {version}")
+    current = text("CURRENT_IMPLEMENTATION.md")
+    if version and f"## Version `{version}`" not in current:
+        fail(f"CURRENT_IMPLEMENTATION.md does not describe VERSION {version}")
     return version
-
 
 def load_catalog() -> dict:
     source = text("goals/catalog.json")
@@ -142,21 +153,31 @@ def load_catalog() -> dict:
 
 
 def validate_catalog(catalog: dict) -> list[dict]:
+    if not isinstance(catalog, dict):
+        fail("goals/catalog.json: root must be an object")
+        return []
     if catalog.get("schema_version") != 1:
         fail("goals/catalog.json: schema_version must be 1")
 
     categories = catalog.get("categories", [])
-    category_keys = [item.get("key") for item in categories]
-    if category_keys != ["core", "specialist", "quality"]:
+    goals = catalog.get("goals", [])
+    if not isinstance(categories, list) or not isinstance(goals, list):
+        fail("goals/catalog.json: categories and goals must be arrays")
+        return []
+
+    category_keys = [item.get("key") if isinstance(item, dict) else None for item in categories]
+    expected_order = ["core", "specialist", "quality"]
+    if category_keys != expected_order:
         fail(f"Unexpected category order: {category_keys}")
 
-    expected_counts = {"core": 7, "specialist": 9, "quality": 15}
-    counts = {key: 0 for key in expected_counts}
-    goals = catalog.get("goals", [])
+    counts = {key: 0 for key in expected_order}
     seen_ids: set[str] = set()
     seen_files: set[str] = set()
 
     for index, item in enumerate(goals, start=1):
+        if not isinstance(item, dict):
+            fail(f"Catalog goal {index}: entry must be an object")
+            continue
         goal_id = item.get("id", "")
         filename = item.get("file", "")
         category = item.get("category", "")
@@ -174,10 +195,11 @@ def validate_catalog(catalog: dict) -> list[dict]:
             if not item.get(field):
                 fail(f"Catalog goal {filename}: missing {field}")
 
-    if len(goals) != 31:
-        fail(f"Expected 31 goals, found {len(goals)}")
-    if counts != expected_counts:
-        fail(f"Unexpected category counts: {counts}")
+    if not goals:
+        fail("Goal catalog must contain at least one profile")
+    for category, count in counts.items():
+        if count == 0:
+            fail(f"Goal catalog category {category!r} must not be empty")
 
     actual_files = {
         path.name
@@ -189,8 +211,7 @@ def validate_catalog(catalog: dict) -> list[dict]:
             "Goal catalog/file mismatch. "
             f"Missing={sorted(seen_files - actual_files)}; extra={sorted(actual_files - seen_files)}"
         )
-    return goals
-
+    return [item for item in goals if isinstance(item, dict)]
 
 def extract_commands(source: str) -> list[str]:
     return [
@@ -407,7 +428,7 @@ def validate_skills(version: str) -> None:
                 fail(f"{engine.relative_to(ROOT)}: missing {fragment!r}")
 
 
-def validate_state_and_docs() -> None:
+def validate_state_and_docs(version: str) -> None:
     required_paths = (
         "README.md",
         "INSTALL.md",
@@ -438,6 +459,7 @@ def validate_state_and_docs() -> None:
         "skills/goal-engine/references/loop-profiles.md",
         "skills/goal-engine/references/assurance-overlays.md",
         "skills/goal-engine/references/state-and-evidence.md",
+        "skills/goal-engine/references/specialist-reviewers.md",
         "skills/goal-engine/templates/project-harness-template.md",
         "skills/goal-engine/templates/goal-progress-template.md",
         "skills/goal-engine/templates/goal-result-template.md",
@@ -446,16 +468,33 @@ def validate_state_and_docs() -> None:
         "scripts/sync_goal_docs.py",
         "scripts/sync_goal_launchers.py",
         "scripts/validate_shaping_history_diff.py",
+        "scripts/validate_question_state.py",
+        "scripts/validate_goal_archives.py",
+        "scripts/validate_tooling_contract.py",
         "scripts/validate_repository.py",
         "tests/test_adversarial_robustness.py",
         "tests/test_adversarial_second_pass.py",
+        "tests/test_specialist_audit_regressions.py",
         "docs/ROBUSTNESS_AUDIT.md",
+        "docs/SPECIALIST_AUDIT.md",
+        "docs/audits/2026-08-27-specialist-review/README.md",
+        "docs/audits/2026-08-27-specialist-review/contract-state.md",
+        "docs/audits/2026-08-27-specialist-review/agent-control.md",
+        "docs/audits/2026-08-27-specialist-review/security-supply-chain.md",
+        "docs/audits/2026-08-27-specialist-review/tooling-portability.md",
+        "docs/audits/2026-08-27-specialist-review/verification-mutation.md",
+        "docs/audits/2026-08-27-specialist-review/documentation-adoption.md",
         "package.json",
         "package-lock.json",
         "docs/goals/2026-08-26-adversarial-robustness/SHAPING.md",
         "docs/goals/2026-08-26-adversarial-robustness/CONTRACT.md",
         "docs/goals/2026-08-26-adversarial-robustness/PROGRESS.md",
         "docs/goals/2026-08-26-adversarial-robustness/UAT.md",
+        "docs/goals/2026-08-26-adversarial-robustness/RESULT.md",
+        "docs/goals/2026-08-27-specialist-audit/SHAPING.md",
+        "docs/goals/2026-08-27-specialist-audit/CONTRACT.md",
+        "docs/goals/2026-08-27-specialist-audit/PROGRESS.md",
+        "docs/goals/2026-08-27-specialist-audit/UAT.md",
         ".github/dependabot.yml",
         ".github/workflows/validate.yml",
         "examples/complete-brownfield-cycle/README.md",
@@ -487,6 +526,9 @@ def validate_state_and_docs() -> None:
         ".github/workflows/apply-overlay-validation-fix.yml",
         ".github/workflows/cleanup-final-review-branch.yml",
         ".github/workflows/apply-interactive-first.yml",
+        ".github/workflows/apply-specialist-audit.yml",
+        ".github/workflows/export-specialist-audit-snapshot.yml",
+        "scripts/apply_specialist_audit.py",
     ):
         require_absent(path)
 
@@ -507,7 +549,7 @@ def validate_state_and_docs() -> None:
     require_fragments(
         require("CURRENT_IMPLEMENTATION.md"),
         (
-            "Version `0.10.0`",
+            f"Version `{version}`",
             "shape-goal                    main interactive entry point",
             "question barrier",
             "Advanced preflight",
@@ -592,6 +634,42 @@ def validate_state_and_docs() -> None:
     require_fragments(
         require("skills/goal-engine/references/state-and-evidence.md"),
         ("Shaping history", "approval round", "├── SHAPING.md"),
+    )
+    require_fragments(
+        require("skills/goal-engine/references/specialist-reviewers.md"),
+        (
+            "Contract & State-Machine Reviewer",
+            "Agent-Control & Interaction Reviewer",
+            "Security & Supply-Chain Reviewer",
+            "Tooling & Portability Reviewer",
+            "Verification & Mutation Reviewer",
+            "Documentation & Adoption Reviewer",
+            "Treat every finding as a hypothesis",
+            "independently re-check important fixes",
+        ),
+    )
+    require_fragments(
+        require("docs/SPECIALIST_AUDIT.md"),
+        (
+            "six independent review tracks",
+            "Findings remain hypotheses until reproduced",
+            "Deterministic validators",
+        ),
+    )
+    require_fragments(
+        require("docs/audits/2026-08-27-specialist-review/README.md"),
+        (
+            "Contract & State-Machine",
+            "Agent-Control & Interaction",
+            "Security & Supply Chain",
+            "Tooling & Portability",
+            "Verification & Mutation",
+            "Documentation & Adoption",
+        ),
+    )
+    require_fragments(
+        require(".github/dependabot.yml"),
+        ("package-ecosystem: github-actions", "package-ecosystem: npm"),
     )
     require_fragments(
         require("examples/complete-brownfield-cycle/SHAPING.md"),
@@ -765,11 +843,12 @@ def validate_package_manifest() -> None:
         fail("npm package metadata must use JSON objects")
         return
 
-    expected = "1.5.23"
     if package.get("name") != "loop-engineering-goal-library" or package.get("private") is not True:
         fail("package.json must remain the private loop-engineering-goal-library package")
-    if package.get("devDependencies", {}).get("skills") != expected:
-        fail(f"package.json must pin skills exactly to {expected}")
+    expected = package.get("devDependencies", {}).get("skills")
+    if not isinstance(expected, str) or not SEMVER.fullmatch(expected):
+        fail("package.json must pin skills to one exact semantic version")
+        return
     if package.get("scripts") != {"test": "python -m unittest discover -s tests -v"}:
         fail("package.json may contain only the reviewed test script")
     if lock.get("lockfileVersion") != 3:
@@ -783,8 +862,13 @@ def validate_package_manifest() -> None:
     skills_package = packages.get("node_modules/skills", {})
     if root_package.get("devDependencies", {}).get("skills") != expected:
         fail("package-lock.json root dependency does not match package.json")
-    if skills_package.get("version") != expected or not skills_package.get("integrity"):
-        fail("package-lock.json must pin skills 1.5.23 with an integrity hash")
+    expected_tarball = f"https://registry.npmjs.org/skills/-/skills-{expected}.tgz"
+    if (
+        skills_package.get("version") != expected
+        or skills_package.get("resolved") != expected_tarball
+        or not skills_package.get("integrity")
+    ):
+        fail(f"package-lock.json must pin skills {expected} with matching provenance and integrity")
 
     for package_path, entry in packages.items():
         if package_path == "":
@@ -821,6 +905,8 @@ def validate_scripts_and_ci() -> None:
     if not workflow.exists():
         return
     source = workflow.read_text(encoding="utf-8")
+    if "concurrency:" not in source or "cancel-in-progress: true" not in source:
+        fail(".github/workflows/validate.yml: superseded runs must be cancelled")
     if "contents: read" not in source:
         fail(".github/workflows/validate.yml: contents permission must remain read-only")
     if re.search(r"^\s*[A-Za-z-]+:\s*write(?:-all)?\s*$", source, flags=re.MULTILINE):
@@ -842,6 +928,9 @@ def validate_scripts_and_ci() -> None:
         "scripts/sync_goal_launchers.py --check",
         "scripts/sync_goal_docs.py --check",
         "scripts/validate_shaping_history_diff.py --self-test",
+        "scripts/validate_question_state.py --self-test",
+        "scripts/validate_goal_archives.py --self-test",
+        "scripts/validate_tooling_contract.py --self-test",
         "scripts/package_skills.py",
         "scripts/validate_repository.py",
         "python -m unittest discover -s tests -v",
@@ -860,12 +949,18 @@ def main() -> int:
         goals = []
     validate_goal_files(goals)
     validate_skills(version)
-    validate_state_and_docs()
+    validate_state_and_docs(version)
     validate_generated_docs()
     validate_markdown_links()
     validate_tree_hygiene()
     validate_package_manifest()
     validate_scripts_and_ci()
+    for error in validate_question_state.validate(""):
+        fail(f"Question-state contract: {error}")
+    for error in validate_goal_archives.validate():
+        fail(f"Goal-archive contract: {error}")
+    for error in validate_tooling_contract.validate():
+        fail(f"Tooling contract: {error}")
 
     if ERRORS:
         print("Repository validation failed:\n")
@@ -877,11 +972,19 @@ def main() -> int:
     print(f"- version {version}")
     print("- shape-goal is the interactive main entry point")
     print("- 2 portable skills with host metadata")
-    print("- 31 interactive profile start commands")
-    print("- 31 advanced autonomous preflights")
-    print("- 31 advanced self-contained preflights")
+    category_counts = {key: 0 for key in ("core", "specialist", "quality")}
+    for item in goals:
+        category = item.get("category")
+        if category in category_counts:
+            category_counts[category] += 1
+    print(f"- {len(goals)} interactive profile start commands")
+    print(f"- {len(goals)} advanced autonomous preflights")
+    print(f"- {len(goals)} advanced self-contained preflights")
     print("- question barrier and normal-reply workflow enforced")
-    print("- 7 core, 9 specialist, and 15 quality profiles")
+    print(
+        f"- {category_counts['core']} core, {category_counts['specialist']} specialist, "
+        f"and {category_counts['quality']} quality profiles"
+    )
     print("- 12 assurance overlays")
     print("- append-only shaping history and explicit approval")
     print("- multi-goal portfolio, project harness, and reusable closeout")
@@ -890,6 +993,8 @@ def main() -> int:
     print("- local Markdown links resolve")
     print("- adversarial mutation tests and repository hygiene are enforced")
     print("- locked transitive dependencies, strict frontmatter, and archive-source parity are enforced")
+    print("- shaping question state, goal archives, and tooling controls have deterministic validators")
+    print("- six isolated specialist reviewer roles are available for high-impact audits")
     return 0
 
 

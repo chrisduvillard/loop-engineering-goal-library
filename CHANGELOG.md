@@ -8,6 +8,24 @@ The project follows semantic versioning while it is field-tested. Versions below
 
 - Reserved for changes after the current release.
 
+## [0.11.0] - 2026-08-27
+
+### Added
+
+- A reusable six-role specialist-review protocol for contract/state, agent-control, security/supply-chain, portability, verification, and documentation/adoption audits.
+- Deterministic validators for shaping question state, closed-goal archive/index consistency, and the locked tooling/CI contract.
+- Regression tests for generated README version metadata, dynamic catalog accounting, dependency-pin consistency, reviewer-protocol discoverability, and npm Dependabot coverage.
+- Durable specialist-audit findings and closeout records.
+
+### Changed
+
+- README version metadata is generated from `VERSION`, preventing the public badge from drifting behind the released skills.
+- Repository validation derives profile totals from the canonical catalog instead of freezing release-specific counts.
+- Skills CLI validation derives the exact pin from `package.json` and verifies lockfile consistency and registry provenance instead of hardcoding one historical version.
+- Dependabot now reviews npm dependencies as well as GitHub Actions.
+- Validation CI now cancels superseded runs and exposes the specialist state, archive, and tooling gates as named steps.
+- `goal-engine` routes broad audits through isolated evidence-based reviewers and independent re-review of important fixes.
+
 ## [0.10.0] - 2026-08-26
 
 ### Added

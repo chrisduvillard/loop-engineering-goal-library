@@ -1,4 +1,4 @@
-name: Cleanup merged specialist branch
+name: Cleanup merged and superseded branches
 
 on:
   push:
@@ -17,12 +17,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Delete merged audit branch
+      - name: Delete merged or superseded branches
         shell: bash
         run: |
           set -euo pipefail
-          if git ls-remote --exit-code --heads origin refs/heads/codex/specialist-audit >/dev/null 2>&1; then
-            git push origin --delete codex/specialist-audit
-          else
-            echo "Branch already absent."
-          fi
+          for branch in \
+            codex/specialist-audit \
+            dependabot/github_actions/actions/setup-node-7.0.0
+          do
+            if git ls-remote --exit-code --heads origin "refs/heads/$branch" >/dev/null 2>&1; then
+              git push origin --delete "$branch"
+            else
+              echo "$branch is already absent."
+            fi
+          done

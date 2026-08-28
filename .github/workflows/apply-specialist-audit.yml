@@ -39,7 +39,9 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/apply_specialist_audit.py
+          python scripts/finalize_specialist_audit.py
           rm -f scripts/apply_specialist_audit.py
+          rm -f scripts/finalize_specialist_audit.py
           rm -f .github/workflows/apply-specialist-audit.yml
           rm -f .github/workflows/export-specialist-audit-snapshot.yml
           python scripts/sync_goal_docs.py --write
@@ -48,6 +50,9 @@ jobs:
           python scripts/sync_goal_launchers.py --check
           python scripts/sync_goal_docs.py --check
           python scripts/validate_shaping_history_diff.py --self-test --base-ref origin/main
+          python scripts/validate_question_state.py --self-test --base-ref origin/main
+          python scripts/validate_goal_archives.py --self-test
+          python scripts/validate_tooling_contract.py --self-test
           npm ci --ignore-scripts
           python scripts/validate_repository.py
           output="$(npx --no-install skills add . --list)"
@@ -64,5 +69,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git diff --cached --check
-          git commit -m "Apply specialist audit improvements"
+          git commit -m "Apply verified specialist audit improvements"
           git push origin HEAD:codex/specialist-audit

@@ -14,6 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = ROOT / "goals" / "catalog.json"
+VERSION_PATH = ROOT / "VERSION"
 README_START = "<!-- goal-catalog:start -->"
 README_END = "<!-- goal-catalog:end -->"
 CATEGORY_ICONS = {"core": "🟣", "specialist": "🔵", "quality": "🟢"}
@@ -23,8 +24,16 @@ EXPECTED_COLLECTIONS = {
     "quality": "QUALITY_GOALS.md",
 }
 GOAL_FILE = re.compile(r"\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.md")
+VERSION_BADGE = re.compile(
+    r"!\[Version\]\(https://img\.shields\.io/badge/version-[^)]*-7C3AED\?style=flat-square\)"
+)
 PROFILE_BADGE = re.compile(
     r"!\[Profiles\]\(https://img\.shields\.io/badge/profiles-\d+-16A34A\?style=flat-square\)"
+)
+SEMVER = re.compile(
+    r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)"
+    r"(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?"
+    r"(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?"
 )
 COMMAND = re.compile(r"```text\n(/goal .*?)\n```", flags=re.DOTALL)
 
@@ -255,6 +264,9 @@ def replace_readme_catalog(readme: str, section: str) -> str:
 def render_documents() -> dict[Path, str]:
     catalog = load_catalog()
     parsed = validate_catalog(catalog)
+    version = VERSION_PATH.read_text(encoding="utf-8").strip()
+    if not SEMVER.fullmatch(version):
+        raise ValueError(f"VERSION is not semantic: {version!r}")
     documents: dict[Path, str] = {}
     for category in catalog["categories"]:
         documents[ROOT / category["collection"]] = render_collection(category, parsed)
@@ -263,6 +275,12 @@ def render_documents() -> dict[Path, str]:
     if readme_path.is_symlink():
         raise ValueError("README.md may not be a symlink")
     readme = readme_path.read_text(encoding="utf-8")
+    version_badge = f"![Version](https://img.shields.io/badge/version-{version}-7C3AED?style=flat-square)"
+    readme, version_count = VERSION_BADGE.subn(version_badge, readme)
+    if version_count != 1:
+        raise ValueError(
+            f"README.md must contain exactly one generated Version badge, found {version_count}"
+        )
     readme, count = PROFILE_BADGE.subn(
         f"![Profiles](https://img.shields.io/badge/profiles-{len(parsed)}-16A34A?style=flat-square)",
         readme,

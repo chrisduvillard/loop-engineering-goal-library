@@ -16,7 +16,7 @@ Reusable Agent Skills and execution profiles for OpenAI Codex, Anthropic Claude 
 [![Codex](https://img.shields.io/badge/OpenAI%20Codex-compatible-111827?style=flat-square&logo=openai&logoColor=white)](https://learn.chatgpt.com/use-cases/follow-goals)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757?style=flat-square)](https://code.claude.com/docs/en/goal)
 [![Validation](https://img.shields.io/github/actions/workflow/status/chrisduvillard/loop-engineering-goal-library/validate.yml?branch=main&style=flat-square&label=validation)](https://github.com/chrisduvillard/loop-engineering-goal-library/actions/workflows/validate.yml)
-![Version](https://img.shields.io/badge/version-0.9.0-7C3AED?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.11.0-7C3AED?style=flat-square)
 ![Profiles](https://img.shields.io/badge/profiles-31-16A34A?style=flat-square)
 
 </div>
@@ -94,6 +94,9 @@ If you see **Pursuing goal…** while a shaping question is waiting:
 
 - **Codex:** `/goal pause` or `/goal clear`, then `$shape-goal Resume goal-id`
 - **Claude Code:** `/goal clear`, then `/shape-goal Resume goal-id`
+
+> [!TIP]
+> Running a high-impact audit? Use the isolated [specialist reviewer team](skills/goal-engine/references/specialist-reviewers.md): contract/state, agent control, security, portability, verification, and documentation.
 
 <!-- goal-catalog:start -->
 

@@ -1,0 +1,17 @@
+name: Apply audit hardening source
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit-remediation-runtime-hardening
+      - name: Placeholder
+        run: echo 'Source transfer pending'

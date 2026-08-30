@@ -1,0 +1,95 @@
+name: Apply approved audit remediation
+
+on:
+  push:
+    branches: [audit-remediation-runtime-hardening]
+    paths:
+      - .github/workflows/apply-audit-remediation.yml
+
+concurrency:
+  group: apply-approved-audit-remediation
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  remediate:
+    if: github.actor == 'chrisduvillard'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out the audit branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: audit-remediation-runtime-hardening
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.20.0'
+          cache: npm
+
+      - name: Install locked tooling
+        run: npm ci --ignore-scripts
+
+      - name: Apply the deterministic source transform
+        run: python scripts/apply_audit_remediation.py
+
+      - name: Remove temporary transfer and remediation controls
+        shell: bash
+        run: |
+          rm -f .github/workflows/export-audit-branch.yml
+          rm -f .github/workflows/apply-audit-remediation.yml
+          rm -f scripts/apply_audit_remediation.py
+
+      - name: Refresh generated goal surfaces
+        run: |
+          python scripts/sync_goal_launchers.py
+          python scripts/sync_goal_docs.py
+
+      - name: Compile and run the complete test suite
+        run: |
+          python -m compileall -q scripts tests skills/goal-engine/scripts
+          python -m unittest discover -s tests -v
+
+      - name: Validate repository invariants
+        run: |
+          python scripts/validate_repository.py
+          python scripts/sync_goal_launchers.py --check
+          python scripts/sync_goal_docs.py --check
+          python scripts/validate_shaping_history_diff.py --self-test
+          python scripts/validate_question_state.py --self-test
+          python scripts/validate_goal_archives.py --self-test
+          python scripts/validate_tooling_contract.py --self-test
+          python skills/goal-engine/scripts/goalctl.py self-test
+          python scripts/evaluate_behavior.py --self-test
+
+      - name: Validate skill discovery and packages
+        shell: bash
+        run: |
+          output="$(npx --no-install skills add . --list)"
+          printf '%s\n' "$output"
+          grep -q "shape-goal" <<<"$output"
+          grep -q "goal-engine" <<<"$output"
+          python scripts/package_skills.py
+
+      - name: Check the final diff
+        run: |
+          git diff --check
+          git status --short
+
+      - name: Commit and push the verified remediation
+        shell: bash
+        run: |
+          git config user.name "Chris Duvillard"
+          git config user.email "duvillard.c@gmail.com"
+          git add -A
+          git commit -m "Harden runtime state, package closure, and audit safety"
+          git push origin HEAD:audit-remediation-runtime-hardening

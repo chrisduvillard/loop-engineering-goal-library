@@ -1,0 +1,163 @@
+name: Finalize approved audit remediation
+
+on:
+  push:
+    branches: [audit-remediation-runtime-hardening]
+    paths:
+      - .github/workflows/finalize-audit-remediation.yml
+
+concurrency:
+  group: finalize-approved-audit-remediation
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+jobs:
+  finalize:
+    if: github.actor == 'chrisduvillard'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BRANCH: audit-remediation-runtime-hardening
+    steps:
+      - name: Check out the audited branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: audit-remediation-runtime-hardening
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.20.0'
+          cache: npm
+
+      - name: Install locked tooling
+        run: npm ci --ignore-scripts
+
+      - name: Apply the transform when an earlier run did not complete
+        shell: bash
+        run: |
+          if [[ -f scripts/apply_audit_remediation.py ]]; then
+            python scripts/apply_audit_remediation.py
+          fi
+
+      - name: Remove all temporary controls
+        shell: bash
+        run: |
+          rm -f .github/workflows/export-audit-branch.yml
+          rm -f .github/workflows/apply-audit-remediation.yml
+          rm -f .github/workflows/finalize-audit-remediation.yml
+          rm -f scripts/apply_audit_remediation.py
+
+      - name: Refresh generated surfaces
+        run: |
+          python scripts/sync_goal_launchers.py
+          python scripts/sync_goal_docs.py
+
+      - name: Compile and run all deterministic tests
+        run: |
+          python -m compileall -q scripts tests skills/goal-engine/scripts
+          python -m unittest discover -s tests -v
+
+      - name: Run every repository validation gate
+        shell: bash
+        run: |
+          python scripts/validate_repository.py
+          python scripts/sync_goal_launchers.py --check
+          python scripts/sync_goal_docs.py --check
+          python scripts/validate_shaping_history_diff.py --self-test
+          python scripts/validate_question_state.py --self-test
+          python scripts/validate_goal_archives.py --self-test
+          python scripts/validate_tooling_contract.py --self-test
+          python skills/goal-engine/scripts/goalctl.py self-test
+          python scripts/evaluate_behavior.py --self-test
+          output="$(npx --no-install skills add . --list)"
+          printf '%s\n' "$output"
+          grep -q "shape-goal" <<<"$output"
+          grep -q "goal-engine" <<<"$output"
+          python scripts/package_skills.py
+          git diff --check
+
+      - name: Commit the final verified branch state
+        shell: bash
+        run: |
+          git config user.name "Chris Duvillard"
+          git config user.email "duvillard.c@gmail.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Harden runtime state, package closure, and audit safety"
+            git push origin HEAD:"$BRANCH"
+          fi
+
+      - name: Open or reuse the pull request
+        id: pr
+        shell: bash
+        run: |
+          pr_url="$(gh pr list --head "$BRANCH" --base main --state open --json url --jq '.[0].url')"
+          if [[ -z "$pr_url" ]]; then
+            pr_url="$(gh pr create \
+              --head "$BRANCH" \
+              --base main \
+              --title "Harden runtime state, package closure, and audit safety" \
+              --body-file - <<'EOF'
+## Summary
+
+Implements the approved full-project audit remediation:
+
+- closes standalone package references and validates archive closure;
+- adds canonical JSON goal state, fingerprints, atomic leases, generated views, and deterministic lifecycle controls;
+- adds read-only and propose-patch mutation enforcement plus false-completion guards;
+- adds the compaction-resistant Goal Kernel, assurance levels, held-out verification, and behavioral evaluation scaffolding;
+- makes shaping explicit-only and audit wording read-only by default;
+- adds MIT licensing, security reporting, code ownership, plugin metadata, governance, and host acceptance gates;
+- bumps the project to 0.11.1.
+
+## Verification
+
+The finalizer executes the full unit suite, repository validators, generated-file checks, goal archive and question-state checks, goalctl self-test, behavioral evaluator self-test, Skills CLI discovery, package construction, archive reference closure, and `git diff --check` before opening this PR.
+EOF
+            )"
+          fi
+          echo "url=$pr_url" >> "$GITHUB_OUTPUT"
+          echo "$pr_url"
+
+      - name: Wait for pull-request validation
+        shell: bash
+        run: gh pr checks "${{ steps.pr.outputs.url }}" --watch --interval 10 --fail-fast
+
+      - name: Squash-merge the verified remediation
+        shell: bash
+        run: |
+          gh pr merge "${{ steps.pr.outputs.url }}" \
+            --squash \
+            --delete-branch \
+            --subject "Harden runtime state, package closure, and audit safety" \
+            --body "Verified by the complete repository and package validation suite."
+
+      - name: Build and publish the immutable release
+        shell: bash
+        run: |
+          git fetch origin main --tags
+          git checkout --detach origin/main
+          version="$(tr -d '\r\n' < VERSION)"
+          tag="v$version"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists; leaving it unchanged."
+            exit 0
+          fi
+          python scripts/package_skills.py
+          main_sha="$(git rev-parse HEAD)"
+          gh release create "$tag" dist/* \
+            --target "$main_sha" \
+            --title "$tag" \
+            --generate-notes

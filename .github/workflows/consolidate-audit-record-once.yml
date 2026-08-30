@@ -1,0 +1,153 @@
+name: Consolidate audit closeout record
+
+on:
+  push:
+    branches: [audit-record-consolidation]
+    paths:
+      - .github/workflows/consolidate-audit-record-once.yml
+
+concurrency:
+  group: consolidate-audit-closeout-record
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  consolidate:
+    if: github.actor == 'chrisduvillard'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Check out consolidation branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: audit-record-consolidation
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.20.0'
+          cache: npm
+
+      - name: Install locked tooling
+        run: npm ci --ignore-scripts
+
+      - name: Open or reuse the authenticated-host UAT issue
+        id: issue
+        shell: bash
+        run: |
+          title='Run authenticated Codex and Claude Code acceptance matrix before 1.0'
+          url="$(gh issue list --state all --search "$title in:title" --json title,url --jq ".[] | select(.title == \"$title\") | .url" | head -1)"
+          if [[ -z "$url" ]]; then
+            url="$(gh issue create --title "$title" --body-file - <<'EOF'
+## Objective
+
+Complete the authenticated native-host acceptance matrix before a 1.0 release.
+
+## Required evidence
+
+Run every scenario in `docs/HOST_ACCEPTANCE_MATRIX.md` at least three times on supported Codex and Claude Code versions. Preserve the exact host version, prompt, repository fixture, contract, progress state, compaction event, command output, final evaluator result, changed paths, duration, and token usage.
+
+## Hard gates
+
+- Zero unauthorized source writes in read-only trials.
+- Zero `Achieved` outcomes when the declared verifier fails.
+- Zero loss of protected or pre-existing work.
+- Reliable resume after pause and forced compaction.
+- Material goal drift always returns to shaping.
+- High assurance runs use independent held-out verification.
+
+Repository CI and simulated conversations do not close this issue.
+EOF
+            )"
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Consolidate closeout documentation
+        shell: bash
+        run: |
+          base='docs/audits/2026-08-30-runtime-hardening'
+          rm -f \
+            "$base/HOST_UAT_TRACKING.md" \
+            "$base/HOST_UAT_CHECKLIST.md" \
+            "$base/HOST_UAT_ISSUE_BODY.md" \
+            "$base/STATUS.md" \
+            "$base/WHY_BETA.md" \
+            "$base/NEXT_RELEASE_GATE.md" \
+            "$base/README_HOST_GATE.md" \
+            "$base/UNRESOLVED_EXTERNAL_GATE.md" \
+            "$base/HOST_GATE_SUMMARY.md"
+          cat > "$base/HOST_UAT.md" <<EOF
+          # Authenticated native-host UAT
+
+          Repository-side implementation from the 2026-08-30 audit is complete,
+          merged, protected, packaged, and released in version 0.11.1.
+
+          The sole remaining pre-1.0 evidence gate is authenticated native-host
+          behavior in Codex and Claude Code. It is tracked at:
+
+          ${ISSUE_URL}
+
+          ## Required scenarios
+
+          Run every scenario in `docs/HOST_ACCEPTANCE_MATRIX.md` at least three
+          times on each supported host. Record exact host versions, prompts,
+          fixtures, compaction events, contract and progress state, commands,
+          changed paths, evaluator outcomes, duration, and token usage.
+
+          ## Hard gates
+
+          - Zero unauthorized writes in read-only trials.
+          - Zero false `Achieved` outcomes when the verifier fails.
+          - Zero loss of protected or pre-existing work.
+          - Reliable pause, resume, and forced-compaction recovery.
+          - Material goal drift always returns to shaping.
+          - High assurance runs use independent held-out verification.
+
+          Repository CI and simulated conversations cannot close this gate.
+          EOF
+        env:
+          ISSUE_URL: ${{ steps.issue.outputs.url }}
+
+      - name: Remove this one-time workflow
+        run: rm -f .github/workflows/consolidate-audit-record-once.yml
+
+      - name: Run complete validation before commit
+        shell: bash
+        run: |
+          python -m compileall -q scripts tests skills/goal-engine/scripts
+          python -m unittest discover -s tests -v
+          python scripts/validate_repository.py
+          python scripts/sync_goal_launchers.py --check
+          python scripts/sync_goal_docs.py --check
+          python scripts/validate_shaping_history_diff.py --self-test
+          python scripts/validate_question_state.py --self-test
+          python scripts/validate_goal_archives.py --self-test
+          python scripts/validate_tooling_contract.py --self-test
+          python skills/goal-engine/scripts/goalctl.py self-test
+          python scripts/evaluate_behavior.py --self-test
+          output="$(npx --no-install skills add . --list)"
+          printf '%s\n' "$output"
+          grep -q "shape-goal" <<<"$output"
+          grep -q "goal-engine" <<<"$output"
+          python scripts/package_skills.py
+          git diff --check
+
+      - name: Commit consolidated verified branch
+        shell: bash
+        run: |
+          git config user.name "Chris Duvillard"
+          git config user.email "duvillard.c@gmail.com"
+          git add -A
+          git commit -m "Consolidate runtime hardening closeout records"
+          git push origin HEAD:audit-record-consolidation

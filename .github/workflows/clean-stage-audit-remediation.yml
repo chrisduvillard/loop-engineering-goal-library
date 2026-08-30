@@ -1,0 +1,126 @@
+name: Clean and verify audit remediation branch
+
+on:
+  push:
+    branches: [audit-remediation-runtime-hardening]
+    paths:
+      - .github/workflows/clean-stage-audit-remediation.yml
+
+concurrency:
+  group: clean-stage-audit-remediation
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  clean-stage:
+    if: github.actor == 'chrisduvillard'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: audit-remediation-runtime-hardening
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.20.0'
+          cache: npm
+
+      - name: Install locked tooling
+        run: npm ci --ignore-scripts
+
+      - name: Reconcile remediation and vendored references
+        shell: bash
+        run: |
+          if [[ -f scripts/apply_audit_remediation.py ]]; then
+            python scripts/apply_audit_remediation.py
+          fi
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+          import shutil
+
+          root = Path.cwd()
+          skills = root / 'skills'
+          for skill_name in ('shape-goal', 'goal-engine'):
+              skill_root = skills / skill_name
+              for document in sorted(skill_root.rglob('*.md')):
+                  original = document.read_text(encoding='utf-8')
+                  text = original
+                  patterns = (
+                      (re.compile(r'\.\./goal-engine/(references|templates)/([A-Za-z0-9_.-]+\.md)'), 'goal-engine'),
+                      (re.compile(r'\.\./\.\./shape-goal/(references|templates)/([A-Za-z0-9_.-]+\.md)'), 'shape-goal'),
+                  )
+                  for pattern, other_skill in patterns:
+                      while True:
+                          match = pattern.search(text)
+                          if not match:
+                              break
+                          source = skills / other_skill / match.group(1) / match.group(2)
+                          if not source.is_file():
+                              raise SystemExit(f'Missing cross-skill source: {source}')
+                          destination = skill_root / match.group(1) / match.group(2)
+                          destination.parent.mkdir(parents=True, exist_ok=True)
+                          shutil.copyfile(source, destination)
+                          relative = os.path.relpath(destination, document.parent).replace(os.sep, '/')
+                          text = text[:match.start()] + relative + text[match.end():]
+                  if text != original:
+                      document.write_text(text, encoding='utf-8', newline='\n')
+          PY
+
+      - name: Remove every temporary file
+        shell: bash
+        run: |
+          rm -f .github/workflows/export-audit-branch.yml
+          rm -f .github/workflows/apply-audit-remediation.yml
+          rm -f .github/workflows/finalize-audit-remediation.yml
+          rm -f .github/workflows/repair-and-stage-audit-remediation.yml
+          rm -f .github/workflows/clean-stage-audit-remediation.yml
+          rm -f .github/workflows/stage-status.yml
+          rm -f scripts/apply_audit_remediation.py
+
+      - name: Refresh generated surfaces
+        run: |
+          python scripts/sync_goal_launchers.py
+          python scripts/sync_goal_docs.py
+
+      - name: Run complete verification
+        shell: bash
+        run: |
+          python -m compileall -q scripts tests skills/goal-engine/scripts
+          python -m unittest discover -s tests -v
+          python scripts/validate_repository.py
+          python scripts/sync_goal_launchers.py --check
+          python scripts/sync_goal_docs.py --check
+          python scripts/validate_shaping_history_diff.py --self-test
+          python scripts/validate_question_state.py --self-test
+          python scripts/validate_goal_archives.py --self-test
+          python scripts/validate_tooling_contract.py --self-test
+          python skills/goal-engine/scripts/goalctl.py self-test
+          python scripts/evaluate_behavior.py --self-test
+          output="$(npx --no-install skills add . --list)"
+          printf '%s\n' "$output"
+          grep -q "shape-goal" <<<"$output"
+          grep -q "goal-engine" <<<"$output"
+          python scripts/package_skills.py
+          git diff --check
+
+      - name: Commit clean verified tree
+        shell: bash
+        run: |
+          git config user.name "Chris Duvillard"
+          git config user.email "duvillard.c@gmail.com"
+          git add -A
+          git commit -m "Harden runtime state, package closure, and audit safety"
+          git push origin HEAD:audit-remediation-runtime-hardening

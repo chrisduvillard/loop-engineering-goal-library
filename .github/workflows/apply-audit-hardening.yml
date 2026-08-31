@@ -167,7 +167,7 @@ jobs:
           python scripts/package_skills.py
           python scripts/package_skills.py --output-dir /tmp/loop-package-second
           cmp dist/SHA256SUMS /tmp/loop-package-second/SHA256SUMS
-          sha256sum --check dist/SHA256SUMS
+          (cd dist && sha256sum --check SHA256SUMS)
 
       - name: Commit verified implementation
         shell: bash

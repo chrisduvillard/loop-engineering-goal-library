@@ -26,8 +26,8 @@ Templates:
 - [../templates/goal-progress-template.md](../templates/goal-progress-template.md)
 - [../templates/goal-result-template.md](../templates/goal-result-template.md)
 - [../templates/goal-history-index-template.md](../templates/goal-history-index-template.md)
-- [../../shape-goal/templates/shaping-history-template.md](../../shape-goal/templates/shaping-history-template.md)
-- [../../shape-goal/templates/goal-portfolio-template.md](../../shape-goal/templates/goal-portfolio-template.md)
+- [../templates/shaping-history-template.md](../templates/shaping-history-template.md)
+- [../templates/goal-portfolio-template.md](../templates/goal-portfolio-template.md)
 - [../templates/project-harness-template.md](../templates/project-harness-template.md)
 
 ## State layers
@@ -187,3 +187,21 @@ Never commit secrets, tokens, credentials, private keys, private user data, raw 
 ## Result quality
 
 A useful result lets a fresh agent answer what was intended, which shaping round approved it, what happened, which evidence supports it, what changed, what remained protected, what failed or was reverted, what goal followed or was superseded, what knowledge was promoted, and what residual risk or next action remains.
+
+## Canonical runtime model
+
+The canonical machine-readable files are:
+
+- `.loop/active-goal.json`
+- `.loop/goals/<goal-id>/contract.json`
+- `.loop/goals/<goal-id>/progress.json`
+- `.loop/leases/<goal-id>.json`
+
+`GOAL.md` and `GOAL_PROGRESS.md` are generated views. They must include a source
+hash and must not become competing writable state. Use `scripts/goalctl.py` to
+validate and render them.
+
+Lifecycle, run termination, and final outcome are distinct. A paused or blocked
+goal is not closed. `Achieved` is valid only after every acceptance item is
+`pass`, the declared verifier has succeeded, protected behavior has been
+checked, and read-only mutation enforcement has passed when applicable.

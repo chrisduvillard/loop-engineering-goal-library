@@ -1,0 +1,18 @@
+{
+  "author": {
+    "name": "Chris Duvillard"
+  },
+  "description": "Goal shaping and verifiable autonomous engineering loops for brownfield repositories.",
+  "homepage": "https://github.com/chrisduvillard/loop-engineering-goal-library",
+  "keywords": [
+    "agent-skills",
+    "codex",
+    "claude-code",
+    "goal",
+    "verification"
+  ],
+  "license": "MIT",
+  "name": "loop-engineering-goal-library",
+  "repository": "https://github.com/chrisduvillard/loop-engineering-goal-library",
+  "version": "0.12.0"
+}

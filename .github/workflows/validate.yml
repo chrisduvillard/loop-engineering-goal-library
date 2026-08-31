@@ -88,6 +88,12 @@ jobs:
       - name: Validate tooling contract
         run: python scripts/validate_tooling_contract.py --self-test
 
+      - name: Validate deterministic goal runtime
+        run: python skills/goal-engine/scripts/goalctl.py self-test
+
+      - name: Validate behavioral invariants
+        run: python scripts/evaluate_behavior.py --self-test
+
       - name: Verify Agent Skills CLI discovery
         shell: bash
         run: |

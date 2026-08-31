@@ -226,3 +226,27 @@ Strict two-step mode:
 | Revision | Date | Change | Lifecycle decision | Shaping round | Approved by |
 |---|---|---|---|---|---|
 | 1 | [DATE] | Initial contract | New | [ROUND ID] | [OWNER] |
+
+## Execution controls
+
+- Mutation mode: `read_only` | `propose_patch` | `apply_verified_fixes`
+- Assurance level: `lite` | `standard` | `high`
+- Canonical state: `.loop/goals/<goal-id>/contract.json`
+- Approval fingerprint algorithm: `goalctl-v1-sha256`
+- Generated human view: `GOAL.md` (do not edit directly)
+- Private shaping journal: `.loop/private/<goal-id>/` (ignored and never committed)
+
+`read_only` is the default for review, audit, assessment, inspection, and
+evaluation requests. Remediation requires separate explicit authorization.
+
+## State and termination model
+
+- Goal status: `candidate` | `ready` | `active` | `paused` | `blocked` | `closed`
+- Run termination: `achieved` | `approval_required` | `budget_exhausted` |
+  `stalled` | `external_blocked` | `safety_stop` | `cancelled_by_user` |
+  `host_failure`
+- Final goal outcome: `achieved` | `cancelled` | `superseded` | `abandoned`
+
+A run termination is not automatically a final goal outcome. A goal with
+`approval_required`, `budget_exhausted`, `stalled`, or `external_blocked`
+remains resumable unless it is explicitly closed.

@@ -3,4 +3,4 @@ interface:
   short_description: "Main interactive command for defining an executable goal."
   default_prompt: "Inspect this repository, resolve facts before asking, adapt the number of one-decision questions to risk and ambiguity, save each question and answer, end the turn after each question, clarify partial or ambiguous replies instead of guessing, preserve must-versus-preference strength and bound delegated judgment, stress-test the draft with an assumption register and fresh-reader review, and produce an explicitly approved Goal Contract plus the exact execution /goal command. Do not start autonomous execution."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

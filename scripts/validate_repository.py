@@ -354,8 +354,8 @@ def validate_skills(version: str) -> None:
                 fail(f"{rel}: missing {key}")
         if top.get("user-invocable") != "true":
             fail(f"{rel}: user-invocable must be true")
-        if top.get("disable-model-invocation") != "false":
-            fail(f"{rel}: disable-model-invocation must be false")
+        if top.get("disable-model-invocation") != "true":
+            fail(f"{rel}: disable-model-invocation must be true")
         name = top.get("name", "")
         names.add(name)
         if name != path.parent.name:
@@ -377,7 +377,7 @@ def validate_skills(version: str) -> None:
                 "display_name:",
                 "short_description:",
                 "default_prompt:",
-                "allow_implicit_invocation: true",
+                "allow_implicit_invocation: false",
             ):
                 if fragment not in host_text:
                     fail(f"{host_metadata.relative_to(ROOT)}: missing {fragment!r}")

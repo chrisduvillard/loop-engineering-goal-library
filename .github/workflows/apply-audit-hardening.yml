@@ -47,6 +47,77 @@ jobs:
           PY
           python scripts/apply_audit_remediation.py
 
+      - name: Align explicit invocation, versions, and standalone closure
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import shutil
+
+          version = '0.12.0'
+          skill_paths = [
+              Path('skills/shape-goal/SKILL.md'),
+              Path('skills/goal-engine/SKILL.md'),
+          ]
+          for path in skill_paths:
+              text = path.read_text(encoding='utf-8')
+              text = re.sub(
+                  r'(?m)^disable-model-invocation:\s*(?:true|false)\s*$',
+                  'disable-model-invocation: true',
+                  text,
+                  count=1,
+              )
+              text = re.sub(
+                  r'(?m)^  version:\s*["\']?[^"\'\n]+["\']?\s*$',
+                  f'  version: "{version}"',
+                  text,
+                  count=1,
+              )
+              path.write_text(text, encoding='utf-8', newline='\n')
+
+          for path in [
+              Path('skills/shape-goal/agents/openai.yaml'),
+              Path('skills/goal-engine/agents/openai.yaml'),
+          ]:
+              text = path.read_text(encoding='utf-8')
+              text = re.sub(
+                  r'(?m)^\s*allow_implicit_invocation:\s*(?:true|false)\s*$',
+                  '  allow_implicit_invocation: false',
+                  text,
+                  count=1,
+              )
+              text = text.replace('0.11.0', version).replace('0.11.1', version)
+              path.write_text(text, encoding='utf-8', newline='\n')
+
+          source = Path('skills/goal-engine/references/assurance-levels.md')
+          destination = Path('skills/shape-goal/references/assurance-levels.md')
+          destination.parent.mkdir(parents=True, exist_ok=True)
+          shutil.copyfile(source, destination)
+
+          shape = Path('skills/shape-goal/SKILL.md')
+          text = shape.read_text(encoding='utf-8').replace(
+              '../goal-engine/references/assurance-levels.md',
+              'references/assurance-levels.md',
+          )
+          shape.write_text(text, encoding='utf-8', newline='\n')
+
+          validator = Path('scripts/validate_repository.py')
+          text = validator.read_text(encoding='utf-8')
+          text = text.replace(
+              'if top.get("disable-model-invocation") != "false":\n'
+              '            fail(f"{rel}: disable-model-invocation must be false")',
+              'if top.get("disable-model-invocation") != "true":\n'
+              '            fail(f"{rel}: disable-model-invocation must be true")',
+          )
+          text = text.replace(
+              '"allow_implicit_invocation: true",',
+              '"allow_implicit_invocation: false",',
+          )
+          validator.write_text(text, encoding='utf-8', newline='\n')
+          PY
+
       - name: Remove temporary transfer and publication machinery
         shell: bash
         run: |

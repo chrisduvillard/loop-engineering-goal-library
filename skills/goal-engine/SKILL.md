@@ -3,11 +3,11 @@ name: goal-engine
 description: Execute one approved Goal Contract safely inside a native /goal loop. Start only after shape-goal has resolved owner decisions and recorded explicit approval. Use for brownfield orientation, any library profile or custom loop, assurance overlays, repository-native verification, regression protection, independent review, durable progress, reusable closeout, and goal-drift detection. Never invent or materially redefine the target, and never interview the user while autonomous execution is active.
 compatibility: Portable Agent Skills host with repository read/write tools. Native /goal support is required for durable continuation and host-side completion evaluation.
 user-invocable: true
-disable-model-invocation: false
+disable-model-invocation: true
 argument-hint: "[approved Goal Contract path or issue]"
 metadata:
   author: chrisduvillard
-  version: "0.11.0"
+  version: "0.12.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
 
@@ -290,3 +290,24 @@ Residual risk:
 State and archive paths:
 Next action: only when not achieved
 ```
+
+## Deterministic runtime controls
+
+Before material execution, read `references/goal-kernel.md`, the canonical JSON
+contract, and the canonical progress state. Use `scripts/goalctl.py` for state
+transitions, approval fingerprints, leases, generated views, mutation checks,
+and closeout validation. Natural-language instructions do not override an
+invalid state transition or a failed verifier.
+
+Keep these concepts separate:
+
+- `goal_status`: candidate, ready, active, paused, blocked, or closed;
+- `run_termination`: why the current execution run stopped;
+- `goal_outcome`: the final disposition of a closed goal.
+
+For `read_only` and `propose_patch` goals, run `goalctl verify-mutation` before
+every completion claim. For High assurance goals, use an independent held-out
+verifier as described in `references/independent-verification.md`. Present the
+compact proof record from `templates/goal-evidence-envelope.md` to the native
+evaluator. Never report `Achieved` unless every required acceptance item is
+`pass` and the declared verifier succeeded.

@@ -1,0 +1,181 @@
+{
+  "$id": "https://github.com/chrisduvillard/loop-engineering-goal-library/schemas/goal-contract.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "acceptance": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "not_run",
+              "pass",
+              "fail",
+              "blocked"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "status",
+          "evidence"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "approval": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "goalctl-v1-sha256"
+        },
+        "answer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "approved_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fingerprint": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "question_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "approved",
+        "question_id",
+        "answer",
+        "approved_at",
+        "fingerprint",
+        "algorithm"
+      ],
+      "type": "object"
+    },
+    "assurance_level": {
+      "enum": [
+        "lite",
+        "standard",
+        "high"
+      ]
+    },
+    "authority_boundaries": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "goal_id": {
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$",
+      "type": "string"
+    },
+    "goal_outcome": {
+      "enum": [
+        "achieved",
+        "cancelled",
+        "superseded",
+        "abandoned",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "goal_status": {
+      "enum": [
+        "candidate",
+        "ready",
+        "active",
+        "paused",
+        "blocked",
+        "closed"
+      ]
+    },
+    "mutation_mode": {
+      "enum": [
+        "read_only",
+        "propose_patch",
+        "apply_verified_fixes"
+      ]
+    },
+    "protected_paths": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "revision": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "scope": {
+      "type": "object"
+    },
+    "source": {
+      "type": "object"
+    },
+    "title": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "goal_id",
+    "revision",
+    "title",
+    "goal_status",
+    "mutation_mode",
+    "assurance_level",
+    "acceptance",
+    "approval",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "Loop Engineering Goal Contract",
+  "type": "object"
+}

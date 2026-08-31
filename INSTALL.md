@@ -160,3 +160,14 @@ python3 scripts/package_skills.py
 npm ci --ignore-scripts
 npx --no-install skills add . --list
 ```
+
+## Package integrity in 0.12.0
+
+Each standalone ZIP now contains every skill-local reference it requires. The
+packager rejects local Markdown references that escape the archive or resolve to
+a missing member. Prefer the combined bundle when installing both phases, and
+verify `SHA256SUMS` before extraction.
+
+Claude Code can also discover the repository as a plugin through
+`.claude-plugin/plugin.json`. Codex continues to use the documented Agent Skills
+installation path.

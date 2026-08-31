@@ -4,3 +4,6 @@ __pycache__/
 dist/
 
 node_modules/
+.loop/private/
+.loop/leases/
+.loop/runtime/

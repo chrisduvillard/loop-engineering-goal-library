@@ -1,0 +1,97 @@
+{
+  "$id": "https://github.com/chrisduvillard/loop-engineering-goal-library/schemas/goal-progress.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "changed_paths": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "goal_id": {
+      "type": "string"
+    },
+    "next_action": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "revision": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "run_termination": {
+      "enum": [
+        "achieved",
+        "approval_required",
+        "budget_exhausted",
+        "stalled",
+        "external_blocked",
+        "safety_stop",
+        "cancelled_by_user",
+        "host_failure",
+        null
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "verifier": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "exit_code": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "succeeded": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "command",
+        "exit_code",
+        "succeeded",
+        "evidence"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "goal_id",
+    "revision",
+    "run_termination",
+    "verifier",
+    "changed_paths",
+    "next_action",
+    "updated_at"
+  ],
+  "title": "Loop Engineering Goal Progress",
+  "type": "object"
+}

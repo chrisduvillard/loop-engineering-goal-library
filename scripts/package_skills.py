@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Build deterministic, path-safe ZIP packages for the repository's Agent Skills."""
+"""Build deterministic, path-safe, reference-closed ZIP packages."""
 
 from __future__ import annotations
 
 import argparse
 import hashlib
 import os
+import posixpath
 import re
 import shutil
 import stat
@@ -14,6 +15,7 @@ import tempfile
 import unicodedata
 import zipfile
 from pathlib import Path, PurePosixPath
+from typing import Iterable, List, Sequence, Tuple
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_DIR = ROOT / "skills"
@@ -31,6 +33,11 @@ GENERATED_ARTIFACT = re.compile(
 )
 MAX_FILE_BYTES = 2 * 1024 * 1024
 MAX_PACKAGE_BYTES = 16 * 1024 * 1024
+MARKDOWN_LINK = re.compile(r"\]\(([^)]+)\)")
+CODE_PATH = re.compile(
+    r"`((?:\./|\.\./|references/|templates/|agents/|scripts/|schemas/|profiles/)[^`\s]+\.md(?:#[^`\s]+)?)`"
+)
+LOCAL_PREFIXES = ("./", "../", "references/", "templates/", "agents/", "scripts/", "schemas/", "profiles/")
 
 
 def is_relative_to(path: Path, parent: Path) -> bool:
@@ -60,8 +67,8 @@ def safe_archive_name(name: str) -> str:
     return normalized
 
 
-def validate_unique_names(names: list[str]) -> None:
-    seen: dict[str, str] = {}
+def validate_unique_names(names: Sequence[str]) -> None:
+    seen = {}
     for name in names:
         safe_archive_name(name)
         key = unicodedata.normalize("NFC", name).casefold()
@@ -73,15 +80,14 @@ def validate_unique_names(names: list[str]) -> None:
         seen[key] = name
 
 
-def collect_source_entries(skill_name: str, *, bundle: bool) -> list[tuple[str, Path]]:
+def collect_source_entries(skill_name: str, *, bundle: bool) -> List[Tuple[str, Path]]:
     source_dir = SKILLS_DIR / skill_name
     skill_file = source_dir / "SKILL.md"
     if source_dir.is_symlink() or not skill_file.is_file() or skill_file.is_symlink():
         raise FileNotFoundError(f"{skill_file} is missing or unsafe")
-
-    entries: list[tuple[str, Path]] = []
+    entries: List[Tuple[str, Path]] = []
     total_size = 0
-    for directory, dirnames, filenames in os.walk(source_dir, followlinks=False):
+    for directory, dirnames, filenames in os.walk(str(source_dir), followlinks=False):
         directory_path = Path(directory)
         for dirname in list(dirnames):
             candidate = directory_path / dirname
@@ -103,7 +109,6 @@ def collect_source_entries(skill_name: str, *, bundle: bool) -> list[tuple[str, 
             relative = source.relative_to(source_dir).as_posix()
             arcname = f"skills/{skill_name}/{relative}" if bundle else relative
             entries.append((safe_archive_name(arcname), source))
-
     entries.sort(key=lambda item: item[0])
     validate_unique_names([name for name, _ in entries])
     expected_skill = f"skills/{skill_name}/SKILL.md" if bundle else "SKILL.md"
@@ -120,16 +125,47 @@ def add_file(archive: zipfile.ZipFile, source: Path, arcname: str) -> None:
     archive.writestr(info, source.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
 
 
-def write_zip(entries: list[tuple[str, Path]], destination: Path) -> None:
-    with zipfile.ZipFile(destination, "w", allowZip64=True) as archive:
+def write_zip(entries: Sequence[Tuple[str, Path]], destination: Path) -> None:
+    with zipfile.ZipFile(str(destination), "w", allowZip64=True) as archive:
         for arcname, source in entries:
             add_file(archive, source, arcname)
 
 
-def validate_zip(path: Path, expected: list[tuple[str, Path]], *, individual: bool) -> None:
+def local_markdown_targets(text: str) -> Iterable[str]:
+    candidates = [match.group(1).strip() for match in MARKDOWN_LINK.finditer(text)]
+    candidates.extend(match.group(1).strip() for match in CODE_PATH.finditer(text))
+    for candidate in candidates:
+        if candidate.startswith(("http://", "https://", "mailto:", "#", "/")):
+            continue
+        path = candidate.split("#", 1)[0].split("?", 1)[0]
+        if not path.endswith(".md"):
+            continue
+        if path in {"SKILL.md", "goal-contract-template.md"} or path.startswith(LOCAL_PREFIXES):
+            yield path
+
+
+def validate_markdown_references(archive: zipfile.ZipFile, names: Sequence[str]) -> None:
+    available = set(names)
+    for name in names:
+        if not name.endswith(".md"):
+            continue
+        try:
+            text = archive.read(name).decode("utf-8")
+        except UnicodeDecodeError as error:
+            raise ValueError(f"{archive.filename}: Markdown member is not UTF-8: {name}") from error
+        parent = posixpath.dirname(name)
+        for target in local_markdown_targets(text):
+            resolved = posixpath.normpath(posixpath.join(parent, target))
+            if resolved == ".." or resolved.startswith("../") or resolved.startswith("/"):
+                raise ValueError(f"{archive.filename}: local reference escapes the package: {name} -> {target}")
+            if resolved not in available:
+                raise ValueError(f"{archive.filename}: unresolved local reference: {name} -> {target} ({resolved})")
+
+
+def validate_zip(path: Path, expected: Sequence[Tuple[str, Path]], *, individual: bool) -> None:
     expected_names = [name for name, _ in expected]
     validate_unique_names(expected_names)
-    with zipfile.ZipFile(path) as archive:
+    with zipfile.ZipFile(str(path)) as archive:
         bad = archive.testzip()
         if bad is not None:
             raise ValueError(f"{path.name}: corrupt member {bad}")
@@ -159,6 +195,7 @@ def validate_zip(path: Path, expected: list[tuple[str, Path]], *, individual: bo
                 expected_skill = f"skills/{skill_name}/SKILL.md"
                 if expected_skill not in names:
                     raise ValueError(f"{path.name}: missing {expected_skill}")
+        validate_markdown_references(archive, names)
 
 
 def sha256(path: Path) -> str:
@@ -175,10 +212,8 @@ def ensure_safe_output_dir(output_dir: Path) -> Path:
     resolved = output_dir.expanduser().resolve(strict=False)
     root = ROOT.resolve()
     skills = SKILLS_DIR.resolve()
-
     if resolved == root or is_relative_to(root, resolved):
         raise ValueError(f"refusing to delete the repository or one of its ancestors: {resolved}")
-
     protected_roots = (
         skills,
         (root / ".git").resolve(strict=False),
@@ -193,25 +228,21 @@ def ensure_safe_output_dir(output_dir: Path) -> Path:
     for protected in protected_roots:
         if resolved == protected or is_relative_to(resolved, protected):
             raise ValueError(f"output directory overlaps protected source content: {resolved}")
-
     if resolved.exists():
         if not resolved.is_dir():
             raise ValueError(f"output path is not a directory: {resolved}")
         for entry in resolved.iterdir():
             if entry.is_symlink() or entry.is_dir() or not GENERATED_ARTIFACT.fullmatch(entry.name):
-                raise ValueError(
-                    f"refusing to remove a non-generated entry from the output directory: {entry}"
-                )
+                raise ValueError(f"refusing to remove a non-generated entry from the output directory: {entry}")
     return resolved
 
 
-def build(output_dir: Path) -> list[Path]:
+def build(output_dir: Path) -> List[Path]:
     version = read_version()
     output_dir = ensure_safe_output_dir(output_dir)
     output_dir.parent.mkdir(parents=True, exist_ok=True)
-    temporary = Path(tempfile.mkdtemp(prefix=f".{output_dir.name}.tmp-", dir=output_dir.parent))
-    artifact_names: list[str] = []
-
+    temporary = Path(tempfile.mkdtemp(prefix=f".{output_dir.name}.tmp-", dir=str(output_dir.parent)))
+    artifact_names: List[str] = []
     try:
         for skill_name in SKILL_NAMES:
             entries = collect_source_entries(skill_name, bundle=False)
@@ -220,8 +251,7 @@ def build(output_dir: Path) -> list[Path]:
             write_zip(entries, path)
             validate_zip(path, entries, individual=True)
             artifact_names.append(name)
-
-        bundle_entries: list[tuple[str, Path]] = []
+        bundle_entries: List[Tuple[str, Path]] = []
         for skill_name in SKILL_NAMES:
             bundle_entries.extend(collect_source_entries(skill_name, bundle=True))
         bundle_entries.sort(key=lambda item: item[0])
@@ -231,40 +261,28 @@ def build(output_dir: Path) -> list[Path]:
         write_zip(bundle_entries, bundle)
         validate_zip(bundle, bundle_entries, individual=False)
         artifact_names.append(bundle_name)
-
         sums = temporary / "SHA256SUMS"
         with sums.open("w", encoding="utf-8", newline="\n") as handle:
-            handle.write(
-                "".join(f"{sha256(temporary / name)}  {name}\n" for name in artifact_names)
-            )
+            handle.write("".join(f"{sha256(temporary / name)}  {name}\n" for name in artifact_names))
         artifact_names.append("SHA256SUMS")
-
         if output_dir.exists():
-            shutil.rmtree(output_dir)
-        os.replace(temporary, output_dir)
+            shutil.rmtree(str(output_dir))
+        os.replace(str(temporary), str(output_dir))
     except Exception:
-        shutil.rmtree(temporary, ignore_errors=True)
+        shutil.rmtree(str(temporary), ignore_errors=True)
         raise
-
     return [output_dir / name for name in artifact_names]
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=ROOT / "dist",
-        help="Directory for generated packages (default: dist)",
-    )
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "dist")
     args = parser.parse_args()
-
     try:
         artifacts = build(args.output_dir)
     except (OSError, ValueError, zipfile.BadZipFile) as error:
         print(f"Packaging failed: {error}", file=sys.stderr)
         return 1
-
     print("Packaged Agent Skills:")
     for artifact in artifacts:
         try:

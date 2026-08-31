@@ -2,7 +2,7 @@
 
 [`FULL_REPORT.md`](FULL_REPORT.md) is the historical research foundation. The live implementation is an interactive-first workflow for shaping and then autonomously executing software goals.
 
-## Version `0.11.0`
+## Version `0.12.0`
 
 ```text
 shape-goal                    main interactive entry point
@@ -97,3 +97,12 @@ High-impact audits can use six isolated reviewer roles covering contract/state, 
 ## Verification
 
 CI validates the canonical profile catalog, recognized overlays, interactive starts, advanced preflight stop behavior, the 4,000-character native-goal limit, profile input coverage, adaptive questioning, append-only history, question-state transitions, closed-goal archives, locked tooling, generated docs, skill metadata, links, discovery, and deterministic ZIP builds across Linux, macOS, and Windows.
+
+## 0.12.0 deterministic control layer
+
+The implementation now includes canonical JSON state, approval fingerprints,
+atomic leases, generated state views, mutation-mode enforcement, separate
+lifecycle and termination concepts, assurance levels, a compaction-resistant
+Goal Kernel, held-out verification guidance, and deterministic behavioral
+invariant scoring. Live host UAT remains pending and is documented as a beta
+release gate rather than implied by repository tests.

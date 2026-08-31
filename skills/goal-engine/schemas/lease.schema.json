@@ -1,0 +1,37 @@
+{
+  "$id": "https://github.com/chrisduvillard/loop-engineering-goal-library/schemas/lease.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "acquired_at": {
+      "type": "string"
+    },
+    "expires_at": {
+      "type": "string"
+    },
+    "goal_id": {
+      "type": "string"
+    },
+    "owner": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "token": {
+      "pattern": "^[0-9a-f]{32}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "goal_id",
+    "owner",
+    "acquired_at",
+    "expires_at",
+    "token"
+  ],
+  "title": "Goal Execution Lease",
+  "type": "object"
+}

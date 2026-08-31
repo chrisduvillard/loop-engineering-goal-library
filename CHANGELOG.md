@@ -4,6 +4,28 @@ All notable changes to this library are recorded here.
 
 The project follows semantic versioning while it is field-tested. Versions below `1.0.0` may refine contracts and workflow details, but changes should remain documented and migration-friendly.
 
+## [0.12.0] - 2026-08-30
+
+### Fixed
+
+- Made both standalone skill packages reference-closed by vendoring and validating their transitive skill assets.
+- Added deterministic archive-level validation for local Markdown references.
+- Made audit and assessment wording default to read-only execution unless remediation is explicitly approved.
+- Disabled implicit invocation for the interactive shaping skill.
+
+### Added
+
+- Added the `goalctl` deterministic runtime for canonical JSON state, approval fingerprints, lifecycle validation, atomic leases, generated views, mutation enforcement, sanitization, and diagnostics.
+- Added versioned JSON schemas, a compact Goal Kernel, evidence envelope, assurance levels, independent-verification guidance, and behavioral evaluation rules.
+- Added an MIT license, security policy, code ownership, plugin metadata, host acceptance matrix, and repository governance guidance.
+
+### Changed
+
+- Separated goal lifecycle, run termination, and final goal outcome.
+- Added `read_only`, `propose_patch`, and `apply_verified_fixes` mutation modes.
+- Added Lite, Standard, and High assurance levels and progressive-disclosure guidance for profile loading.
+- Classified the project as beta until the documented live Codex and Claude Code acceptance matrix passes.
+
 ## [Unreleased]
 
 - Reserved for changes after the current release.

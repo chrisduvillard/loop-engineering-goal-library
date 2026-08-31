@@ -67,3 +67,11 @@ Consider namespaced Claude Code and OpenAI plugin releases after field testing, 
 - Hidden auto-approval of product direction, destructive actions, legal conclusions, or risk acceptance.
 - A proprietary state database when repository artifacts or existing trackers are sufficient.
 - Automatic deployment, release, destructive migration, security testing outside scope, or credential authority.
+
+## Runtime hardening after 0.12.0
+
+The deterministic `goalctl` substrate, schemas, Goal Kernel, assurance levels,
+and behavioral evaluator are now implemented. The next release cycle should
+focus on repeated live Codex and Claude Code trials, quantitative comparison
+against the previous release and no-skill baseline, finer per-profile reference
+splitting, and a fully integrated multi-host plugin distribution.

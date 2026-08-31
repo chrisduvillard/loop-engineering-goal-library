@@ -3,14 +3,13 @@ name: shape-goal
 description: Main interactive entry point for turning vague, incomplete, or changing project needs into an approved Goal Contract and managed goal portfolio. Search repository and connected evidence first, save every asked question and answer, ask one material owner decision at a time, stop the turn while waiting for each answer, support deeper shaping rounds, and return the exact goal-engine /goal command only after approval. Use before autonomous execution or whenever target, priority, scope, proof, lifecycle, profile, or boundaries are unclear.
 compatibility: Portable Agent Skills host. Reads repository and connected authoritative evidence and writes planning/state artifacts; production implementation remains the responsibility of goal-engine inside a later native /goal.
 user-invocable: true
-disable-model-invocation: false
+disable-model-invocation: true
 argument-hint: "[continue | new goal | deepen | profile | goal ID | changed need]"
 metadata:
   author: chrisduvillard
-  version: "0.11.0"
+  version: "0.12.0"
   source: "github.com/chrisduvillard/loop-engineering-goal-library"
 ---
-
 # Shape Goal
 
 `shape-goal` is the main command. It turns rough intent into one safe, approved, executable contract while preserving the full decision trail.
@@ -250,7 +249,7 @@ Do not manufacture a target. Recommend product discovery, wayfinding, an ADR, or
 
 ## 8. Select the execution pattern
 
-Choose one primary profile from [../goal-engine/references/loop-profiles.md](../goal-engine/references/loop-profiles.md).
+Choose one primary profile from [references/loop-profiles.md](references/loop-profiles.md).
 
 When none fits, use **Custom Contract-Driven** and define:
 
@@ -260,11 +259,11 @@ When none fits, use **Custom Contract-Driven** and define:
 - Review and regression strategy
 - Objective success, blocker, approval, budget, and stall exits
 
-Select only relevant overlays from [../goal-engine/references/assurance-overlays.md](../goal-engine/references/assurance-overlays.md). Split the goal when two profiles imply different outcomes.
+Select only relevant overlays from [references/assurance-overlays.md](references/assurance-overlays.md). Split the goal when two profiles imply different outcomes.
 
 ## 9. Reuse the project harness
 
-Prefer verified repository instructions and scripts. When setup, run, reset, supported environments, or verification knowledge is fragmented, contradictory, or repeatedly rediscovered, update an authoritative source or create `docs/agent/PROJECT_HARNESS.md` from [../goal-engine/templates/project-harness-template.md](../goal-engine/templates/project-harness-template.md).
+Prefer verified repository instructions and scripts. When setup, run, reset, supported environments, or verification knowledge is fragmented, contradictory, or repeatedly rediscovered, update an authoritative source or create `docs/agent/PROJECT_HARNESS.md` from [templates/project-harness-template.md](templates/project-harness-template.md).
 
 ## 10. Build, deepen, and approve the Goal Contract
 
@@ -357,3 +356,23 @@ Open owner decisions: None
 ```
 
 If a material decision remains, the contract is not approved and production execution must not start.
+
+## Runtime and mutation controls
+
+- Invocation is explicit. Do not enter shaping mode merely because a normal
+  engineering request resembles a goal profile.
+- Resolve the requested mutation mode before approval:
+  - `read_only` for review, inspect, audit, assess, and evaluate wording;
+  - `propose_patch` when changes may be designed but not applied;
+  - `apply_verified_fixes` only when the user explicitly authorizes repair,
+    implementation, remediation, or equivalent repository mutation.
+- A broad approval to perform an audit does not authorize remediation.
+- Select Lite, Standard, or High assurance using
+  `references/assurance-levels.md` after installation, or the
+  vendored `references/assurance-overlays.md` when using the standalone skill.
+- Follow `references/progressive-disclosure.md`: route with the compact index,
+  then load only the selected profile and overlays.
+- Store exact sensitive shaping transcripts under `.loop/private/<goal-id>/`,
+  which must remain ignored. Commit only sanitized decisions and references.
+- The approved contract must embed the compact Goal Kernel from the goal-engine
+  skill so authority, evidence, and completion rules survive host compaction.

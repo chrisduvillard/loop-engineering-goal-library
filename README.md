@@ -16,7 +16,7 @@ Reusable Agent Skills and execution profiles for OpenAI Codex, Anthropic Claude 
 [![Codex](https://img.shields.io/badge/OpenAI%20Codex-compatible-111827?style=flat-square&logo=openai&logoColor=white)](https://learn.chatgpt.com/use-cases/follow-goals)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-D97757?style=flat-square)](https://code.claude.com/docs/en/goal)
 [![Validation](https://img.shields.io/github/actions/workflow/status/chrisduvillard/loop-engineering-goal-library/validate.yml?branch=main&style=flat-square&label=validation)](https://github.com/chrisduvillard/loop-engineering-goal-library/actions/workflows/validate.yml)
-![Version](https://img.shields.io/badge/version-0.11.0-7C3AED?style=flat-square)
+![Version](https://img.shields.io/badge/version-0.12.0-7C3AED?style=flat-square)
 ![Profiles](https://img.shields.io/badge/profiles-31-16A34A?style=flat-square)
 
 </div>
@@ -199,3 +199,15 @@ Both stop as **Approval required** when a human decision is missing. They never 
 [`Install`](INSTALL.md) · [`Profiles`](goals/README.md) · [`Quick reference`](QUICK_REFERENCE.md) · [`Architecture`](SKILLS_AND_GOALS.md) · [`Worked example`](examples/complete-brownfield-cycle/) · [`Research`](FULL_REPORT.md)
 
 > **Use conversation to decide what “done” means. Use `/goal` only after “done” is approved and verifiable.**
+
+## Beta safety status
+
+Version 0.12.0 adds deterministic lifecycle state, read-only audit controls,
+reference-closed standalone packages, false-completion guards, and behavioral
+evaluation scaffolding. The project remains beta until the repeated live-host
+matrix in `docs/HOST_ACCEPTANCE_MATRIX.md` passes for supported Codex and Claude
+Code versions.
+
+Use `skills/goal-engine/scripts/goalctl.py doctor` to inspect runtime state and
+`goalctl self-test` to exercise fingerprints, leases, read-only enforcement, and
+false-completion protection locally.

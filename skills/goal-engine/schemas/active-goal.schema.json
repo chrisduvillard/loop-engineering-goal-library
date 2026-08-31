@@ -1,0 +1,36 @@
+{
+  "$id": "https://github.com/chrisduvillard/loop-engineering-goal-library/schemas/active-goal.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "contract_path": {
+      "type": "string"
+    },
+    "goal_id": {
+      "type": "string"
+    },
+    "progress_path": {
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "goal_id",
+    "revision",
+    "contract_path",
+    "progress_path",
+    "updated_at"
+  ],
+  "title": "Active Goal Pointer",
+  "type": "object"
+}

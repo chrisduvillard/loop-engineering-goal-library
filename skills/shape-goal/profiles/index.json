@@ -1,0 +1,273 @@
+{
+  "categories": [
+    {
+      "collection": "GOAL_LIBRARY.md",
+      "intro": "Default control loops for most long-running work in established repositories.",
+      "key": "core",
+      "title": "Core goals"
+    },
+    {
+      "collection": "SPECIALIST_LOOPS.md",
+      "intro": "Distinct loops for unfamiliar codebases, incidents, upgrades, migrations, branch recovery, optimization, feasibility, AI evaluation, and legacy retirement.",
+      "key": "specialist",
+      "title": "Specialist goals"
+    },
+    {
+      "collection": "QUALITY_GOALS.md",
+      "intro": "Focused loops for interface quality, documentation, search, localization, security, reliability, APIs, operations, developer experience, data, CI, infrastructure, recovery, analytics, and audit readiness.",
+      "key": "quality",
+      "title": "Product and quality goals"
+    }
+  ],
+  "goals": [
+    {
+      "category": "core",
+      "file": "01-brownfield-continue-finish.md",
+      "id": "01",
+      "simple": "Understand the real current state and keep completing the most important unblocked work.",
+      "title": "Brownfield Continue / Finish",
+      "use_when": "An existing repository has an approved direction, partial implementation, or unfinished milestone and should advance autonomously."
+    },
+    {
+      "category": "core",
+      "file": "02-prd-spec-compliance.md",
+      "id": "02",
+      "simple": "Compare the real product with its requirements and close every proven gap.",
+      "title": "PRD / Spec Compliance",
+      "use_when": "A product, feature, or repository must be brought into full alignment with documented requirements."
+    },
+    {
+      "category": "core",
+      "file": "03-next-milestone.md",
+      "id": "03",
+      "simple": "Deliver one useful next milestone without wandering into the whole backlog.",
+      "title": "Next Milestone",
+      "use_when": "A roadmap is larger than one run and the next coherent, dependency-safe increment should be completed end to end."
+    },
+    {
+      "category": "core",
+      "file": "04-deep-audit-remediation.md",
+      "id": "04",
+      "simple": "Find important problems, prove they are real, fix root causes, and prevent recurrence.",
+      "title": "Deep Audit + Remediation",
+      "use_when": "The codebase needs evidence-based discovery and repair of important defects or risks."
+    },
+    {
+      "category": "core",
+      "file": "05-qa-regression-uat.md",
+      "id": "05",
+      "simple": "Exercise the real product until required workflows and regression gates pass.",
+      "title": "QA / Regression / UAT",
+      "use_when": "The actual product surface and realistic user workflows must pass defined acceptance gates."
+    },
+    {
+      "category": "core",
+      "file": "06-safe-refactor-modernization.md",
+      "id": "06",
+      "simple": "Improve internals while proving users and integrations still see the intended behavior.",
+      "title": "Safe Refactor / Modernization",
+      "use_when": "Architecture, dependencies, or internals should change while external behavior and contracts remain stable."
+    },
+    {
+      "category": "core",
+      "file": "07-release-readiness.md",
+      "id": "07",
+      "simple": "Remove verified release blockers and stop at release-ready.",
+      "title": "Release Readiness",
+      "use_when": "A version or milestone must satisfy all release gates without actually being published or deployed."
+    },
+    {
+      "category": "specialist",
+      "file": "08-incident-recovery.md",
+      "id": "08",
+      "simple": "Contain damage, restore health, prove the cause, and add prevention.",
+      "title": "Incident Recovery / Stabilization",
+      "use_when": "A severe regression or production-like incident must be contained, diagnosed, and recovered without compounding damage."
+    },
+    {
+      "category": "specialist",
+      "file": "09-dependency-framework-upgrade.md",
+      "id": "09",
+      "simple": "Upgrade through safe version steps while checking the full compatibility surface.",
+      "title": "Dependency / Framework Upgrade",
+      "use_when": "A dependency, framework, language runtime, or toolchain must move to a target version without breaking supported behavior."
+    },
+    {
+      "category": "specialist",
+      "file": "10-data-migration-integrity.md",
+      "id": "10",
+      "simple": "Migrate data through reversible phases and prove no unexplained loss, duplication, or corruption.",
+      "title": "Data Migration / Integrity",
+      "use_when": "Stored data, schemas, formats, or backfills must change while preserving correctness, compatibility, and recoverability."
+    },
+    {
+      "category": "specialist",
+      "file": "11-branch-rescue-integration.md",
+      "id": "11",
+      "simple": "Recover useful behavioral slices without overwriting newer target work.",
+      "title": "Branch Rescue / Integration",
+      "use_when": "Valuable work is stranded in a stale, divergent, oversized, or conflicting branch and must be recovered safely."
+    },
+    {
+      "category": "specialist",
+      "file": "12-measured-optimization-benchmark.md",
+      "id": "12",
+      "simple": "Freeze a baseline, test one challenger at a time, and keep only reproducible wins.",
+      "title": "Measured Optimization / Benchmark",
+      "use_when": "A stable metric must improve under a fixed protocol without regressing required behavior."
+    },
+    {
+      "category": "specialist",
+      "file": "13-technical-spike-feasibility.md",
+      "id": "13",
+      "simple": "Run an isolated experiment and return a Go, Conditional Go, or No-Go decision.",
+      "title": "Technical Spike / Feasibility",
+      "use_when": "A bounded technical unknown must be resolved before production commitment."
+    },
+    {
+      "category": "quality",
+      "file": "14-frontend-ui-ux-accessibility.md",
+      "id": "14",
+      "simple": "Improve the real interface through browser-based user journeys, visual evidence, and accessibility checks.",
+      "title": "Frontend UI / UX / Accessibility",
+      "use_when": "A frontend surface must become coherent, usable, responsive, accessible, and visually polished without regressing behavior."
+    },
+    {
+      "category": "quality",
+      "file": "15-documentation-synchronization.md",
+      "id": "15",
+      "simple": "Find documentation drift, verify examples and commands, and make the maintained knowledge trustworthy.",
+      "title": "Documentation Synchronization / Knowledge Transfer",
+      "use_when": "Documentation, examples, runbooks, diagrams, or onboarding material must accurately match current behavior and be usable by its audience."
+    },
+    {
+      "category": "quality",
+      "file": "16-security-privacy-hardening.md",
+      "id": "16",
+      "simple": "Threat-model the scoped system, prove actionable findings, remediate safely, and add lasting protection.",
+      "title": "Security / Privacy Hardening",
+      "use_when": "Security and privacy are the primary outcome: attack surface, authorization, secrets, dependencies, or data handling must be hardened and verified."
+    },
+    {
+      "category": "quality",
+      "file": "17-reliability-resilience-hardening.md",
+      "id": "17",
+      "simple": "Model failure modes, inject safe faults, improve recovery, and prove reliability objectives.",
+      "title": "Reliability / Resilience Hardening",
+      "use_when": "A system must continue or recover correctly under defined failures, load, retries, restarts, and dependency degradation."
+    },
+    {
+      "category": "quality",
+      "file": "18-api-integration-contract-compatibility.md",
+      "id": "18",
+      "simple": "Map contracts and consumers, prove compatibility, and evolve interfaces without hidden breakage.",
+      "title": "API / Integration Contract Compatibility",
+      "use_when": "APIs, events, schemas, SDKs, or external integrations must remain compatible across producers, consumers, and versions."
+    },
+    {
+      "category": "quality",
+      "file": "19-observability-operability.md",
+      "id": "19",
+      "simple": "Make system health visible and actionable, then prove it with drills.",
+      "title": "Observability / Operability",
+      "use_when": "Operators and maintainers must be able to detect, understand, and recover from important failures using useful signals and runbooks."
+    },
+    {
+      "category": "quality",
+      "file": "20-developer-experience-tooling.md",
+      "id": "20",
+      "simple": "Make the common developer path work from clean state with clear commands and actionable failures.",
+      "title": "Developer Experience / Tooling",
+      "use_when": "Local setup, build, test, debug, CI, or contribution workflows must become faster, clearer, and reproducible."
+    },
+    {
+      "category": "quality",
+      "file": "21-data-quality-pipeline-assurance.md",
+      "id": "21",
+      "simple": "Define data invariants, test the real pipeline, correct root causes, and make quality continuously observable.",
+      "title": "Data Quality / Pipeline Assurance",
+      "use_when": "A data pipeline or dataset must satisfy defined freshness, completeness, validity, consistency, lineage, and reconciliation expectations."
+    },
+    {
+      "category": "quality",
+      "file": "22-compliance-audit-readiness.md",
+      "id": "22",
+      "simple": "Map controls to implementation and evidence, close technical gaps, and leave an auditable package for qualified human review.",
+      "title": "Compliance / Audit Readiness",
+      "use_when": "A repository or system must produce implementation evidence for an approved control set without falsely self-certifying legal or regulatory compliance."
+    },
+    {
+      "category": "quality",
+      "file": "23-test-suite-ci-health.md",
+      "id": "23",
+      "simple": "Find flaky, misleading, slow, skipped, or environment-dependent checks and turn the test pipeline into reliable evidence.",
+      "title": "Test Suite / CI Health",
+      "use_when": "Automated tests and CI must become trustworthy, deterministic, appropriately fast, and consistent with local development."
+    },
+    {
+      "category": "quality",
+      "file": "24-infrastructure-deployment-readiness.md",
+      "id": "24",
+      "simple": "Verify that the system can be provisioned and deployed consistently, diagnosed after rollout, and safely rolled back before a human authorizes production change.",
+      "title": "Infrastructure / Deployment Readiness",
+      "use_when": "Infrastructure, environment configuration, deployment automation, smoke checks, and rollback must be proven ready without silently changing production."
+    },
+    {
+      "category": "specialist",
+      "file": "25-ai-llm-evaluation-improvement.md",
+      "id": "25",
+      "simple": "Build a trustworthy eval set, classify failures, test one change at a time, and keep only improvements that survive repeated runs.",
+      "title": "AI / LLM Evaluation & Improvement",
+      "use_when": "An AI, agent, retrieval, ranking, or LLM-powered feature must improve under representative evaluations while controlling quality, safety, latency, and cost."
+    },
+    {
+      "category": "specialist",
+      "file": "26-deprecation-legacy-sunset.md",
+      "id": "26",
+      "simple": "Find who still depends on the old path, provide a safe migration, prove adoption, then remove it in controlled stages.",
+      "title": "Deprecation / Legacy Sunset",
+      "use_when": "A legacy API, feature, format, service, flag, dependency, or code path must be retired without abandoning active consumers or removing rollback too early."
+    },
+    {
+      "category": "quality",
+      "file": "27-internationalization-localization-readiness.md",
+      "id": "27",
+      "simple": "Find hard-coded locale assumptions, build a locale matrix, test translated and right-to-left experiences, and prove every supported locale works.",
+      "title": "Internationalization / Localization Readiness",
+      "use_when": "A product must work correctly across approved languages, regions, scripts, reading directions, time zones, and local formats."
+    },
+    {
+      "category": "quality",
+      "file": "28-backup-restore-disaster-recovery.md",
+      "id": "28",
+      "simple": "Define what must survive, create trustworthy backups, restore them in a clean environment, and prove recovery meets the agreed targets.",
+      "title": "Backup / Restore / Disaster Recovery",
+      "use_when": "Critical application state must be recoverable within approved recovery objectives, with backups and restore procedures proven by realistic drills."
+    },
+    {
+      "category": "quality",
+      "file": "29-product-analytics-experimentation-integrity.md",
+      "id": "29",
+      "simple": "Define the events and metrics, verify collection end to end, test experiment assignment, and prove the numbers mean what the team thinks they mean.",
+      "title": "Product Analytics / Experimentation Integrity",
+      "use_when": "Product events, funnels, metrics, dashboards, or controlled experiments must become trustworthy enough to support decisions without misleading attribution."
+    },
+    {
+      "category": "specialist",
+      "file": "30-codebase-onboarding-knowledge-recovery.md",
+      "id": "30",
+      "simple": "Turn an unfamiliar repository into a verified map that a new maintainer or agent can safely use.",
+      "title": "Codebase Onboarding / Knowledge Recovery",
+      "use_when": "A mature, inherited, or poorly documented codebase must become understandable, runnable, and safe to change before major delivery work begins."
+    },
+    {
+      "category": "quality",
+      "file": "31-search-seo-web-discoverability.md",
+      "id": "31",
+      "simple": "Make public web content crawlable, understandable, fast, and internally connected without promising rankings.",
+      "title": "Search / SEO / Web Discoverability",
+      "use_when": "A public website or web application must improve its technical search readiness, rendered metadata, structured data, crawl paths, internal links, and discoverable content quality."
+    }
+  ],
+  "schema_version": 1
+}

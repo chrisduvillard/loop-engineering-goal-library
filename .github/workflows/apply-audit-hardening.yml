@@ -103,6 +103,12 @@ jobs:
           )
           shape.write_text(text, encoding='utf-8', newline='\n')
 
+          profile_readme = Path('skills/shape-goal/profiles/README.md')
+          text = profile_readme.read_text(encoding='utf-8')
+          text = text.replace('`references/profile-inputs.md`', '`../references/profile-inputs.md`')
+          text = text.replace('`references/loop-profiles.md`', '`../references/loop-profiles.md`')
+          profile_readme.write_text(text, encoding='utf-8', newline='\n')
+
           validator = Path('scripts/validate_repository.py')
           text = validator.read_text(encoding='utf-8')
           text = text.replace(

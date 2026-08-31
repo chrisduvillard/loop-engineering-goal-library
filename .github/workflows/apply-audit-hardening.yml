@@ -179,10 +179,11 @@ jobs:
           cmp dist/SHA256SUMS /tmp/loop-package-second/SHA256SUMS
           (cd dist && sha256sum --check SHA256SUMS)
 
-      - name: Commit verified implementation
+      - name: Commit verified source without workflow mutations
         shell: bash
         run: |
           set -euo pipefail
+          git restore --source=HEAD -- .github/workflows
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A

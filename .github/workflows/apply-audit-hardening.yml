@@ -109,6 +109,16 @@ jobs:
           text = text.replace('`references/loop-profiles.md`', '`../references/loop-profiles.md`')
           profile_readme.write_text(text, encoding='utf-8', newline='\n')
 
+          for path in [
+              Path('skills/goal-engine/templates/goal-portfolio-template.md'),
+              Path('skills/goal-engine/templates/shaping-history-template.md'),
+              Path('skills/shape-goal/templates/project-harness-template.md'),
+          ]:
+              normalized = '\n'.join(
+                  line.rstrip() for line in path.read_text(encoding='utf-8').splitlines()
+              ) + '\n'
+              path.write_text(normalized, encoding='utf-8', newline='\n')
+
           validator = Path('scripts/validate_repository.py')
           text = validator.read_text(encoding='utf-8')
           text = text.replace(

@@ -1,17 +1,104 @@
-name: Apply audit hardening source
+name: Apply approved v0.12.0 audit remediation
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [audit-remediation-v0.12.0]
 
 permissions:
   contents: write
 
+concurrency:
+  group: apply-audit-remediation-v0.12.0
+  cancel-in-progress: false
+
 jobs:
   apply:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out remediation branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: audit-remediation-runtime-hardening
-      - name: Placeholder
-        run: echo 'Source transfer pending'
+          ref: audit-remediation-v0.12.0
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22.20.0"
+          cache: npm
+
+      - name: Apply deterministic source transform as v0.12.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/apply_audit_remediation.py')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace('0.11.1', '0.12.0')
+          path.write_text(text, encoding='utf-8', newline='\n')
+          PY
+          python scripts/apply_audit_remediation.py
+
+      - name: Remove temporary transfer and publication machinery
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f scripts/apply_audit_remediation.py
+          rm -f .implementation-transfer-marker __probe_should_not_create__
+          rm -f docs/IMPLEMENTATION_VERIFICATION.md docs/RELEASE_PROCESS_NOTE.md
+          rm -rf docs/audits/2026-08-30-runtime-hardening
+          rm -f .github/workflows/apply-audit-hardening.yml
+          rm -f .github/workflows/clean-audit-documentation.yml
+          rm -f .github/workflows/cleanup-audit-transfer.yml
+          rm -f .github/workflows/export-audit-branch.yml
+          rm -f .github/workflows/publish-0.11.1-once.yml
+          rm -f .github/workflows/publish-v0.12.0.yml
+          rm -f .github/workflows/recover-and-publish-0.11.1.yml
+
+      - name: Install locked Skills CLI
+        run: npm ci --ignore-scripts
+
+      - name: Run complete validation suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(cat VERSION)" = "0.12.0"
+          python -m compileall -q scripts tests skills/goal-engine/scripts
+          python -m unittest discover -s tests -v
+          python scripts/validate_repository.py
+          python scripts/sync_goal_launchers.py --check
+          python scripts/sync_goal_docs.py --check
+          python scripts/validate_shaping_history_diff.py --self-test
+          python scripts/validate_question_state.py --self-test
+          python scripts/validate_goal_archives.py --self-test
+          python scripts/validate_tooling_contract.py --self-test
+          python skills/goal-engine/scripts/goalctl.py self-test
+          python scripts/evaluate_behavior.py --self-test
+          output="$(npx --no-install skills add . --list)"
+          printf '%s\n' "$output"
+          grep -q "shape-goal" <<<"$output"
+          grep -q "goal-engine" <<<"$output"
+          rm -rf dist /tmp/loop-package-second
+          python scripts/package_skills.py
+          python scripts/package_skills.py --output-dir /tmp/loop-package-second
+          cmp dist/SHA256SUMS /tmp/loop-package-second/SHA256SUMS
+          sha256sum --check dist/SHA256SUMS
+
+      - name: Commit verified implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "Implement deterministic runtime hardening for v0.12.0"
+          git push origin HEAD:audit-remediation-v0.12.0
